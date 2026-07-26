@@ -1,0 +1,96 @@
+name: Build APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get the repo
+        uses: actions/checkout@v4
+
+      - name: Unpack the project zip
+        run: |
+          ZIP=$(ls *.zip 2>/dev/null | head -1)
+          if [ -z "$ZIP" ]; then
+            echo "No .zip found at the top of the repo."
+            exit 1
+          fi
+          unzip -q "$ZIP"
+          SETTINGS=$(find . -name settings.gradle.kts -not -path "./.git/*" | head -1)
+          if [ -z "$SETTINGS" ]; then
+            echo "Unpacked, but no settings.gradle.kts inside."
+            exit 1
+          fi
+          echo "PROJECT=$(dirname "$SETTINGS")" >> $GITHUB_ENV
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build the debug APK
+        id: build
+        continue-on-error: true
+        working-directory: ${{ env.PROJECT }}
+        run: |
+          set -o pipefail
+          gradle wrapper --gradle-version 8.9
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build.log
+
+      - name: Put the errors on the summary page
+        if: always()
+        run: |
+          {
+            echo "## Build result"
+            echo ""
+            if [ "${{ steps.build.outcome }}" = "success" ]; then
+              echo "Built fine."
+            else
+              echo "Failed. Here is what Kotlin and Gradle actually said."
+              echo ""
+              echo "### Compile errors"
+              echo '```'
+              grep -E "^e: " /tmp/build.log | head -40 || echo "none found"
+              echo '```'
+              echo ""
+              echo "### What went wrong"
+              echo '```'
+              sed -n '/What went wrong/,/^\* Try/p' /tmp/build.log | head -40 || true
+              echo '```'
+              echo ""
+              echo "### Last 40 lines"
+              echo '```'
+              tail -40 /tmp/build.log
+              echo '```'
+            fi
+          } >> $GITHUB_STEP_SUMMARY
+
+      - name: Keep the full log as a download
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: /tmp/build.log
+          if-no-files-found: ignore
+
+      - name: Upload the APK
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: chalkboard-apk
+          path: ${{ env.PROJECT }}/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Fail the run if the build failed
+        if: steps.build.outcome != 'success'
+        run: exit 1
