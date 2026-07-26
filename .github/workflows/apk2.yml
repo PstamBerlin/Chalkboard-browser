@@ -1,0 +1,64 @@
+name: APK2
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unpack
+        run: |
+          unzip -q "$(ls *.zip | head -1)"
+          S=$(find . -name settings.gradle.kts -not -path "./.git/*" | head -1)
+          echo "P=$(dirname "$S")" >> $GITHUB_ENV
+
+      - name: Fix the GeckoView version
+        working-directory: ${{ env.P }}
+        run: |
+          curl -sSL "https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/maven-metadata.xml" -o m.xml
+          V=$(grep -o '<version>[^<]*</version>' m.xml | sed 's/<[^>]*>//g' | tail -1)
+          echo "PICKED=$V" >> $GITHUB_ENV
+          sed -i -E "s|(geckoview:geckoview:)[^\"]+|\1${V}|" app/build.gradle.kts
+          grep geckoview: app/build.gradle.kts
+          rm m.xml
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build
+        id: b
+        continue-on-error: true
+        working-directory: ${{ env.P }}
+        run: |
+          set -o pipefail
+          gradle wrapper --gradle-version 8.9
+          ./gradlew assembleDebug --no-daemon 2>&1 | tee /tmp/b.log
+
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo "## GeckoView used: $PICKED"
+            echo '```'
+            grep -E "^e: |Could not find" /tmp/b.log | head -40 || echo none
+            echo '```'
+          } >> $GITHUB_STEP_SUMMARY
+
+      - uses: actions/upload-artifact@v4
+        if: steps.b.outcome == 'success'
+        with:
+          name: chalkboard-apk
+          path: ${{ env.P }}/app/build/outputs/apk/debug/*.apk
+
+      - if: steps.b.outcome != 'success'
+        run: exit 1
