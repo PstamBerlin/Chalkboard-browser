@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Make a Board · Chalkboard</title>
+<meta name="description" content="Build a Chalkboard look in your browser and download it as a .board file.">
+<style>
+  :root{
+    --page:#0A0A0B; --card:#131315; --line:rgba(242,239,233,.14);
+    --ink:#F2EFE9; --dim:#8B8177; --accent:#FF7F5C;
+    --ui:ui-sans-serif,-apple-system,system-ui,"Segoe UI",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--page);color:var(--ink);
+    font-family:var(--ui);font-size:15px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:min(760px,100% - 28px);margin-inline:auto}
+
+  header{padding:26px 0 10px}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--dim);font-size:14px;margin:0}
+  .back{color:var(--dim);font-size:13px;text-decoration:none;display:inline-block;margin-bottom:14px}
+  .back:hover{color:var(--accent)}
+
+  /* ---------- the mockup ---------- */
+  .stage{position:sticky;top:0;z-index:5;padding:14px 0 12px;background:var(--page)}
+  .stage::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);
+  }
+
+  /* ------------------------------------------------------------------
+     From here down, these are the browser's own rules, copied out of
+     ui.css rather than rewritten. The only changes are the .mock prefix
+     so they cannot leak into this page, and fixed sizes where the app
+     uses the whole window. Everything else is byte for byte the real
+     thing, which is the point: what you see is what the file does.
+     ------------------------------------------------------------------ */
+  .mock{
+    --bg:#0A0A0B;
+    --panel:#111112;
+    --ink:#F2EFE9;
+    --ink-dim:#8B8177;
+    --stroke:#FF7F5C;
+    --fill:#1A1210;
+
+    --stroke-w:2px;
+    --glow:10px;
+    --radius:16px;
+    --tab-radius:999px;
+    --toolbar-h:46px;
+    --tabstrip-h:42px;
+    --gap:6px;
+    --fsize:13px;
+    --tab-max:190px;
+    --speed:150ms;
+
+    --font:ui-sans-serif,-apple-system,"Segoe UI",Inter,system-ui,sans-serif;
+    --strip:transparent;
+    --texture:none; --texture-size:200px; --texture-op:.5; --texture-blend:soft-light;
+    --chromewall:none; --chromewall-op:1; --chromewall-blur:0px;
+
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --halo:0 0 var(--glow) color-mix(in srgb, var(--stroke) 55%, transparent);
+    --faint:color-mix(in srgb, var(--stroke) 32%, transparent);
+
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font);
+    font-size:var(--fsize);
+    -webkit-font-smoothing:antialiased;
+    user-select:none;cursor:default;
+    border-radius:14px;overflow:hidden;border:1px solid var(--line);
+  }
+
+  /* ================= chrome ================= */
+  .mock .chrome{
+    position:relative;isolation:isolate;
+    padding:7px 8px 0;
+    background:var(--bg);
+    border-bottom:var(--stroke-w) solid var(--faint);
+  }
+  .mock .chrome::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background-image:var(--chromewall,none);background-size:cover;background-position:center;
+    filter:blur(var(--chromewall-blur,0px));opacity:var(--chromewall-op,1);
+  }
+  .mock .chrome::after{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:var(--texture,none);
+    background-size:var(--texture-size,200px);
+    opacity:var(--texture-op,.5);
+    mix-blend-mode:var(--texture-blend,soft-light);
+  }
+  .mock .chrome::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background-image:var(--chromewall);background-size:cover;background-position:center;
+    filter:blur(var(--chromewall-blur));opacity:var(--chromewall-op);
+  }
+
+  .mock .tabstrip{
+    height:var(--tabstrip-h);display:flex;align-items:center;gap:var(--gap);
+    background:var(--strip, transparent);
+    margin:0 -8px;padding:0 8px;
+  }
+  .mock .tabs{flex:1;min-width:0;display:flex;align-items:center;gap:var(--gap);
+    overflow-x:auto;scrollbar-width:none;padding:2px 0}
+  .mock .tabs::-webkit-scrollbar{display:none}
+
+  .mock .tab{
+    flex:0 1 auto;min-width:0;max-width:var(--tab-max,190px);
+    display:flex;align-items:center;gap:7px;
+    height:calc(var(--tabstrip-h) - 14px);padding:0 8px;
+    border:var(--stroke-w) solid transparent;border-radius:var(--tab-radius);
+    background:transparent;color:var(--ink-dim);font:inherit;font-size:.9em;
+    transition:color var(--speed) var(--ease),border-color var(--speed) var(--ease),
+               background var(--speed) var(--ease),box-shadow var(--speed) var(--ease);
+  }
+  .mock .tab.on{color:var(--ink);border-color:var(--stroke);background:var(--fill);box-shadow:var(--halo)}
+  .mock .tab .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+  .mock .tab .x{flex:none;width:14px;height:14px;padding:0;border:0;border-radius:50%;
+    background:transparent;color:inherit;opacity:.5;display:grid;place-items:center}
+  .mock .tab .x svg{width:8px;height:8px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+
+  .mock .fav{flex:none;width:16px;height:16px;border-radius:5px;display:grid;place-items:center;
+    font-size:9.5px;font-weight:700;color:#0A0A0B}
+  .mock .fav.chalkfav{background:transparent;color:var(--stroke);
+    border:1.2px solid var(--stroke);font-weight:700}
+
+  .mock .toolbar{height:var(--toolbar-h);display:flex;align-items:center;gap:var(--gap);padding-left:2px}
+
+  .mock .round{
+    flex:none;width:32px;height:32px;padding:0;display:grid;place-items:center;
+    border:var(--stroke-w) solid var(--stroke);border-radius:50%;
+    background:var(--fill);color:var(--stroke);box-shadow:var(--halo);
+    transition:background var(--speed) var(--ease);
+  }
+  .mock .round svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;
+    stroke-linecap:round;stroke-linejoin:round}
+  .mock .round svg.cmark{width:18px;height:18px;stroke-width:0}
+  .mock .round.sm{width:26px;height:26px}
+  .mock .round.sm svg{width:13px;height:13px}
+  .mock .round.dim{opacity:.28;box-shadow:none}
+
+  .mock .omni{
+    flex:1;min-width:0;height:34px;display:flex;align-items:center;gap:9px;padding:0 14px;
+    border:var(--stroke-w) solid var(--stroke);border-radius:var(--tab-radius);
+    background:var(--fill);box-shadow:var(--halo);
+  }
+  .mock .omni .site{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:1.06em;font-weight:600;letter-spacing:-.01em}
+  .mock .omni .site.empty{font-weight:400;font-size:1em;color:var(--ink-dim)}
+  .mock .lock{flex:none;width:13px;height:13px;fill:none;stroke:var(--ink-dim);stroke-width:1.8}
+
+  /* ================= the chalk page ================= */
+  .mock .page{
+    background:var(--panel);height:168px;
+    display:grid;place-items:center;
+    position:relative;isolation:isolate;
+  }
+  .mock .page::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background-image:var(--wall,none);background-size:var(--wall-size,cover);
+    background-position:center;filter:blur(var(--wall-blur,0px));opacity:var(--wall-op,1);
+  }
+  /* the app centres a column and lets the line fill it, so the line is
+     wide and its text sits left inside the pill, exactly as here */
+  .mock .main{width:min(520px,80%);margin-inline:auto}
+  .mock .mark{width:96px;height:auto;margin:0 auto 16px;opacity:.92;display:block}
+  .mock .ln{
+    display:flex;align-items:center;height:50px;padding:0 20px;
+    border:2px solid var(--stroke);border-radius:999px;
+    background:var(--fill);color:var(--ink-dim);
+    box-shadow:0 0 14px color-mix(in srgb, var(--stroke) 45%, transparent);
+  }
+
+  /* ---------- controls ---------- */
+  .sect{border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:14px 0}
+  .sect h2{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 12px;font-weight:600;
+  }
+  .row{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .row > span:first-child{flex:0 0 96px;color:var(--dim);font-size:13px}
+  .row input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+  .row output{font-family:var(--mono);font-size:11.5px;color:var(--dim);width:52px;text-align:right}
+  .row input[type=color]{
+    width:38px;height:28px;padding:0;border:1px solid var(--line);border-radius:8px;
+    background:transparent;cursor:pointer;flex:none;
+  }
+  .row input[type=text],.row select{
+    flex:1;min-width:0;background:#0E0E10;color:var(--ink);
+    border:1px solid var(--line);border-radius:9px;padding:6px 10px;
+    font-family:var(--mono);font-size:12px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    border:1.5px solid var(--line);border-radius:999px;padding:6px 12px;
+    background:transparent;color:var(--ink);font:inherit;font-size:12.5px;cursor:pointer;
+    display:flex;align-items:center;gap:7px;
+  }
+  .chip:hover{border-color:var(--accent)}
+  .chip.on{border-color:var(--accent);color:var(--accent)}
+  .chip i{width:11px;height:11px;border-radius:50%;display:block;flex:none}
+  .btns{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px}
+  .btn{
+    border:2px solid var(--accent);border-radius:999px;padding:9px 18px;
+    background:transparent;color:var(--ink);font:inherit;font-size:13.5px;font-weight:600;
+    cursor:pointer;
+  }
+  .btn:hover{background:color-mix(in srgb, var(--accent) 16%, transparent)}
+  .btn.quiet{border-color:var(--line)}
+  .btn.quiet:hover{border-color:var(--accent);background:transparent}
+  textarea{
+    width:100%;min-height:88px;background:#0E0E10;color:#7FE3A0;
+    border:1px solid var(--line);border-radius:11px;padding:10px 12px;
+    font-family:var(--mono);font-size:11.5px;resize:vertical;
+  }
+  .fine{color:var(--dim);font-size:12.5px;margin:10px 0 0}
+  .said{color:var(--accent);font-size:12.5px;min-height:1.2em;margin:8px 0 0}
+  footer{color:var(--dim);font-size:12px;padding:26px 0 50px;text-align:center}
+  a{color:var(--accent)}
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--accent);outline-offset:2px;
+  }
+  @media (prefers-reduced-motion:reduce){*{transition-duration:0ms!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <a class="back" href="#" onclick="history.back();return false">Back</a>
+    <h1>Make a Board</h1>
+    <p class="sub">Every value a Board carries, with the real window below to see it in. Keys, Custom CSS, Website CSS and your search engine live in the browser itself, because those are settings rather than part of a look.</p>
+  </header>
+</div>
+
+<div class="stage">
+  <div class="wrap">
+    <div class="mock" id="mock">
+      <div class="chrome">
+        <div class="tabstrip">
+          <div class="tabs">
+            <button class="tab on">
+              <span class="fav chalkfav">C</span>
+              <span class="lbl">New tab</span>
+              <span class="x"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span>
+            </button>
+            <button class="tab">
+              <span class="fav" style="background:hsl(28 62% 62%)">T</span>
+              <span class="lbl">Thingiverse</span>
+              <span class="x"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span>
+            </button>
+            <button class="tab">
+              <span class="fav" style="background:hsl(146 62% 62%)">C</span>
+              <span class="lbl">Clover</span>
+              <span class="x"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span>
+            </button>
+          </div>
+          <span class="round sm"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+        </div>
+
+        <div class="toolbar">
+          <span class="round dim"><svg viewBox="0 0 24 24"><path d="M14.5 6 8.5 12l6 6"/></svg></span>
+          <span class="round dim"><svg viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6"/></svg></span>
+          <span class="round"><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M19 4v4h-4"/></svg></span>
+          <div class="omni">
+            <span class="site empty">Search on Chalk, or type an address</span>
+          </div>
+          <span class="round"><svg viewBox="0 0 24 24"><path d="M12 4.5l2.3 4.7 5.2.8-3.8 3.6.9 5.1-4.6-2.4-4.6 2.4.9-5.1L4.5 10l5.2-.8z"/></svg></span>
+          <span class="round"><svg viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6.5 11 7.6 7.2A1.6 1.6 0 0 1 9.1 6h5.8a1.6 1.6 0 0 1 1.5 1.2L17.5 11"/><circle cx="7.3" cy="14.4" r="2.6"/><circle cx="16.7" cy="14.4" r="2.6"/><path d="M9.9 14.4h4.2"/></svg></span>
+          <span class="round"><svg viewBox="0 0 512 512" class="cmark"><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="currentColor" stroke-width="52" stroke-linecap="butt"/></svg></span>
+          <span class="round"><svg viewBox="0 0 24 24"><path d="M5 8h14M5 12h14M5 16h14"/></svg></span>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="main">
+          <svg class="mark" viewBox="0 0 512 320" aria-hidden="true">
+            <g fill="none" stroke="var(--stroke)" stroke-width="24" stroke-linejoin="round" opacity=".9">
+              <rect x="94" y="36" width="324" height="248" rx="42"/>
+              <path d="M 94 120 H 418"/>
+            </g>
+            <circle cx="146" cy="78" r="15" fill="var(--stroke)"/>
+            <circle cx="196" cy="78" r="15" fill="var(--ink)" opacity=".55"/>
+            <circle cx="246" cy="78" r="15" fill="var(--ink-dim)" opacity=".8"/>
+          </svg>
+          <div class="ln">Write something</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="sect">
+    <h2>Start from</h2>
+    <div class="chips" id="packs"></div>
+    <p class="fine">Pick one, then change anything. Nothing here is locked.</p>
+  </section>
+
+  <section class="sect">
+    <h2>Colours</h2>
+    <div id="colours"></div>
+  </section>
+
+  <section class="sect">
+    <h2>Outline and shape</h2>
+    <div id="shape"></div>
+  </section>
+
+  <section class="sect">
+    <h2>Type and motion</h2>
+    <div class="row"><span>Font</span>
+      <select id="font">
+        <option value="ui-sans-serif,-apple-system,system-ui,sans-serif">System sans</option>
+        <option value="Georgia,&quot;Iowan Old Style&quot;,serif">Serif</option>
+        <option value="ui-monospace,Menlo,Consolas,monospace">Monospace</option>
+        <option value="&quot;Segoe UI&quot;,system-ui,sans-serif">Segoe</option>
+        <option value="Tahoma,Verdana,sans-serif">Tahoma</option>
+        <option value="&quot;Comic Sans MS&quot;,&quot;Chalkboard SE&quot;,cursive">Comic</option>
+        <option value="&quot;Chalkboard SE&quot;,&quot;Bradley Hand&quot;,cursive">Chalk</option>
+        <option value="&quot;Courier New&quot;,ui-monospace,monospace">Courier</option>
+      </select>
+    </div>
+    <div id="motion"></div>
+  </section>
+
+  <section class="sect">
+    <h2>Texture</h2>
+    <div class="chips" id="textures"></div>
+    <div id="texop"></div>
+  </section>
+
+  <section class="sect">
+    <h2>Pictures</h2>
+    <div id="walls"></div>
+    <p class="fine">Your own photo on the new tab page or behind the toolbars. It travels inside the .board file, so keep it small if you plan to send it to someone.</p>
+  </section>
+
+  <section class="sect">
+    <h2>Take it with you</h2>
+    <div class="row"><span>Name</span><input type="text" id="bname" value="My board" spellcheck="false"></div>
+    <div class="btns">
+      <button class="btn" id="dl">Download the .board file</button>
+      <button class="btn quiet" id="copy">Copy as text</button>
+      <button class="btn quiet" id="paste">Paste a board</button>
+      <button class="btn quiet" id="dlff">Download for Firefox</button>
+    </div>
+    <p class="said" id="said"></p>
+    <textarea id="json" spellcheck="false" style="margin-top:12px"></textarea>
+    <p class="fine">Open the .board file in Chalkboard with the Boards section of the Chalk Tray, or double click it. The Firefox version is a stylesheet instead, so the same look runs in real Firefox: the file itself says where to put it.</p>
+  </section>
+
+  <footer>Chalkboard · every value is a token, and this page writes them all</footer>
+</div>
+
+<script>
+/* ==================================================================
+ * The tokens. Same names as the browser, in the same units, which is
+ * the only reason a file made here works there.
+ * ================================================================== */
+const mock = document.getElementById('mock');
+const said = document.getElementById('said');
+const T = {};
+
+function setTok(name, value){
+  T[name] = value;
+  // No translation layer. The mockup reads the browser's own token names,
+  // so a value that looks right here is the value that ships.
+  mock.style.setProperty(name, value);
+}
+
+/* ---------- textures, generated exactly as the browser generates them ---------- */
+function noiseTexture(freq, oct, seed, alpha){
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">'
+    + '<filter id="n"><feTurbulence type="fractalNoise" baseFrequency="' + freq
+    + '" numOctaves="' + oct + '" seed="' + seed + '"/>'
+    + '<feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  '
+    + alpha + ' 0 0 0 0"/></filter>'
+    + '<rect width="200" height="200" filter="url(%23n)"/></svg>';
+  return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+}
+function linesTexture(gap, angle, alpha){
+  let d = '';
+  for (let i = 0; i < 8; i++){
+    d += '<line x1="' + (-gap*2) + '" y1="' + i*gap + '" x2="' + gap*6 + '" y2="' + i*gap + '"/>';
+  }
+  const n = gap*4;
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + n + '" height="' + n + '">'
+    + '<g transform="rotate(' + angle + ' ' + n/2 + ' ' + n/2 + ')" stroke="white" stroke-opacity="'
+    + alpha + '" stroke-width="1">' + d + '</g></svg>';
+  return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+}
+function dotTexture(gap, r, alpha){
+  const n = gap*4; let d = '';
+  for (let y=0;y<4;y++) for (let x=0;x<4;x++){
+    const ox = (y%2) ? gap/2 : 0;
+    d += '<circle cx="' + (x*gap+ox) + '" cy="' + (y*gap) + '" r="' + r + '"/>';
+  }
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + n + '" height="' + n + '">'
+    + '<g fill="white" fill-opacity="' + alpha + '">' + d + '</g></svg>';
+  return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+}
+function gridTexture(gap, alpha){
+  const n = gap*4; let d = '';
+  for (let i=0;i<=4;i++){
+    d += '<line x1="' + i*gap + '" y1="0" x2="' + i*gap + '" y2="' + n + '"/>';
+    d += '<line x1="0" y1="' + i*gap + '" x2="' + n + '" y2="' + i*gap + '"/>';
+  }
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + n + '" height="' + n + '">'
+    + '<g stroke="white" stroke-opacity="' + alpha + '" stroke-width="1">' + d + '</g></svg>';
+  return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+}
+
+const TEXTURES = {
+  None:        { '--texture':'none' },
+  Chalk:       { '--texture':noiseTexture('0.9',4,7,'0.55'),  '--texture-size':'180px','--texture-op':'0.5','--texture-blend':'soft-light' },
+  'Chalk dust':{ '--texture':noiseTexture('0.35',5,23,'0.65'),'--texture-size':'320px','--texture-op':'0.55','--texture-blend':'soft-light' },
+  Paper:       { '--texture':noiseTexture('0.42',5,19,'0.4'), '--texture-size':'260px','--texture-op':'0.42','--texture-blend':'soft-light' },
+  Concrete:    { '--texture':noiseTexture('0.16',6,41,'0.5'), '--texture-size':'420px','--texture-op':'0.5','--texture-blend':'soft-light' },
+  Static:      { '--texture':noiseTexture('1.4',2,3,'0.7'),   '--texture-size':'120px','--texture-op':'0.28','--texture-blend':'overlay' },
+  Film:        { '--texture':noiseTexture('2.2',1,13,'0.8'),  '--texture-size':'90px', '--texture-op':'0.2','--texture-blend':'overlay' },
+  Frost:       { '--texture':noiseTexture('0.06',4,29,'0.45'),'--texture-size':'520px','--texture-op':'0.55','--texture-blend':'soft-light' },
+  Linen:       { '--texture':linesTexture(6,0,'0.5'),   '--texture-size':'24px','--texture-op':'0.3','--texture-blend':'soft-light' },
+  Carbon:      { '--texture':linesTexture(5,45,'0.55'), '--texture-size':'20px','--texture-op':'0.26','--texture-blend':'soft-light' },
+  Corduroy:    { '--texture':linesTexture(9,90,'0.5'),  '--texture-size':'36px','--texture-op':'0.28','--texture-blend':'soft-light' },
+  Graph:       { '--texture':gridTexture(20,'0.5'),     '--texture-size':'80px','--texture-op':'0.32','--texture-blend':'soft-light' },
+  Dots:        { '--texture':dotTexture(14,1.6,'0.6'),  '--texture-size':'56px','--texture-op':'0.34','--texture-blend':'soft-light' },
+  Halftone:    { '--texture':dotTexture(8,2.4,'0.5'),   '--texture-size':'32px','--texture-op':'0.3','--texture-blend':'soft-light' },
+};
+
+/* ---------- the boards you can start from ---------- */
+const SANS = 'ui-sans-serif,-apple-system,system-ui,sans-serif';
+function pack(t){
+  return Object.assign({
+    '--stroke-w':'2px','--glow':'14px','--radius':'18px','--tab-radius':'999px',
+    '--toolbar-h':'46px','--tabstrip-h':'42px','--gap':'6px','--fsize':'13px',
+    '--speed':'150ms','--font':SANS,'--texture':'none','--strip':'transparent',
+  }, t);
+}
+const BOARDS = {
+  Ember:  pack({'--stroke':'#FF7F5C','--bg':'#0A0A0B','--fill':'#1A1210','--panel':'#111112','--ink':'#F2EFE9','--ink-dim':'#8B8177','--glow':'10px'}),
+  Ice:    pack({'--stroke':'#63D7E8','--bg':'#070B0D','--fill':'#0D1A1E','--panel':'#0B1214','--ink':'#EAF6F8','--ink-dim':'#6E858B','--glow':'16px'}),
+  Chalk:  pack({'--stroke':'#F2EFE6','--bg':'#12161A','--fill':'#1A1F24','--panel':'#0E1113','--ink':'#F2EFE6','--ink-dim':'#767C83','--glow':'0px','--tab-radius':'10px','--texture':TEXTURES.Chalk['--texture'],'--texture-size':'180px','--texture-op':'0.55','--texture-blend':'soft-light'}),
+  Acid:   pack({'--stroke':'#00FF00','--bg':'#000000','--fill':'#001400','--panel':'#000000','--ink':'#CFFFCF','--ink-dim':'#4E874E','--glow':'22px','--radius':'4px','--tab-radius':'3px','--speed':'60ms','--font':'ui-monospace,Menlo,Consolas,monospace','--texture':TEXTURES.Film['--texture'],'--texture-size':'90px','--texture-op':'0.22','--texture-blend':'overlay'}),
+  Grape:  pack({'--stroke':'#B08BD8','--bg':'#0C0912','--fill':'#1A1226','--panel':'#100C18','--ink':'#F1EAF8','--ink-dim':'#8578A0'}),
+  Paper:  pack({'--stroke':'#B3400F','--bg':'#F7F5F0','--fill':'#FFFFFF','--panel':'#EDEAE3','--ink':'#161616','--ink-dim':'#6B6B6B','--glow':'0px','--radius':'14px','--font':'Georgia,"Iowan Old Style",serif','--texture':TEXTURES.Paper['--texture'],'--texture-size':'260px','--texture-op':'0.5','--texture-blend':'soft-light'}),
+
+  Fox:    pack({'--stroke':'#FBFBFE','--bg':'#2B2A33','--fill':'#42414D','--panel':'#1C1B22','--ink':'#FBFBFE','--ink-dim':'#8F8F9D','--strip':'#1C1B22','--glow':'0px','--stroke-w':'0px','--tab-radius':'4px','--radius':'8px'}),
+  Shiny:  pack({'--stroke':'#5F6368','--bg':'#FFFFFF','--fill':'#F1F3F4','--panel':'#FFFFFF','--ink':'#202124','--ink-dim':'#5F6368','--strip':'#DEE1E6','--glow':'0px','--stroke-w':'0px','--tab-radius':'10px','--radius':'12px','--font':'Roboto,'+SANS}),
+  Cupertino:pack({'--stroke':'#4D4D53','--bg':'#F6F5F3','--fill':'#E9E8EA','--panel':'#FFFFFF','--ink':'#1D1D1F','--ink-dim':'#86868B','--glow':'0px','--stroke-w':'0px','--tab-radius':'7px','--radius':'10px','--fsize':'12px'}),
+  Edgy:   pack({'--stroke':'#C5C5C8','--bg':'#202020','--fill':'#2D2D2D','--panel':'#272727','--ink':'#F3F3F3','--ink-dim':'#8E8E96','--strip':'#1A1A1A','--glow':'0px','--stroke-w':'0px','--tab-radius':'8px','--radius':'8px','--font':'"Segoe UI",system-ui,sans-serif'}),
+  Lion:   pack({'--stroke':'#C1C4CF','--bg':'#1E2029','--fill':'#2E3140','--panel':'#24262F','--ink':'#F0F1F4','--ink-dim':'#8B8E9B','--strip':'#171A21','--glow':'0px','--stroke-w':'0px','--tab-radius':'10px','--radius':'12px'}),
+  Gamer:  pack({'--stroke':'#FA1E4E','--bg':'#17171C','--fill':'#26262E','--panel':'#1B1B21','--ink':'#F5EDEF','--ink-dim':'#8E7C82','--glow':'12px','--stroke-w':'1px','--tab-radius':'2px','--radius':'3px','--speed':'90ms','--font':'"Segoe UI",system-ui,sans-serif','--texture':TEXTURES.Carbon['--texture'],'--texture-size':'20px','--texture-op':'0.26','--texture-blend':'soft-light'}),
+  Onion:  pack({'--stroke':'#F4F0FB','--bg':'#251F38','--fill':'#393356','--panel':'#1B1725','--ink':'#F4F0FB','--ink-dim':'#8F87A3','--strip':'#1D1A26','--glow':'0px','--stroke-w':'0px','--tab-radius':'4px','--radius':'8px'}),
+  Curve:  pack({'--stroke':'#4A4458','--bg':'#E9E2F7','--fill':'#FFFFFF','--panel':'#F6F2FC','--ink':'#2A2438','--ink-dim':'#8A82A6','--glow':'0px','--stroke-w':'0px','--tab-radius':'10px','--radius':'16px','--gap':'8px'}),
+  'Ninety Five': pack({'--stroke':'#404040','--bg':'#C0C0C0','--fill':'#DFDFDF','--panel':'#BDBDBD','--ink':'#000000','--ink-dim':'#4A4A4A','--glow':'0px','--stroke-w':'1px','--tab-radius':'0px','--radius':'0px','--speed':'0ms','--fsize':'12px','--font':'Tahoma,Verdana,\"MS Sans Serif\",sans-serif','--texture':TEXTURES.Halftone['--texture'],'--texture-size':'32px','--texture-op':'0.22','--texture-blend':'soft-light'}),
+
+  Blackboard: pack({'--stroke':'#F2EFE6','--bg':'#1E3D31','--fill':'#173328','--panel':'#122A21','--ink':'#F2EFE6','--ink-dim':'#9DB5AA','--glow':'4px','--radius':'12px','--font':'"Chalkboard SE","Bradley Hand",cursive','--texture':TEXTURES.Chalk['--texture'],'--texture-size':'180px','--texture-op':'0.5','--texture-blend':'soft-light'}),
+  Blueprint: pack({'--stroke':'#6FA8FF','--bg':'#061021','--fill':'#0B1B33','--panel':'#08152A','--ink':'#EAF2FF','--ink-dim':'#7A8CA8','--texture':TEXTURES.Graph['--texture'],'--texture-size':'80px','--texture-op':'0.32','--texture-blend':'soft-light'}),
+  Blackout: pack({'--stroke':'#FFFFFF','--bg':'#000000','--fill':'#0A0A0A','--panel':'#050505','--ink':'#FFFFFF','--ink-dim':'#777777','--glow':'0px','--radius':'2px','--tab-radius':'2px','--speed':'0ms'}),
+  Slate:  pack({'--stroke':'#E8E8E8','--bg':'#000000','--fill':'#161616','--panel':'#0B0B0B','--ink':'#F2F2F2','--ink-dim':'#8A8A8A','--stroke-w':'0px','--glow':'0px','--radius':'10px','--tab-radius':'8px','--speed':'120ms'}),
+  Rose:   pack({'--stroke':'#FF7FB0','--bg':'#120A0E','--fill':'#231218','--panel':'#180D12','--ink':'#F8ECF1','--ink-dim':'#9A7F8B'}),
+  Honey:  pack({'--stroke':'#FFC24B','--bg':'#120E06','--fill':'#221A0C','--panel':'#181207','--ink':'#F6EFDF','--ink-dim':'#968870'}),
+  Moss:   pack({'--stroke':'#8FBF7F','--bg':'#0A100A','--fill':'#131D12','--panel':'#0D140D','--ink':'#ECF3E9','--ink-dim':'#7E8F79','--glow':'7px'}),
+  Signal: pack({'--stroke':'#FFD400','--bg':'#0C0C0A','--fill':'#1C1A0E','--panel':'#121108','--ink':'#F5F2E4','--ink-dim':'#8E8A72','--glow':'18px'}),
+  Vapor:  pack({'--stroke':'#FF71CE','--bg':'#1A1033','--fill':'#2A1B4E','--panel':'#221542','--ink':'#F3E9FF','--ink-dim':'#9C8BC4','--glow':'20px','--radius':'16px'}),
+  Comic:  pack({'--stroke':'#7A4CDB','--bg':'#FFF8E7','--fill':'#FFFFFF','--panel':'#F7EFDC','--ink':'#2E2440','--ink-dim':'#8B7FA8','--glow':'0px','--font':'"Comic Sans MS","Chalkboard SE",cursive'}),
+  Typewriter: pack({'--stroke':'#3B3630','--bg':'#F2EDE3','--fill':'#FBF8F1','--panel':'#EAE3D5','--ink':'#262220','--ink-dim':'#7C756A','--glow':'0px','--stroke-w':'1px','--radius':'4px','--tab-radius':'3px','--speed':'0ms','--font':'"Courier New",ui-monospace,monospace','--texture':TEXTURES.Paper['--texture'],'--texture-size':'260px','--texture-op':'0.4','--texture-blend':'soft-light'}),
+  Frosted:pack({'--stroke':'#3D7A99','--bg':'#EEF4F7','--fill':'#FFFFFF','--panel':'#E2EBF0','--ink':'#16303C','--ink-dim':'#71858F','--glow':'0px','--radius':'14px'}),
+};
+
+/* ---------- controls, built from the token list ---------- */
+const COLOURS = [
+  ['Outline','--stroke'], ['Window','--bg'], ['Capsules','--fill'],
+  ['Page','--panel'], ['Text','--ink'], ['Faint text','--ink-dim'],
+];
+const SHAPE = [
+  ['Thickness','--stroke-w',0,6,'px'],
+  ['Glow','--glow',0,30,'px'],
+  ['Corners','--radius',0,26,'px'],
+  ['Tab shape','--tab-radius',0,999,'px'],
+  ['Toolbar','--toolbar-h',34,60,'px'],
+  ['Tab row','--tabstrip-h',28,54,'px'],
+  ['Spacing','--gap',0,16,'px'],
+  ['Tab width','--tab-max',90,320,'px'],
+];
+
+function row(label){
+  const d = document.createElement('div');
+  d.className = 'row';
+  const s = document.createElement('span');
+  s.textContent = label;
+  d.append(s);
+  return d;
+}
+
+COLOURS.forEach(([label, name]) => {
+  const d = row(label);
+  const c = document.createElement('input');
+  c.type = 'color';
+  const t = document.createElement('input');
+  t.type = 'text'; t.spellcheck = false;
+  const push = (v) => { setTok(name, v); c.value = v; t.value = v; };
+  c.addEventListener('input', () => push(c.value));
+  t.addEventListener('change', () => {
+    if (/^#[0-9a-fA-F]{6}$/.test(t.value.trim())) push(t.value.trim());
+    else t.value = T[name];
+  });
+  d.append(c, t);
+  d.dataset.tok = name;
+  document.getElementById('colours').append(d);
+});
+
+// the tab strip gets its own colour, and may simply be "same as window"
+(function(){
+  const d = row('Tab row');
+  const c = document.createElement('input'); c.type = 'color'; c.value = '#0A0A0B';
+  const b = document.createElement('button'); b.className = 'chip'; b.textContent = 'Same as window';
+  c.addEventListener('input', () => { setTok('--strip', c.value); b.classList.remove('on'); });
+  b.addEventListener('click', () => { setTok('--strip', 'transparent'); b.classList.add('on'); });
+  b.classList.add('on');
+  d.append(c, b);
+  document.getElementById('colours').append(d);
+})();
+
+SHAPE.forEach(([label, name, min, max, unit]) => {
+  const d = row(label);
+  const r = document.createElement('input');
+  r.type = 'range'; r.min = min; r.max = max; r.step = 1;
+  const o = document.createElement('output');
+  r.addEventListener('input', () => {
+    setTok(name, r.value + unit);
+    o.textContent = (name === '--tab-radius' && +r.value >= 999) ? 'pill' : r.value + unit;
+  });
+  d.append(r, o);
+  d.dataset.range = name;
+  document.getElementById('shape').append(d);
+});
+
+(function(){
+  const d = row('Speed');
+  const r = document.createElement('input');
+  r.type = 'range'; r.min = 0; r.max = 400; r.step = 10;
+  const o = document.createElement('output');
+  r.addEventListener('input', () => {
+    setTok('--speed', r.value + 'ms');
+    o.textContent = r.value === '0' ? 'off' : r.value + 'ms';
+  });
+  d.append(r, o); d.dataset.range = '--speed';
+  document.getElementById('motion').append(d);
+
+  const dz = row('UI scale');
+  const rz = document.createElement('input');
+  rz.type = 'range'; rz.min = 80; rz.max = 130; rz.step = 5; rz.value = 100;
+  const oz = document.createElement('output'); oz.textContent = '1';
+  rz.addEventListener('input', () => {
+    const v = (rz.value / 100).toFixed(2).replace(/0$/, '');
+    setTok('--ui-zoom', v); oz.textContent = v;
+  });
+  dz.append(rz, oz); dz.dataset.zoom = '1';
+  document.getElementById('motion').append(dz);
+
+  const d2 = row('Text size');
+  const r2 = document.createElement('input');
+  r2.type = 'range'; r2.min = 10; r2.max = 18; r2.step = 1;
+  const o2 = document.createElement('output');
+  r2.addEventListener('input', () => { setTok('--fsize', r2.value + 'px'); o2.textContent = r2.value + 'px'; });
+  d2.append(r2, o2); d2.dataset.range = '--fsize';
+  document.getElementById('motion').append(d2);
+})();
+
+document.getElementById('font').addEventListener('change', (e) => setTok('--font', e.target.value));
+
+Object.keys(TEXTURES).forEach((name) => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.type = 'button'; b.textContent = name;
+  b.addEventListener('click', () => {
+    const t = TEXTURES[name];
+    setTok('--texture', t['--texture']);
+    setTok('--texture-size', t['--texture-size'] || '200px');
+    setTok('--texture-op', t['--texture-op'] || '0.5');
+    setTok('--texture-blend', t['--texture-blend'] || 'soft-light');
+    markTextures();
+  });
+  document.getElementById('textures').append(b);
+});
+
+(function(){
+  const d = row('Strength');
+  const r = document.createElement('input');
+  r.type = 'range'; r.min = 0; r.max = 100; r.step = 1; r.value = 50;
+  const o = document.createElement('output'); o.textContent = '50';
+  r.addEventListener('input', () => { setTok('--texture-op', String(r.value/100)); o.textContent = r.value; });
+  d.append(r, o); d.id = 'texrow';
+  document.getElementById('texop').append(d);
+})();
+
+function markTextures(){
+  const now = T['--texture'] || 'none';
+  let match = 'None';
+  for (const [n, t] of Object.entries(TEXTURES)) if (t['--texture'] === now) { match = n; break; }
+  document.querySelectorAll('#textures .chip').forEach((b) => b.classList.toggle('on', b.textContent === match));
+  const r = document.querySelector('#texrow input');
+  if (r) { r.value = Math.round(parseFloat(T['--texture-op'] || '0.5') * 100);
+           document.querySelector('#texrow output').textContent = r.value; }
+}
+
+/* ---------- pictures ---------- */
+// Same two images the browser offers: one on the new tab page, one behind
+// the toolbars, each with fade and blur so text stays readable on top.
+function wallControl(label, varName, opName, blurName){
+  const box = document.createElement('div');
+
+  const pick = row(label);
+  const file = document.createElement('input');
+  file.type = 'file'; file.accept = 'image/*';
+  file.style.cssText = 'flex:1;min-width:0;font-size:12px;color:var(--dim)';
+  const clear = document.createElement('button');
+  clear.className = 'chip'; clear.type = 'button'; clear.textContent = 'None';
+  file.addEventListener('change', () => {
+    const f = file.files && file.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => setTok(varName, 'url("' + r.result + '")');
+    r.readAsDataURL(f);
+  });
+  clear.addEventListener('click', () => { setTok(varName, 'none'); file.value = ''; });
+  pick.append(file, clear);
+  box.append(pick);
+
+  [['Fade', opName, 0, 100, 100, (v) => String(v / 100)],
+   ['Blur', blurName, 0, 24, 0, (v) => v + 'px']].forEach(([name, tok, min, max, def, fmt]) => {
+    const d = row(name);
+    const r = document.createElement('input');
+    r.type = 'range'; r.min = min; r.max = max; r.step = 1; r.value = def;
+    const o = document.createElement('output'); o.textContent = def;
+    r.addEventListener('input', () => { setTok(tok, fmt(+r.value)); o.textContent = r.value; });
+    d.append(r, o);
+    box.append(d);
+  });
+  return box;
+}
+document.getElementById('walls').append(
+  wallControl('New tab page', '--wall', '--wall-op', '--wall-blur'),
+  wallControl('Top bars', '--chromewall', '--chromewall-op', '--chromewall-blur'),
+);
+
+/* ---------- starting points ---------- */
+Object.keys(BOARDS).forEach((name) => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.type = 'button';
+  const i = document.createElement('i');
+  i.style.background = BOARDS[name]['--stroke'];
+  b.append(i, document.createTextNode(name));
+  b.addEventListener('click', () => { apply(BOARDS[name]); document.getElementById('bname').value = name; });
+  document.getElementById('packs').append(b);
+});
+
+function apply(tokens){
+  Object.entries(tokens).forEach(([k, v]) => setTok(k, v));
+  syncControls();
+  document.querySelectorAll('#packs .chip').forEach((c) => c.classList.remove('on'));
+  said.textContent = '';
+}
+
+function syncControls(){
+  document.querySelectorAll('#colours .row[data-tok]').forEach((d) => {
+    const v = T[d.dataset.tok];
+    if (!v) return;
+    const c = d.querySelector('input[type=color]'), t = d.querySelector('input[type=text]');
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) c.value = v;
+    if (t) t.value = v;
+  });
+  document.querySelectorAll('[data-range]').forEach((d) => {
+    const name = d.dataset.range;
+    const num = parseInt(T[name], 10);
+    if (isNaN(num)) return;
+    const r = d.querySelector('input'), o = d.querySelector('output');
+    r.value = Math.min(Math.max(num, +r.min), +r.max);
+    o.textContent = (name === '--tab-radius' && num >= 999) ? 'pill'
+                  : (name === '--speed' && num === 0) ? 'off'
+                  : r.value + (name === '--speed' ? 'ms' : 'px');
+  });
+  const dz = document.querySelector('[data-zoom]');
+  if (dz && T['--ui-zoom']) {
+    const v = parseFloat(T['--ui-zoom']);
+    if (!isNaN(v)) { dz.querySelector('input').value = Math.round(v * 100);
+                     dz.querySelector('output').textContent = String(v); }
+  }
+  const f = document.getElementById('font');
+  if (T['--font']) {
+    const hit = [...f.options].find((o) => o.value === T['--font']);
+    if (hit) f.value = hit.value;
+  }
+  markTextures();
+}
+
+/* ==================================================================
+ * board2firefox
+ *
+ * A Board is a set of named values. Firefox's own interface is built
+ * from HTML and CSS and can be overridden with a stylesheet. So a Board
+ * can become a Firefox look without anything being reinvented: the same
+ * tokens, pointed at Firefox's selectors instead of Chalkboard's.
+ *
+ * This one file is used twice: the site's Make a Board page imports it
+ * for its "Download for Firefox" button, and the fork's build uses it to
+ * generate the stylesheet it ships. One implementation, so the two can
+ * never drift apart.
+ * ================================================================== */
+
+function px(v, fallback) {
+  const n = parseInt(v, 10);
+  return isNaN(n) ? fallback : n;
+}
+
+function toUserChrome(tokens, name) {
+  const t = tokens || {};
+  const g = (k, d) => (t[k] === undefined || t[k] === '' ? d : t[k]);
+
+  const stroke = g('--stroke', '#FF7F5C');
+  const bg = g('--bg', '#0A0A0B');
+  const fill = g('--fill', '#1A1210');
+  const panel = g('--panel', '#111112');
+  const ink = g('--ink', '#F2EFE9');
+  const dim = g('--ink-dim', '#8B8177');
+  const strip = g('--strip', 'transparent');
+  const strokeW = px(g('--stroke-w', '2px'), 2);
+  const glow = px(g('--glow', '10px'), 10);
+  const radius = px(g('--radius', '16px'), 16);
+  const tabRadius = px(g('--tab-radius', '999px'), 999);
+  const toolbarH = px(g('--toolbar-h', '46px'), 46);
+  const tabH = px(g('--tabstrip-h', '42px'), 42);
+  const gap = px(g('--gap', '6px'), 6);
+  const fsize = px(g('--fsize', '13px'), 13);
+  const speed = px(g('--speed', '150ms'), 150);
+  const font = g('--font', 'ui-sans-serif, system-ui, sans-serif');
+
+  const halo = glow > 0
+    ? `0 0 ${glow}px color-mix(in srgb, ${stroke} 55%, transparent)`
+    : 'none';
+  const border = strokeW > 0 ? `${strokeW}px solid ${stroke}` : 'none';
+  const faint = `color-mix(in srgb, ${stroke} 30%, transparent)`;
+  const stripColour = strip === 'transparent' ? bg : strip;
+
+  const tabHeight = Math.max(24, tabH - 14);
+  const btn = 32;
+
+  // The mark, drawn the same way the browser draws it, small enough to
+  // live inside a stylesheet.
+  const mark = encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 320">` +
+    `<g fill="none" stroke="${stroke}" stroke-width="24" stroke-linejoin="round" opacity="0.9">` +
+    `<rect x="94" y="36" width="324" height="248" rx="42"/><path d="M94 120H418"/></g>` +
+    `<circle cx="146" cy="78" r="15" fill="${stroke}"/>` +
+    `<circle cx="196" cy="78" r="15" fill="${ink}" opacity="0.55"/>` +
+    `<circle cx="246" cy="78" r="15" fill="${dim}" opacity="0.8"/></svg>`
+  );
+
+  const userChrome = `/* ==================================================================
+ * ${name || 'A Chalkboard Board'} — Firefox, made to look like Chalkboard
+ *
+ * Not a colour scheme. This rebuilds Firefox's window to match the
+ * browser: capsule tabs, round outlined buttons, the address bar as a
+ * pill, the same heights and spacing, the same font, the same glow.
+ *
+ * Goes in your Firefox profile as  chrome/userChrome.css
+ * ================================================================== */
+
+:root {
+  --cb-stroke: ${stroke};
+  --cb-bg: ${bg};
+  --cb-fill: ${fill};
+  --cb-panel: ${panel};
+  --cb-ink: ${ink};
+  --cb-dim: ${dim};
+  --cb-strip: ${stripColour};
+  --cb-halo: ${halo};
+  --cb-border: ${border};
+  --cb-faint: ${faint};
+  --cb-radius: ${radius}px;
+  --cb-tab-radius: ${tabRadius >= 99 ? '999px' : tabRadius + 'px'};
+  --cb-speed: ${speed}ms;
+  --cb-gap: ${gap}px;
+  --cb-font: ${font};
+  --cb-fsize: ${fsize}px;
+
+  /* Firefox's own variables, so anything not rebuilt below still lands
+     in the right colours instead of staying default grey. */
+  --lwt-accent-color: ${bg} !important;
+  --lwt-text-color: ${ink} !important;
+  --toolbar-bgcolor: ${bg} !important;
+  --toolbar-color: ${ink} !important;
+  --toolbar-field-background-color: ${fill} !important;
+  --toolbar-field-focus-background-color: ${fill} !important;
+  --toolbar-field-color: ${ink} !important;
+  --toolbar-field-focus-color: ${ink} !important;
+  --toolbar-field-border-color: transparent !important;
+  --tab-selected-bgcolor: ${fill} !important;
+  --tab-selected-textcolor: ${ink} !important;
+  --arrowpanel-background: ${panel} !important;
+  --arrowpanel-color: ${ink} !important;
+  --arrowpanel-border-color: ${faint} !important;
+  --panel-separator-color: ${faint} !important;
+  --urlbar-box-bgcolor: ${fill} !important;
+  --urlbar-box-text-color: ${ink} !important;
+  --button-bgcolor: ${fill} !important;
+  --button-color: ${ink} !important;
+  --focus-outline-color: ${stroke} !important;
+  --tab-min-height: ${tabHeight}px !important;
+}
+
+/* ---------------- type ---------------- */
+#navigator-toolbox, #navigator-toolbox menupopup,
+#nav-bar, #TabsToolbar, #PersonalToolbar, panel, menupopup {
+  font-family: var(--cb-font) !important;
+  font-size: var(--cb-fsize) !important;
+}
+
+/* ---------------- the window ---------------- */
+#navigator-toolbox {
+  background: var(--cb-bg) !important;
+  border-bottom: ${strokeW > 0 ? strokeW + 'px solid var(--cb-faint)' : 'none'} !important;
+  padding: 7px 8px 0 !important;
+}
+#nav-bar, #PersonalToolbar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------------- the tab strip ---------------- */
+#TabsToolbar {
+  background: var(--cb-strip) !important;
+  height: ${tabH}px !important;
+  margin: 0 -8px !important;
+  padding: 0 8px !important;
+}
+#tabbrowser-tabs {
+  --tab-overflow-pinned-tabs-width: 0 !important;
+  border: none !important;
+}
+
+/* Things Chalkboard does not have. Firefox puts several of its own
+   buttons in the tab strip; the browser this is imitating has one. */
+#firefox-view-button,
+#alltabs-button,
+#TabsToolbar .titlebar-spacer[type="post-tabs"] { display: none !important; }
+
+/* Tabs: capsules, not trapezoids. Firefox draws a tab's shape on an
+   inner element, so the shape, the outline and the glow all belong
+   there rather than on the tab itself. */
+.tabbrowser-tab {
+  margin-inline: ${Math.round(gap / 2)}px !important;
+  padding: 0 !important;
+}
+.tabbrowser-tab .tab-background {
+  border-radius: var(--cb-tab-radius) !important;
+  border: ${strokeW > 0 ? strokeW + 'px solid transparent' : 'none'} !important;
+  background: transparent !important;
+  margin-block: 0 !important;
+  transition: background var(--cb-speed) ease, border-color var(--cb-speed) ease,
+              box-shadow var(--cb-speed) ease !important;
+}
+.tabbrowser-tab[selected] .tab-background,
+.tabbrowser-tab[multiselected] .tab-background {
+  background: var(--cb-fill) !important;
+  border-color: var(--cb-stroke) !important;
+  box-shadow: var(--cb-halo) !important;
+}
+.tabbrowser-tab .tab-content { padding: 0 8px !important; }
+.tabbrowser-tab .tab-label { color: var(--cb-dim) !important; }
+.tabbrowser-tab[selected] .tab-label { color: var(--cb-ink) !important; }
+.tabbrowser-tab .tab-icon-image {
+  border-radius: 5px !important;
+  width: 16px !important; height: 16px !important;
+}
+/* Firefox draws lines between tabs, and paints a tab on hover. Neither
+   happens in a browser made of capsules. */
+.tabbrowser-tab::after, .tabbrowser-tab::before { display: none !important; }
+.tabbrowser-tab:not([selected]):hover .tab-background {
+  background: transparent !important;
+  border-color: var(--cb-faint) !important;
+}
+/* The close cross, small and quiet like Chalkboard's. */
+.tab-close-button {
+  border-radius: 50% !important;
+  fill: currentColor !important;
+  opacity: .5 !important;
+  width: 14px !important; height: 14px !important; padding: 2px !important;
+}
+.tab-close-button:hover { opacity: 1 !important; background: transparent !important; }
+
+/* The new tab button, a small round capsule at the end of the row. */
+#tabs-newtab-button, #new-tab-button {
+  list-style-image: none !important;
+}
+#tabs-newtab-button > .toolbarbutton-icon,
+#new-tab-button > .toolbarbutton-icon {
+  background: var(--cb-fill) !important;
+  border: var(--cb-border) !important;
+  border-radius: 50% !important;
+  box-shadow: var(--cb-halo) !important;
+  fill: var(--cb-stroke) !important;
+  width: 26px !important; height: 26px !important;
+  padding: 5px !important;
+}
+
+/* ---------------- the toolbar ---------------- */
+#nav-bar { height: ${toolbarH}px !important; }
+#nav-bar > .toolbar-items { gap: var(--cb-gap) !important; }
+
+/* Every toolbar button becomes a round outlined capsule. */
+#nav-bar toolbarbutton:not(.titlebar-button) > .toolbarbutton-icon,
+#nav-bar toolbarbutton:not(.titlebar-button) > .toolbarbutton-badge-stack > .toolbarbutton-icon {
+  background: var(--cb-fill) !important;
+  border: var(--cb-border) !important;
+  border-radius: 50% !important;
+  box-shadow: var(--cb-halo) !important;
+  fill: var(--cb-stroke) !important;
+  color: var(--cb-stroke) !important;
+  width: ${btn}px !important;
+  height: ${btn}px !important;
+  padding: 8px !important;
+  transition: background var(--cb-speed) ease !important;
+}
+#nav-bar toolbarbutton[disabled] > .toolbarbutton-icon { opacity: .28 !important; box-shadow: none !important; }
+#nav-bar toolbarbutton:hover:not([disabled]) > .toolbarbutton-icon {
+  background: color-mix(in srgb, var(--cb-stroke) 18%, var(--cb-fill)) !important;
+}
+/* Firefox wraps back and forward in extra boxes that would show through. */
+#back-button, #forward-button, #stop-reload-button { background: transparent !important; }
+
+/* Buttons Chalkboard's toolbar does not have. Hiding rather than
+   removing, so nothing breaks if you want one back: delete its line. */
+#fxa-toolbar-menu-button,
+#unified-extensions-button,
+#downloads-button,
+#library-button,
+#sidebar-button,
+#home-button { display: none !important; }
+
+/* ---------------- the address bar ---------------- */
+#urlbar-container { margin-inline: var(--cb-gap) !important; }
+#urlbar { --urlbar-height: 34px !important; }
+#urlbar-background {
+  background: var(--cb-fill) !important;
+  border: var(--cb-border) !important;
+  border-radius: var(--cb-tab-radius) !important;
+  box-shadow: var(--cb-halo) !important;
+}
+#urlbar[focused="true"] > #urlbar-background {
+  border: var(--cb-border) !important;
+  box-shadow: var(--cb-halo) !important;
+  outline: none !important;
+}
+#urlbar-input-container { padding-inline: 14px !important; }
+#urlbar-input { color: var(--cb-ink) !important; font-weight: 600 !important; }
+#urlbar-input::placeholder { color: var(--cb-dim) !important; font-weight: 400 !important; }
+
+/* Chalkboard keeps the padlock on the right of the bar, not the left. */
+#identity-box {
+  order: 9 !important;
+  margin-inline: 6px 0 !important;
+}
+#identity-box, #identity-icon-box { background: transparent !important; }
+#identity-icon { fill: var(--cb-dim) !important; opacity: .8 !important; }
+#identity-permission-box, #tracking-protection-icon-container { display: none !important; }
+/* the star lives in the toolbar in Chalkboard, not inside the bar */
+#page-action-buttons { color: var(--cb-dim) !important; }
+
+/* The dropdown under the address bar. */
+.urlbarView {
+  background: var(--cb-panel) !important;
+  border: var(--cb-border) !important;
+  border-radius: var(--cb-radius) !important;
+  margin-top: 6px !important;
+}
+.urlbarView-row[selected] > .urlbarView-row-inner,
+.urlbarView-row:hover > .urlbarView-row-inner {
+  background: var(--cb-fill) !important;
+  border-radius: var(--cb-tab-radius) !important;
+}
+
+/* ---------------- the bookmarks bar ---------------- */
+#PersonalToolbar {
+  border-top: ${strokeW > 0 ? '1px solid var(--cb-faint)' : 'none'} !important;
+  padding: 0 2px 7px !important;
+  min-height: 32px !important;
+}
+#PersonalToolbar .bookmark-item {
+  color: var(--cb-dim) !important;
+  border: ${strokeW > 0 ? strokeW + 'px solid var(--cb-faint)' : 'none'} !important;
+  border-radius: var(--cb-tab-radius) !important;
+  padding: 2px 10px !important;
+  margin-inline: 3px !important;
+}
+#PersonalToolbar .bookmark-item:hover { border-color: var(--cb-stroke) !important; }
+
+/* ---------------- menus and panels ---------------- */
+menupopup, panel, .panel-arrowcontent {
+  --panel-background: var(--cb-panel) !important;
+  --panel-color: var(--cb-ink) !important;
+  --panel-border-radius: var(--cb-radius) !important;
+  --panel-border-color: var(--cb-faint) !important;
+}
+menuitem, menu { color: var(--cb-ink) !important; }
+menuitem:hover, menu:hover { background: var(--cb-fill) !important; }
+
+/* ---------------- find bar and sidebar ---------------- */
+.browserContainer > findbar {
+  background: var(--cb-bg) !important;
+  color: var(--cb-ink) !important;
+  border-top: 1px solid var(--cb-faint) !important;
+}
+findbar .findbar-textbox {
+  background: var(--cb-fill) !important;
+  color: var(--cb-ink) !important;
+  border: var(--cb-border) !important;
+  border-radius: var(--cb-tab-radius) !important;
+}
+#sidebar-box { background: var(--cb-panel) !important; color: var(--cb-ink) !important; }
+#sidebar-header { border-bottom: 1px solid var(--cb-faint) !important; }
+
+/* ---------------- the page area ---------------- */
+#tabbrowser-tabbox, browser { background: var(--cb-panel) !important; }
+`;
+
+  const userContent = `/* ==================================================================
+ * ${name || 'A Chalkboard Board'} — the new tab page, made to match Chalk
+ *
+ * Goes in your Firefox profile as  chrome/userContent.css
+ * ================================================================== */
+
+@-moz-document url("about:newtab"), url("about:home"), url("about:privatebrowsing") {
+  body, .activity-stream, main {
+    background: ${panel} !important;
+    color: ${ink} !important;
+  }
+
+  /* Chalk has one thing on it: a line to write in. Everything Firefox
+     puts on its new tab page goes away. */
+  .top-sites,
+  .collapsible-section,
+  [data-section-id],
+  .ds-outer-wrapper-breakpoint-override,
+  .personalize-button,
+  .customize-menu,
+  .sponsored-content,
+  .weather,
+  .logo-and-wordmark,
+  .search-inner-wrapper > .logo-and-wordmark,
+  #topsites-section { display: none !important; }
+
+  .outer-wrapper { padding-top: 0 !important; }
+  .search-wrapper {
+    padding: 0 !important;
+    min-height: 70vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* the mark, drawn from this Board's own colours */
+  .search-wrapper::before {
+    content: "" !important;
+    display: block !important;
+    width: 210px; height: 132px;
+    margin-bottom: 26px;
+    background: url('data:image/svg+xml,${mark}') center/contain no-repeat;
+    opacity: .92;
+  }
+
+  /* the line, as a Chalkboard capsule */
+  .search-handoff-button,
+  input.fake-editable,
+  .search-wrapper .search-inner-wrapper {
+    background: ${fill} !important;
+    border: ${border} !important;
+    border-radius: ${tabRadius >= 99 ? '999px' : tabRadius + 'px'} !important;
+    box-shadow: ${halo} !important;
+    color: ${dim} !important;
+    height: 50px !important;
+    max-width: 520px !important;
+    width: min(520px, 80vw) !important;
+    font-family: ${font} !important;
+  }
+  .search-handoff-button { padding: 0 20px !important; text-align: left !important; }
+  .search-handoff-button .fake-caret { background: ${stroke} !important; }
+  .search-wrapper .search-inner-wrapper::before,
+  .search-handoff-button::before { display: none !important; }
+}
+`;
+
+  return { userChrome, userContent };
+}
+
+/* ---------- taking it with you ---------- */
+function boardFile(){
+  return JSON.stringify({
+    chalkboard: 1,
+    name: document.getElementById('bname').value.trim() || 'My board',
+    tokens: T,
+  }, null, 2);
+}
+
+document.getElementById('dl').addEventListener('click', () => {
+  const name = (document.getElementById('bname').value.trim() || 'my-board')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const url = URL.createObjectURL(new Blob([boardFile()], { type: 'application/json' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = name + '.board';
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  said.textContent = 'Saved. Open it in Chalkboard from the Boards section, or double click it.';
+});
+
+function saveText(text, filename, type){
+  const url = URL.createObjectURL(new Blob([text], { type: type }));
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+document.getElementById('dlff').addEventListener('click', () => {
+  const label = document.getElementById('bname').value.trim() || 'My board';
+  const r = toUserChrome(T, label);
+  // Two files: one rebuilds Firefox's window, one rebuilds its new tab
+  // page. Both go in the chrome folder of a Firefox profile.
+  saveText(r.userChrome, 'userChrome.css', 'text/css');
+  setTimeout(() => saveText(r.userContent, 'userContent.css', 'text/css'), 400);
+  said.textContent = 'Saved both files. Each one says at the top where it goes.';
+});
+
+document.getElementById('copy').addEventListener('click', async () => {
+  const text = boardFile();
+  document.getElementById('json').value = text;
+  try { await navigator.clipboard.writeText(text); said.textContent = 'Copied.'; }
+  catch { said.textContent = 'Here it is, copy it from the box below.'; }
+});
+
+document.getElementById('paste').addEventListener('click', () => {
+  const raw = document.getElementById('json').value.trim();
+  if (!raw) { said.textContent = 'Paste a board into the box first.'; return; }
+  try {
+    const obj = JSON.parse(raw);
+    const tokens = obj.tokens || obj;
+    const clean = {};
+    Object.entries(tokens).forEach(([k, v]) => {
+      if (/^--[a-z-]+$/.test(k) && typeof v === 'string') clean[k] = v;
+    });
+    if (!Object.keys(clean).length) throw new Error('empty');
+    apply(clean);
+    if (obj.name) document.getElementById('bname').value = obj.name;
+    said.textContent = 'Loaded. Change anything you like.';
+  } catch {
+    said.textContent = 'That is not a board. Paste the text a board gives you.';
+  }
+});
+
+apply(BOARDS.Ember);
+document.getElementById('bname').value = 'My board';
+</script>
+
+</body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Book of Chalkboard</title>
+<meta name="description" content="Every version of Chalkboard, every change, and why it happened.">
+<style>
+  :root{
+    /* Chalkboard's own Blackboard board, the schoolroom one */
+    --slate:#17352A;
+    --slate-deep:#102A21;
+    --slate-lift:#1E4536;
+    --chalk:#F2EFE6;
+    --chalk-dim:#9DB5AA;
+    --coral:#FF7F5C;
+    --gold:#F0C85E;
+    --cyan:#63D7E8;
+    --rose:#E8697D;
+
+    --display:"Chalkboard SE","Bradley Hand","Segoe Print",ui-rounded,system-ui,sans-serif;
+    --body:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+    --rule:rgba(242,239,230,.16);
+    --wrap:min(720px,100% - 40px);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--slate-deep);
+    color:var(--chalk);
+    font-family:var(--body);
+    font-size:17px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* The signature: the browser's own chalk grain, the same turbulence
+     maths that gives the logo its texture, laid over the whole board. */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' seed='7'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.6 0 0 0 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:240px;
+    opacity:.34;mix-blend-mode:soft-light;
+  }
+  /* an eraser sweep, because a board is never perfectly clean */
+  body::after{
+    content:"";position:fixed;z-index:0;pointer-events:none;
+    left:-10%;top:14%;width:120%;height:280px;
+    background:radial-gradient(60% 50% at 50% 50%,rgba(242,239,230,.055),transparent 70%);
+    transform:rotate(-7deg);
+  }
+  main,header,footer{position:relative;z-index:1}
+
+  .wrap{width:var(--wrap);margin-inline:auto}
+
+  /* ---------------- masthead ---------------- */
+  header{padding:64px 0 40px;text-align:center}
+  .mark{width:132px;height:auto;display:block;margin:0 auto 26px;opacity:.95}
+  h1{
+    font-family:var(--display);
+    font-size:clamp(38px,10vw,62px);
+    line-height:1.02;margin:0 0 14px;font-weight:400;
+    letter-spacing:.01em;
+  }
+  .standfirst{
+    font-size:16.5px;color:var(--chalk-dim);margin:0 auto;max-width:30em;
+  }
+  .byline{
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--chalk-dim);
+    margin-top:26px;
+  }
+
+  /* ---------------- the rule the whole page hangs from ---------------- */
+  .hr{
+    height:2px;margin:44px 0;border-radius:2px;
+    background:linear-gradient(90deg,transparent,var(--rule) 12%,var(--rule) 88%,transparent);
+  }
+
+  /* ---------------- foreword ---------------- */
+  .foreword p{margin:0 0 18px}
+  .foreword strong{color:var(--chalk);font-weight:400;box-shadow:inset 0 -.5em 0 rgba(255,127,92,.22)}
+
+  /* ---------------- contents ---------------- */
+  .contents{
+    border:2px solid var(--rule);border-radius:20px;
+    padding:20px 22px;margin:8px 0 0;
+  }
+  .contents h2{
+    font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--coral);margin:0 0 14px;font-weight:600;
+  }
+  .toc{list-style:none;margin:0;padding:0}
+  .toc li{display:flex;gap:12px;align-items:baseline;padding:7px 0;border-top:1px solid var(--rule)}
+  .toc li:first-child{border-top:0}
+  .toc a{color:var(--chalk);text-decoration:none;font-weight:600;flex:1}
+  .toc a:hover{color:var(--coral)}
+  .toc .n{font-family:var(--mono);font-size:12.5px;color:var(--coral);width:2.4em;flex:none}
+  .toc .what{color:var(--chalk-dim);font-size:13.5px;flex:2;min-width:0}
+  @media (max-width:560px){ .toc .what{display:none} }
+
+  /* ---------------- version chapters ---------------- */
+  .ver{padding:52px 0 8px;scroll-margin-top:20px}
+  .vhead{display:flex;align-items:flex-start;gap:18px;margin-bottom:6px}
+  .vnum{
+    font-family:var(--display);
+    font-size:clamp(44px,13vw,74px);line-height:.86;
+    color:var(--coral);flex:none;
+    transform:rotate(-2.5deg);transform-origin:left bottom;
+  }
+  .vname{padding-top:6px}
+  .vname h2{
+    font-family:var(--display);font-weight:400;
+    font-size:clamp(26px,6.5vw,36px);line-height:1.08;margin:0;
+  }
+  .vtag{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--chalk-dim);margin-top:8px;display:block;
+  }
+  .lede{font-size:18px;margin:18px 0 20px}
+  .lede em{color:var(--gold);font-style:normal}
+  .ver p{margin:0 0 16px}
+  .ver h3{
+    font-family:var(--body);font-size:19px;font-weight:700;
+    margin:30px 0 10px;color:var(--chalk);
+  }
+  .ver ul{margin:0 0 18px;padding-left:0;list-style:none}
+  .ver ul li{
+    position:relative;padding-left:26px;margin-bottom:11px;
+  }
+  .ver ul li::before{
+    content:"";position:absolute;left:2px;top:.62em;
+    width:12px;height:2px;border-radius:2px;background:var(--coral);opacity:.75;
+  }
+  .ver ol{margin:0 0 18px;padding-left:22px}
+  .ver ol li{margin-bottom:11px}
+  code{
+    font-family:var(--mono);font-size:.85em;
+    background:rgba(242,239,230,.09);padding:.12em .4em;border-radius:5px;
+  }
+
+  /* palette strip: what this version actually introduced */
+  .swatches{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 22px}
+  .sw{
+    display:flex;align-items:center;gap:7px;
+    border:1.5px solid var(--rule);border-radius:999px;
+    padding:5px 12px 5px 6px;
+    font-family:var(--mono);font-size:11px;color:var(--chalk-dim);
+  }
+  .sw i{width:14px;height:14px;border-radius:50%;display:block;flex:none}
+
+  /* a pulled-out quote, used sparingly */
+  .pull{
+    border-left:3px solid var(--gold);
+    padding:2px 0 2px 18px;margin:24px 0;
+    font-size:19px;line-height:1.5;color:var(--chalk);
+  }
+  .pull span{color:var(--chalk-dim);display:block;font-size:14px;margin-top:8px;font-family:var(--mono)}
+
+  /* the note boxes */
+  .note{
+    border:2px solid var(--rule);border-radius:18px;
+    padding:18px 20px;margin:24px 0;
+  }
+  .note h4{
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);margin:0 0 10px;font-weight:600;
+  }
+  .note p:last-child{margin-bottom:0}
+
+  /* ---------------- closing sections ---------------- */
+  .plain h2{
+    font-family:var(--display);font-weight:400;
+    font-size:clamp(26px,6.5vw,34px);margin:0 0 16px;
+  }
+  .found li::before{background:var(--cyan)}
+
+  footer{
+    text-align:center;padding:56px 0 70px;color:var(--chalk-dim);
+  }
+  footer .last{font-family:var(--display);font-size:22px;color:var(--chalk);margin-bottom:10px}
+  footer .meta{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em}
+
+  /* quiet entrance, once, and never for people who asked not to have it */
+  .ver,.plain,.contents{animation:rise .7s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+  a:focus-visible{outline:2px solid var(--coral);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <!-- the mark, drawn the same way the browser draws it on its new tab page -->
+    <svg class="mark" viewBox="0 0 512 320" role="img" aria-label="Chalkboard">
+      <defs>
+        <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="11" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="4"
+                             xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+      <g filter="url(#soft)" fill="none" stroke="#F2EFE6"
+         stroke-width="24" stroke-linejoin="round" opacity=".92">
+        <rect x="94" y="36" width="324" height="248" rx="42"/>
+        <path d="M 94 120 H 418"/>
+      </g>
+      <g filter="url(#soft)">
+        <circle cx="146" cy="78" r="15" fill="#FF7F5C"/>
+        <circle cx="196" cy="78" r="15" fill="#F0C85E"/>
+        <circle cx="246" cy="78" r="15" fill="#63D7E8"/>
+      </g>
+    </svg>
+
+    <h1>The Book of<br>Chalkboard</h1>
+    <p class="standfirst">Every version, every change, and why it happened.</p>
+    <p class="byline">1.0 · run on exactly one computer</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <section class="foreword">
+      <div class="hr"></div>
+      <p>Chalkboard is a web browser with no AI, no telemetry, easy extensions
+      and too many settings. It was written by an eleven year old working
+      mostly from a phone, and it now runs on a real Mac.</p>
+
+      <p>The versions below were not planned. They are what the work turned out
+      to be, grouped after the fact and named here for the first time, because
+      a project that called itself <em>beta 0.5</em> for weeks deserves a better
+      memory of itself than that.</p>
+
+      <p>One rule was followed the whole way, and it explains most of the
+      decisions that follow.</p>
+
+      <div class="pull">
+        If you cannot replicate it, there is not enough customization.
+        <span>Peter, about browser themes</span>
+      </div>
+
+      <p>He said it about themes. It ended up driving the deepest parts of the
+      design, including two tokens that exist only because something could not
+      be copied exactly.</p>
+    </section>
+
+    <div class="contents">
+      <h2>The versions</h2>
+      <ol class="toc">
+        <li><span class="n">0.1</span><a href="#v1">First Light</a><span class="what">A window that loaded a page</span></li>
+        <li><span class="n">0.2</span><a href="#v2">The Tray</a><span class="what">Every value becomes a token</span></li>
+        <li><span class="n">0.3</span><a href="#v3">Boards</a><span class="what">Looks you can save and send</span></li>
+        <li><span class="n">0.4</span><a href="#v4">Paper</a><span class="what">A website, a guide, real apps</span></li>
+        <li><span class="n">0.5</span><a href="#v5">The Long Beta</a><span class="what">Split view, browser looks, modes, fonts</span></li>
+        <li><span class="n">0.6</span><a href="#v6">Field Report</a><span class="what">It runs, and the truth arrives</span></li>
+        <li><span class="n">0.7</span><a href="#v7">Self Service</a><span class="what">It updates itself and wears its skin</span></li>
+      </ol>
+    </div>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v1">
+      <div class="vhead">
+        <div class="vnum">0.1</div>
+        <div class="vname">
+          <h2>First Light</h2>
+          <span class="vtag">a window that loaded a page</span>
+        </div>
+      </div>
+
+      <p class="lede">An Electron shell that opened a window, loaded a page, and
+      had tabs. Nothing here was clever. It mattered because it existed.</p>
+
+      <p>A real browser process with a real page inside it, not a mockup of one.
+      The architecture choice made here shaped everything after it: pages live
+      in their own view, entirely separate from the browser's own interface.
+      That sounds like a technicality and is not. It is the reason websites can
+      never touch Chalkboard's styling, and the reason Custom CSS is safe.</p>
+
+      <h3>Decisions that stuck</h3>
+      <ul>
+        <li>No AI anywhere, deliberately, forever.</li>
+        <li>No telemetry. Not switched off, never written.</li>
+        <li>The browser's own interface is a web page, so it can be restyled by
+        the same rules as anything else.</li>
+      </ul>
+    </section>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v2">
+      <div class="vhead">
+        <div class="vnum">0.2</div>
+        <div class="vname">
+          <h2>The Tray</h2>
+          <span class="vtag">every value becomes a token</span>
+        </div>
+      </div>
+
+      <p class="lede">The Chalk Tray, and the idea that made the product.</p>
+
+      <p>Every visual value in the browser became a named token. <code>--stroke</code>
+      for the outline colour, <code>--radius</code> for corners, <code>--glow</code>
+      for the halo, and dozens more. The tray does nothing clever. It rewrites
+      tokens. That is the whole engine.</p>
+
+      <p>The consequence is the important part. Adding a new setting does not mean
+      writing new code that draws something differently. It means adding one
+      control that names a token. It wires itself up.</p>
+
+      <h3>Also in this version</h3>
+      <ul>
+        <li>The <code>chalk://</code> new tab page, served with your own colours
+        already in it.</li>
+        <li>Remappable shortcuts: sixteen commands, one combo each, and giving a
+        combo away visibly takes it off whatever had it.</li>
+        <li>Custom CSS, applied as you type, over the browser's own styles.</li>
+        <li>Tracker blocking, cross-site cookie stripping, encrypted DNS, and
+        permissions that ask every time.</li>
+        <li>The disguise: Chalkboard reports itself as ordinary Chrome, because a
+        browser nobody else uses is a perfect fingerprint.</li>
+      </ul>
+    </section>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v3">
+      <div class="vhead">
+        <div class="vnum">0.3</div>
+        <div class="vname">
+          <h2>Boards</h2>
+          <span class="vtag">looks you can save and send</span>
+        </div>
+      </div>
+
+      <p class="lede">Looks became objects.</p>
+
+      <p>A Board is every token as one line of text. Copy it, send it to a friend,
+      and they get your exact browser. Six shipped:</p>
+
+      <div class="swatches">
+        <span class="sw"><i style="background:#FF7F5C"></i>Ember</span>
+        <span class="sw"><i style="background:#63D7E8"></i>Ice</span>
+        <span class="sw"><i style="background:#F2EFE6"></i>Chalk</span>
+        <span class="sw"><i style="background:#00FF00"></i>Acid</span>
+        <span class="sw"><i style="background:#B08BD8"></i>Grape</span>
+        <span class="sw"><i style="background:#B3400F"></i>Paper</span>
+      </div>
+
+      <p>This is where the project stopped being a browser with a settings panel
+      and became a browser about settings.</p>
+
+      <p>The naming held too: Chalkboard, chalk on a board, everything drawn as
+      outlines instead of filled blocks. The Chalk Tray. The chalk page.</p>
+    </section>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v4">
+      <div class="vhead">
+        <div class="vnum">0.4</div>
+        <div class="vname">
+          <h2>Paper</h2>
+          <span class="vtag">a website, a guide, real apps</span>
+        </div>
+      </div>
+
+      <p class="lede">Everything around the browser.</p>
+
+      <ul>
+        <li><b>The website</b>, one self-contained HTML file with the browser's
+        source and the guide embedded inside it as data. No hosting, no server,
+        works offline. Peter later built Fry City OS the same way without being
+        told to, which is a good sign for an architecture.</li>
+        <li><b>The guide</b>, eight pages, every illustration drawn as vector
+        graphics from the same tokens the browser uses. Not screenshots. The
+        browser had never been run, so there was nothing to photograph.</li>
+        <li><b>Real Mac apps</b>, Apple Silicon and Intel, built through a
+        packaging tool that kept dying halfway. Solved by building to a folder
+        and zipping it by hand, which turned out faster and cannot half-write
+        a file.</li>
+        <li><b>Phone-friendly CI</b>, so the whole thing can be built from a
+        phone, which is how most of this project was made.</li>
+      </ul>
+    </section>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v5">
+      <div class="vhead">
+        <div class="vnum">0.5</div>
+        <div class="vname">
+          <h2>The Long Beta</h2>
+          <span class="vtag">split view, browser looks, modes, fonts</span>
+        </div>
+      </div>
+
+      <p class="lede">The version that lasted weeks and grew the most. It is
+      really five projects wearing one number.</p>
+
+      <h3>Tabs grew up</h3>
+      <p>Split view, where the gap between the two pages is the window background
+      so it is automatically in your board's colour. Pinned tabs, small and
+      first. Drag to reorder. A right-click menu with duplicate, mute, close
+      others. And crash-proof sessions: tabs are snapshotted every thirty
+      seconds, so a force quit costs half a minute instead of everything.</p>
+
+      <h3>Board files</h3>
+      <p>Chalkboard grew its own file format. A <code>.board</code> file is your
+      whole look, saved from the tray, opened by double click. Registered with
+      macOS, and read from the command line on Windows and Linux, because those
+      hand a double-clicked file over as an argument instead of an event.</p>
+      <p>This became the best idea in the project. The site, the app, and anyone
+      you send a file to all speak the same language.</p>
+
+      <h3>The borrowed looks</h3>
+      <p>Nine boards in the colours and shapes of browsers people already use.
+      The pitch: <em>switching does not have to look like switching.</em></p>
+
+      <div class="swatches">
+        <span class="sw"><i style="background:#FF7139"></i>Fox</span>
+        <span class="sw"><i style="background:#4285F4"></i>Shiny</span>
+        <span class="sw"><i style="background:#0A84FF"></i>Cupertino</span>
+        <span class="sw"><i style="background:#0078D4"></i>Edgy</span>
+        <span class="sw"><i style="background:#FB542B"></i>Lion</span>
+        <span class="sw"><i style="background:#FA1E4E"></i>Gamer</span>
+        <span class="sw"><i style="background:#9B6BD6"></i>Onion</span>
+        <span class="sw"><i style="background:#7B61FF"></i>Curve</span>
+        <span class="sw"><i style="background:#C0C0C0"></i>Ninety Five</span>
+      </div>
+
+      <p>These were rebuilt three times, each time because Peter checked them
+      against the real browsers on his phone and found them wrong.</p>
+
+      <ol>
+        <li>First they were Chalkboard's outline style wearing other brands'
+        colours. Wrong, because real browsers are flat.</li>
+        <li>Then flat, but with the brand colour in the outlines. Still wrong:
+        real browsers keep their colour in the logo, not the interface.
+        Firefox's interface has no orange in it at all. So the accent moved to
+        the icons, where those browsers actually keep it.</li>
+        <li>Then Chrome's colours turned out to be reversed, and could not be
+        fixed. Chalkboard had one background token painting both the tab row
+        and the toolbar, and Chrome needs them different.</li>
+      </ol>
+
+      <div class="note">
+        <h4>What the rule did here</h4>
+        <p>A new token was added, <code>--strip</code>, giving the tab row its own
+        colour. Firefox, Tor, Edge and Brave turned out to layer their rows the
+        same way and got the same fix. The inability to replicate something was
+        treated as a missing feature rather than an acceptable difference.</p>
+      </div>
+
+      <h3>Three modes</h3>
+      <p>First Beginner and Expert. The verdict from the person it was built for:
+      Beginner was too bare, it needed a bit of customization too. So it became
+      <b>Easy, Medium, Expert</b>: the first minute, the fun knobs, and every
+      knob there is. Nothing is ever removed, deeper controls just wait for the
+      tier that asks for them.</p>
+
+      <h3>Fonts</h3>
+      <p>Boards were changing every visual value except the typeface, which meant
+      Ninety Five was only half a costume. Every board now carries a font: Acid
+      is monospace, Paper is serif, Ninety Five is Tahoma, Edge and Opera GX use
+      Segoe, Chrome prefers Roboto.</p>
+
+      <h3>The gallery</h3>
+      <p>The website grew a downloadable board gallery, ending at twenty seven
+      packs: fifteen that ship inside the browser and twelve that exist only on
+      the site, including Blackboard, Vapor, Comic, Typewriter, Frost and
+      Slate.</p>
+      <p>Slate exists because of a question: why does there always have to be a
+      coloured line? There did not. Thickness zero plus glow zero gives solid
+      blocks. That same question unlocked the flat browser looks, which had been
+      impossible until borders could be zero.</p>
+
+      <h3>The fact-check</h3>
+      <p>Three full audits, every claim on the site and in the guide checked
+      against the code. Sixteen corrections. The site had been claiming there
+      was no list of themes to pick from, directly above a list of themes to
+      pick from. The guide's toolbar drawing was missing its bookmark star. The
+      Android notes still advertised six privacy features that had quietly
+      become manual settings.</p>
+      <p>Fifteen of those were words corrected to match the code. One was the
+      opposite: the claim that board files open by double click was only true on
+      macOS, so the code was changed to make the claim true.</p>
+    </section>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v6">
+      <div class="vhead">
+        <div class="vnum">0.6</div>
+        <div class="vname">
+          <h2>Field Report</h2>
+          <span class="vtag">it runs, and the truth arrives</span>
+        </div>
+      </div>
+
+      <p class="lede">The version where Chalkboard was run for the first time.</p>
+
+      <p>Every line up to this point had been written blind. No screenshot of the
+      browser existed anywhere. Then it was opened on a real computer, and the
+      report came back.</p>
+
+      <div class="pull">
+        works
+        <span>the most important word in the project</span>
+      </div>
+
+      <p>Everything in this version came from that.</p>
+
+      <ul>
+        <li><b>A loading bar</b>, requested within minutes of first launch. A thin
+        line of the board's accent at the seam between toolbar and page, moving
+        on the engine's three real milestones rather than a made-up percentage.
+        Chalk pages show no bar, because pretending to load a local page would
+        be theatre.</li>
+        <li><b>Website CSS</b>, dad's idea and a good one: your own styles injected
+        into websites themselves, for every site or just one, applied as you
+        type. Chrome CSS themes the browser; this themes the web.</li>
+        <li><b>The wallpaper fix.</b> The page image had never worked, and it was
+        broken in three places at once: the renderer stripped it before sending,
+        the main process rejected it as a security risk, and nothing anywhere
+        painted it.</li>
+        <li><b>Version sync</b>, so the number lives in one file and reaches the
+        app, the site, the guide and the notes from there. Settings and website
+        can no longer disagree.</li>
+      </ul>
+
+      <div class="note">
+        <h4>Found later, in this version's own new code</h4>
+        <p>A crash risk in the updater, stale stylesheet keys after navigation, a
+        memory leak in the loading bar's tab map, a missing size limit on
+        wallpapers, and two elements on the website sharing one id. New code is
+        always the least examined code.</p>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v7">
+      <div class="vhead">
+        <div class="vnum">0.7</div>
+        <div class="vname">
+          <h2>Self Service</h2>
+          <span class="vtag">it updates itself and wears its skin</span>
+        </div>
+      </div>
+
+      <p class="lede">The browser learned to look after itself.</p>
+
+      <ul>
+        <li><b>Update from a file.</b> The tray takes a small zip of the browser
+        and swaps it in, then restarts. About fifty kilobytes, because the engine
+        underneath never changes between versions. Going back is one button.
+        Nothing is downloaded on its own and nothing is checked online. This
+        exists because downloading ninety-eight megabytes twice, and having it
+        arrive incomplete twice, is a bad way to spend an afternoon.</li>
+        <li><b>Textures.</b> Sixteen grains over the browser's own surfaces:
+        chalk, chalk dust, paper, concrete, static, film, frost, linen, carbon,
+        corduroy, crosshatch, canvas, graph, dots, halftone. All generated from
+        four maths functions, none fetched, and websites are never touched.</li>
+        <li><b>Textures on boards, but only where the material is the idea.</b>
+        Chalk wears chalk grain, Paper wears paper, Acid wears film static,
+        Gamer wears carbon, Ninety Five wears a halftone dot screen. Every other
+        board says none explicitly, so the nine browser looks stay clean and
+        switching stays predictable.</li>
+        <li><b>A living mark.</b> The new tab page shows the Chalkboard window
+        drawn from your live tokens. Not a picture of the logo: the logo made of
+        your settings.</li>
+        <li><b>A living app icon.</b> On macOS the dock icon is repainted from
+        those same tokens whenever the look changes. Switch to Grape and the
+        icon goes violet. Any board anyone invents gets an icon nobody drew.</li>
+      </ul>
+    </section>
+
+    <div class="hr"></div>
+
+    <!-- ---------------------------------------------------------------- -->
+    <section class="plain">
+      <h2>The things that keep being true</h2>
+
+      <h3 style="margin-top:22px">Honesty in previews</h3>
+      <p>A card advertising a board must obey that board's own values. This
+      started as a small fix and became a rule: colour, corner shape, border
+      width, glow strength, texture and font all flow from the same values as
+      the file being handed out. Nothing in a preview is decorative.</p>
+
+      <h3>Nothing is forced</h3>
+      <p>The coloured outline is Chalkboard's signature, and it can be removed
+      entirely. The AI-free stance is not a limitation to work around, it is the
+      product.</p>
+
+      <h3>Say the limit out loud</h3>
+      <p>The page wallpaper cannot show behind websites, because websites paint
+      their own backgrounds, so the control says so. Copy protection means
+      Netflix will not play, so the site says so. Android is written but
+      unfinished, so every Android button says coming soon.</p>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="plain">
+      <h2>Who found what</h2>
+      <p>Worth recording honestly. The automated checks in this project verify
+      that code matches code: every element exists, every bridge is wired, every
+      channel is handled, nothing is registered twice. Those checks caught real
+      bugs, including one that would have crashed the app at launch.</p>
+      <p>They never caught a single one of these:</p>
+      <ul class="found">
+        <li>The glow that had stopped being proportional, so Acid did not look neon</li>
+        <li>The themes that did not turn blocky when they should</li>
+        <li>Chrome's reversed colours</li>
+        <li>Firefox on a phone being bluer than on a desktop</li>
+        <li>The site claiming there was no list of themes, above a list of themes</li>
+        <li>The page wallpaper doing nothing at all</li>
+      </ul>
+      <p>All six were found by looking at the thing. That is the argument for
+      running software instead of only reading it.</p>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="plain">
+      <h2>The file formats</h2>
+      <ul>
+        <li><b><code>.board</code></b> — a small file containing every token:
+        colours, shapes, glow, speed, font, texture, tab strip. Double-click to
+        open. This is how looks travel between people.</li>
+        <li><b>The update zip</b> — the browser's own source, about fifty
+        kilobytes, applied from inside the tray.</li>
+        <li><b>The site</b> — one HTML file with the source and the guide embedded
+        as data. No hosting required. Build number in the footer, because a
+        folder full of identically named downloads is its own kind of bug.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="hr"></div>
+    <p class="last">Long live the cook.</p>
+    <p class="meta">Chalkboard 1.0 · written by Peter</p>
+  </div>
+</footer>
+
+</body>
+</html>
