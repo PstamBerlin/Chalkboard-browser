@@ -220,7 +220,7 @@
 
     <h1>The Book of<br>Chalkboard</h1>
     <p class="standfirst">Every version, every change, and why it happened.</p>
-    <p class="byline">1.0 · run on exactly one computer</p>
+    <p class="byline">1.1 (coming soon) · run on exactly one computer</p>
   </div>
 </header>
 
@@ -261,6 +261,7 @@
         <li><span class="n">0.5</span><a href="#v5">The Long Beta</a><span class="what">Split view, browser looks, modes, fonts</span></li>
         <li><span class="n">0.6</span><a href="#v6">Field Report</a><span class="what">It runs, and the truth arrives</span></li>
         <li><span class="n">0.7</span><a href="#v7">Self Service</a><span class="what">It updates itself and wears its skin</span></li>
+        <li><span class="n">1.1</span><a href="#v11">Aurora</a><span class="what">A new look, and the old one kept</span></li>
       </ol>
     </div>
 
@@ -576,6 +577,82 @@
       </ul>
     </section>
 
+    <!-- ---------------------------------------------------------------- -->
+    <section class="ver" id="v11">
+      <div class="vhead">
+        <div class="vnum">1.1</div>
+        <div class="vname">
+          <h2>Aurora</h2>
+          <span class="vtag">a new look, and the old one kept · coming soon</span>
+        </div>
+      </div>
+
+      <p class="lede">The first version with a new face, and the first one that
+      promised to keep the old face <em>exactly</em> as it was.</p>
+
+      <p>The look started in another of Peter's apps, a photo editor: a violet
+      mesh, dark at the top and bright at the bottom, frosted glass, one butter
+      yellow accent. When it moved into the browser, Peter named it
+      <b>Aurora</b>. It became the default, with a light version for daytime,
+      and a Device setting that follows the computer from one to the other.</p>
+
+      <div class="swatches">
+        <span class="sw"><i style="background:linear-gradient(180deg,#140833,#5B2DB8 60%,#EC4899)"></i>Aurora</span>
+        <span class="sw"><i style="background:linear-gradient(90deg,#FBBF24,#FB7185)"></i>Sunrise</span>
+        <span class="sw"><i style="background:linear-gradient(90deg,#F472B6,#A78BFA)"></i>Bloom</span>
+        <span class="sw"><i style="background:linear-gradient(90deg,#2DD4BF,#60A5FA)"></i>Lagoon</span>
+        <span class="sw"><i style="background:linear-gradient(90deg,#4ADE80,#2DD4BF)"></i>Meadow</span>
+        <span class="sw"><i style="background:linear-gradient(90deg,#818CF8,#C084FC)"></i>Dusk</span>
+        <span class="sw"><i style="background:linear-gradient(90deg,#CBD5E1,#94A3B8)"></i>Smoke</span>
+      </div>
+
+      <h3>Borrowed from Firefox, done Chalkboard's way</h3>
+      <p>Firefox 157 had just redesigned itself, and the good parts came over.
+      The tab you are on became a pill: a dark fill, and a thin edge running from
+      violet to pink. Window density, from Compact to Touch. Tabs on the side. A
+      list of all your tabs you can search. Six gradient boards came too, under
+      our own names: Sunrise, Bloom, Lagoon, Meadow, Dusk and Smoke, each with a
+      light and a dark half.</p>
+      <p>The rule underneath did not change: nothing is fetched. Aurora's two
+      fonts, Unbounded and Manrope, ship inside the app. The new tab page got a
+      world clock, a focus timer and lists, all kept on your own machine, and no
+      weather, news or stocks, because those would mean the page talking to
+      someone. The shortcuts start empty apart from one + tile. Chalkboard never
+      guesses your sites.</p>
+
+      <h3>The old look, kept exactly</h3>
+      <p>Ember, the 1.0 default, is called <b>Classic</b> now, and it is the
+      exact 1.0 look: no glass, no mesh, the outline tab, the 1.0 fonts. It is
+      one click away, in the tray and on the new tab page. All fifteen 1.0 boards
+      stayed, unchanged.</p>
+
+      <div class="note">
+        <h4>What the rule did here</h4>
+        <p>A new look could have been one switch, Aurora or Classic. That would
+        have failed the rule, because nothing in between could be built. So every
+        part of the new look became its own token: <code>--mesh</code> for the
+        background, <code>--frost-blur</code> for the glass, <code>--grain</code>,
+        <code>--tabstyle</code> for the tab, <code>--tab-edge-a</code> and
+        <code>--tab-edge-b</code> for the pill's edge, and <code>--display</code>
+        for the title font. They sit together in a Style group in the tray. A
+        board sets them all; change one and the rest stay. You can rebuild the
+        old look by hand, or wear Classic's colours with Aurora's tab.</p>
+      </div>
+
+      <h3>The bug in 1.0</h3>
+      <p>While the tray was starting up, it saved its own default values over
+      your board, before it had read your board. So in 1.0 the look never
+      survived a restart: every launch came back as Ember.</p>
+      <p>1.1 fixes it. Because every 1.0 install has that accidental default
+      saved, 1.1 switches each one to Aurora once. After that, what you pick
+      stays picked.</p>
+      <p>Then Peter asked for more: settings you save are always saved. Every
+      setting, in the tray and on the new tab page, now survives a normal quit,
+      a crash right after the change, an update from a file, and clearing your
+      browsing data. Clearing wipes cookies, site data and the cache. It never
+      touches your settings.</p>
+    </section>
+
     <div class="hr"></div>
 
     <!-- ---------------------------------------------------------------- -->
@@ -589,8 +666,9 @@
       the file being handed out. Nothing in a preview is decorative.</p>
 
       <h3>Nothing is forced</h3>
-      <p>The coloured outline is Chalkboard's signature, and it can be removed
-      entirely. The AI-free stance is not a limitation to work around, it is the
+      <p>The coloured outline was Chalkboard's signature, and it could always be
+      removed entirely. In 1.1 the default traded it for glass, and Classic
+      keeps it one click away. The AI-free stance is not a limitation to work around, it is the
       product.</p>
 
       <h3>Say the limit out loud</h3>
@@ -627,7 +705,8 @@
       <h2>The file formats</h2>
       <ul>
         <li><b><code>.board</code></b> — a small file containing every token:
-        colours, shapes, glow, speed, font, texture, tab strip. Double-click to
+        colours, shapes, glow, speed, font, texture, tab strip, and since 1.1
+        the background, the glass, the grain and the tab style. Double-click to
         open. This is how looks travel between people.</li>
         <li><b>The update zip</b> — the browser's own source, about fifty
         kilobytes, applied from inside the tray.</li>
@@ -644,7 +723,7 @@
   <div class="wrap">
     <div class="hr"></div>
     <p class="last">Long live the cook.</p>
-    <p class="meta">Chalkboard 1.0 · written by Peter</p>
+    <p class="meta">Chalkboard 1.1, coming soon · written by Peter</p>
   </div>
 </footer>
 

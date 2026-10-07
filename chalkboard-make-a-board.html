@@ -158,7 +158,7 @@
 
   /* ================= the chalk page ================= */
   .mock .page{
-    background:var(--panel);height:168px;
+    background:var(--panel);min-height:168px;padding:14px 0;
     display:grid;place-items:center;
     position:relative;isolation:isolate;
   }
@@ -170,13 +170,115 @@
   /* the app centres a column and lets the line fill it, so the line is
      wide and its text sits left inside the pill, exactly as here */
   .mock .main{width:min(520px,80%);margin-inline:auto}
-  .mock .mark{width:96px;height:auto;margin:0 auto 16px;opacity:.92;display:block}
+  .mock .mark{width:84px;height:auto;margin:0 auto 12px;opacity:.92;display:block}
   .mock .ln{
     display:flex;align-items:center;height:50px;padding:0 20px;
     border:2px solid var(--stroke);border-radius:999px;
     background:var(--fill);color:var(--ink-dim);
     box-shadow:0 0 14px color-mix(in srgb, var(--stroke) 45%, transparent);
   }
+
+  /* ---------- 1.1: the Aurora parts, on the same mock ----------
+     The app's own 1.1 rules, with the .mock prefix. The script turns the
+     keyword tokens into attributes on the mock (data-mesh, data-nova,
+     data-glass, data-grain, data-tone, data-tabstyle), the way the app
+     does on its window. At the 1.0 values none of this applies. */
+  .mock{
+    position:relative;isolation:isolate;
+    --mesh:none; --frost:#0A0A0B; --frost-blur:0px; --grain:0; --tabstyle:outline;
+    --wash-a:#0A0A0B; --wash-b:#0A0A0B; --accent-ink:#0A0A0B;
+    --tab-edge-a:#FF7F5C; --tab-edge-b:#FF7F5C; --display:var(--font);
+    --nline:color-mix(in srgb, var(--ink) 12%, transparent);
+    --lift:rgba(255,255,255,.10); --lift-2:rgba(255,255,255,.14); --shade:rgba(0,0,0,.25);
+    --ctl-r:max(3px, calc(var(--radius) - 5px));
+  }
+  .mock[data-tone="light"]{--lift:rgba(255,255,255,.8);--lift-2:rgba(255,255,255,.9);--shade:rgba(36,27,60,.12)}
+  .mock[data-mesh="aurora"]{background:
+    radial-gradient(60% 55% at 14% 92%, rgba(167,139,250,.75) 0%, rgba(167,139,250,0) 60%),
+    radial-gradient(55% 50% at 86% 88%, rgba(236,72,153,.55) 0%, rgba(236,72,153,0) 60%),
+    radial-gradient(40% 40% at 60% 70%, rgba(124,58,237,.55) 0%, rgba(124,58,237,0) 60%),
+    linear-gradient(180deg, #140833 0%, #2A0F5E 42%, #5B2DB8 100%)}
+  .mock[data-mesh="aurora-light"]{background:linear-gradient(180deg,#EFE9FA 0%,#F6F2FB 50%,#FFFFFF 100%)}
+  .mock[data-mesh="wash"]{background:
+    linear-gradient(180deg, transparent 0, var(--bg) 260px),
+    linear-gradient(100deg, var(--wash-a), var(--wash-b))}
+  .mock[data-grain]::before{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    opacity:var(--grain,0);mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+  .mock[data-glass] .chrome{
+    background:var(--frost);
+    -webkit-backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+    backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+  }
+  .mock[data-nova] .chrome{border-bottom:1px solid var(--nline);box-shadow:inset 0 1px 0 var(--lift)}
+  .mock[data-nova] .page{background:transparent}
+  .mock[data-nova] .round,
+  .mock[data-nova] .omni{
+    background:var(--fill);border:1px solid var(--nline);
+    box-shadow:inset 0 1px 0 var(--lift-2);color:var(--ink);
+  }
+  .mock[data-nova] .round{border-radius:var(--ctl-r)}
+  .mock[data-nova] .round.dim{opacity:.35;box-shadow:none}
+  .mock[data-nova] .round.cb{color:var(--stroke)}
+  .mock[data-nova] .omni{border-radius:var(--ctl-r);padding:0 12px}
+  .mock[data-nova] .ln{
+    border:1px solid var(--nline);color:var(--ink-dim);background:var(--frost);
+    -webkit-backdrop-filter:blur(var(--frost-blur)) saturate(1.5);backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+    box-shadow:inset 0 1px 0 var(--lift-2),0 10px 40px rgba(0,0,0,.25);
+  }
+  .mock[data-nova]:not([data-tabstyle="outline"]) .tab{border:var(--tab-bw, 1px) solid transparent;color:var(--ink-dim);font-weight:600}
+  .mock[data-tabstyle="glow"] .tab.on{
+    color:var(--ink);border-color:transparent;
+    background:
+      radial-gradient(110% 150% at 50% 145%, color-mix(in srgb, var(--stroke) 42%, transparent) 0%, transparent 68%),
+      var(--fill);
+    box-shadow:0 5px var(--glow) -7px color-mix(in srgb, var(--stroke) 75%, transparent),
+               inset 0 1px 0 var(--lift-2);
+  }
+  .mock[data-tabstyle="pill"]{--pill-fill:color-mix(in srgb, var(--bg) 62%, #000);--pill-ink:#FFFFFF;--tab-bw:1.5px}
+  .mock[data-tabstyle="pill"][data-tone="light"]{--pill-fill:#FFFFFF;--pill-ink:var(--ink)}
+  .mock[data-tabstyle="pill"] .tab{border:1.5px solid transparent;border-radius:999px}
+  .mock[data-tabstyle="pill"] .tab.on{
+    color:var(--pill-ink);box-shadow:0 2px 10px -4px var(--shade);
+    background:
+      linear-gradient(var(--pill-fill), var(--pill-fill)) padding-box,
+      linear-gradient(90deg, var(--tab-edge-a), var(--tab-edge-b)) border-box;
+  }
+  .mock[data-tabstyle="pill"] .tab.on .x{opacity:.75}
+  /* the new tab page's widgets, one of them, to show the glass and the
+     title font: numbers are drawn in --display */
+  .mock .nt-mini{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:12px}
+  .mock .nt-plus{
+    width:34px;height:34px;display:grid;place-items:center;flex:none;
+    border:var(--stroke-w) dashed var(--faint);border-radius:calc(var(--radius) - 4px);color:var(--ink-dim);font-size:17px;
+  }
+  .mock .nt-clock{
+    display:flex;align-items:baseline;gap:7px;height:34px;padding:0 12px;
+    border:var(--stroke-w) solid var(--faint);border-radius:calc(var(--radius) - 4px);background:var(--fill);
+  }
+  .mock .nt-clock b{font-family:var(--display);font-weight:500;font-size:1.2em;line-height:34px;font-variant-numeric:tabular-nums}
+  .mock .nt-clock i{font-style:normal;color:var(--ink-dim)}
+  .mock[data-nova] .nt-plus{border:1px dashed var(--nline);background:var(--fill)}
+  .mock[data-nova] .nt-clock{
+    border:1px solid var(--nline);background:var(--frost);
+    -webkit-backdrop-filter:blur(var(--frost-blur)) saturate(1.5);backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+  }
+
+  /* ---------- the token list ---------- */
+  .toks{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+  .tk{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .tk .nm{flex:0 0 150px;display:flex;flex-direction:column;gap:2px}
+  .tk code{font-family:var(--mono);font-size:12px;color:var(--accent)}
+  .tk span{color:var(--dim);font-size:13.5px}
+  .tk b{color:var(--ink);font-weight:600;font-family:var(--mono);font-size:12px}
+  pre.ex{
+    margin:0 0 12px;overflow-x:auto;padding:14px 16px;border-radius:11px;
+    background:#0E0E10;border:1px solid var(--line);color:#7FE3A0;
+    font-family:var(--mono);font-size:11.5px;line-height:1.55;
+  }
+  @media (max-width:560px){ .tk{flex-direction:column;gap:4px} .tk .nm{flex:none} }
 
   /* ---------- controls ---------- */
   .sect{border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:14px 0}
@@ -236,7 +338,7 @@
   <header>
     <a class="back" href="#" onclick="history.back();return false">Back</a>
     <h1>Make a Board</h1>
-    <p class="sub">Every value a Board carries, with the real window below to see it in. Keys, Custom CSS, Website CSS and your search engine live in the browser itself, because those are settings rather than part of a look.</p>
+    <p class="sub">Every value a Board carries, with the real window below to see it in. Since 1.1 that includes every part of Aurora: the background, the glass, the grain and the pill tab. Keys, Custom CSS, Website CSS and your search engine live in the browser itself, because those are settings rather than part of a look.</p>
   </header>
 </div>
 
@@ -274,7 +376,7 @@
           </div>
           <span class="round"><svg viewBox="0 0 24 24"><path d="M12 4.5l2.3 4.7 5.2.8-3.8 3.6.9 5.1-4.6-2.4-4.6 2.4.9-5.1L4.5 10l5.2-.8z"/></svg></span>
           <span class="round"><svg viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6.5 11 7.6 7.2A1.6 1.6 0 0 1 9.1 6h5.8a1.6 1.6 0 0 1 1.5 1.2L17.5 11"/><circle cx="7.3" cy="14.4" r="2.6"/><circle cx="16.7" cy="14.4" r="2.6"/><path d="M9.9 14.4h4.2"/></svg></span>
-          <span class="round"><svg viewBox="0 0 512 512" class="cmark"><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="currentColor" stroke-width="52" stroke-linecap="butt"/></svg></span>
+          <span class="round cb"><svg viewBox="0 0 512 512" class="cmark"><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="currentColor" stroke-width="52" stroke-linecap="butt"/></svg></span>
           <span class="round"><svg viewBox="0 0 24 24"><path d="M5 8h14M5 12h14M5 16h14"/></svg></span>
         </div>
       </div>
@@ -291,6 +393,10 @@
             <circle cx="246" cy="78" r="15" fill="var(--ink-dim)" opacity=".8"/>
           </svg>
           <div class="ln">Write something</div>
+          <div class="nt-mini" aria-hidden="true">
+            <span class="nt-plus">+</span>
+            <span class="nt-clock"><b>21:14</b><i>Berlin</i></span>
+          </div>
         </div>
       </div>
     </div>
@@ -302,7 +408,13 @@
   <section class="sect">
     <h2>Start from</h2>
     <div class="chips" id="packs"></div>
-    <p class="fine">Pick one, then change anything. Nothing here is locked.</p>
+    <p class="fine">Pick one, then change anything. Nothing here is locked. Aurora and the gradient boards have a light and a dark half in the browser; here Aurora has both, and the gradient boards start from their dark half.</p>
+  </section>
+
+  <section class="sect">
+    <h2>The 1.1 look <span style="font-weight:400;opacity:.7">(coming soon)</span></h2>
+    <div id="look"></div>
+    <p class="fine">Every part of Aurora is its own token, so you can put it on any board. A 1.0 board leaves them at the 1.0 values: no background, no glass, no grain, the outline tab.</p>
   </section>
 
   <section class="sect">
@@ -320,6 +432,7 @@
     <div class="row"><span>Font</span>
       <select id="font">
         <option value="ui-sans-serif,-apple-system,system-ui,sans-serif">System sans</option>
+        <option value="&quot;Manrope&quot;, ui-sans-serif, -apple-system, system-ui, sans-serif">Aurora (Manrope)</option>
         <option value="Georgia,&quot;Iowan Old Style&quot;,serif">Serif</option>
         <option value="ui-monospace,Menlo,Consolas,monospace">Monospace</option>
         <option value="&quot;Segoe UI&quot;,system-ui,sans-serif">Segoe</option>
@@ -328,6 +441,9 @@
         <option value="&quot;Chalkboard SE&quot;,&quot;Bradley Hand&quot;,cursive">Chalk</option>
         <option value="&quot;Courier New&quot;,ui-monospace,monospace">Courier</option>
       </select>
+    </div>
+    <div class="row"><span>Title font</span>
+      <select id="display"></select>
     </div>
     <div id="motion"></div>
   </section>
@@ -342,6 +458,33 @@
     <h2>Pictures</h2>
     <div id="walls"></div>
     <p class="fine">Your own photo on the new tab page or behind the toolbars. It travels inside the .board file, so keep it small if you plan to send it to someone.</p>
+  </section>
+
+  <section class="sect">
+    <h2>New in 1.1: the tokens <span style="font-weight:400;opacity:.7">(coming soon; 1.0 ignores them)</span></h2>
+    <div class="toks">
+      <div class="tk"><div class="nm"><code>--mesh</code></div><span>The window's background, and the new tab page's. One of <b>aurora</b> (the violet mesh, dark at the top and bright at the bottom), <b>aurora-light</b> (Aurora's pale version), <b>wash</b> (a soft gradient across the top, made from --wash-a and --wash-b) or <b>none</b> (the flat 1.0 window). A word, never CSS.</span></div>
+      <div class="tk"><div class="nm"><code>--wash-a</code><code>--wash-b</code></div><span>The two colours of a wash, left to right. Any colour.</span></div>
+      <div class="tk"><div class="nm"><code>--frost</code></div><span>The fill of the frosted glass bars and cards. Any colour, see-through allowed, like <b>rgba(22,10,52,.42)</b>. A board without glass sets it the same as --bg.</span></div>
+      <div class="tk"><div class="nm"><code>--frost-blur</code></div><span>How much the glass blurs what is behind it, in px, from <b>0px</b> to <b>50px</b>. 0px turns the glass off and the bars go back to --bg.</span></div>
+      <div class="tk"><div class="nm"><code>--accent-ink</code></div><span>The text drawn on the accent (--stroke), on selected buttons. Any colour that reads on the accent.</span></div>
+      <div class="tk"><div class="nm"><code>--display</code></div><span>The font for titles and numbers. A font list, like <b>"Unbounded", "Manrope", ui-sans-serif, system-ui, sans-serif</b>. --font is still the font for everything else.</span></div>
+      <div class="tk"><div class="nm"><code>--grain</code></div><span>How strong the built in grain is over the background, a number from <b>0</b> to <b>1</b>. 0 is no grain.</span></div>
+      <div class="tk"><div class="nm"><code>--tabstyle</code></div><span>The tab you are on. <b>pill</b> (a capsule with a dark fill and a gradient edge), <b>glow</b> (a soft accent glow under it) or <b>outline</b> (exactly the 1.0 tab).</span></div>
+      <div class="tk"><div class="nm"><code>--tab-edge-a</code><code>--tab-edge-b</code></div><span>The pill's edge, running left to right from the first colour to the second. Any colour.</span></div>
+      <div class="tk"><div class="nm"><code>--tabglow</code></div><span>An older name from while 1.1 was being made: <b>on</b> or <b>off</b>. Still read, as --tabstyle glow or outline. New boards should use --tabstyle.</span></div>
+    </div>
+    <p class="fine">The new tab page only takes values without &lt; &gt; { } ; or \ in them, nothing that loads a web address, and at most 200 characters, so keep values plain.</p>
+  </section>
+
+  <section class="sect">
+    <h2>Example: Aurora</h2>
+    <p class="fine" style="margin:0 0 12px">The new default, the dark half, as a board file. Start from it here, or copy it and change anything.</p>
+    <pre class="ex" id="auroraex"></pre>
+    <div class="btns">
+      <button class="btn" id="auroraUse" type="button">Start from Aurora</button>
+      <button class="btn quiet" id="auroraCopy" type="button">Copy the example</button>
+    </div>
   </section>
 
   <section class="sect">
@@ -375,6 +518,29 @@ function setTok(name, value){
   // No translation layer. The mockup reads the browser's own token names,
   // so a value that looks right here is the value that ships.
   mock.style.setProperty(name, value);
+  if (LOOK_TOKENS.has(name)) paintMock();
+}
+
+/* CSS cannot branch on a token's value, so the keyword tokens become
+   attributes on the mock, as the app does on its window. */
+const LOOK_TOKENS = new Set(['--mesh', '--frost-blur', '--grain', '--tabstyle', '--tabglow', '--bg']);
+function paintMock(){
+  const m = T['--mesh'];
+  const mesh = ['aurora', 'aurora-light', 'wash'].includes(m) ? m : 'none';
+  mock.dataset.mesh = mesh;
+  mock.toggleAttribute('data-nova', mesh !== 'none');
+  mock.toggleAttribute('data-glass', parseFloat(T['--frost-blur']) > 0);
+  mock.toggleAttribute('data-grain', parseFloat(T['--grain']) > 0);
+  let ts = T['--tabstyle'];
+  if (!ts && T['--tabglow']) ts = T['--tabglow'] === 'on' ? 'glow' : 'outline';
+  mock.dataset.tabstyle = ['pill', 'glow', 'outline'].includes(ts) ? ts : 'outline';
+  mock.dataset.tone = toneOf(T['--bg']);
+}
+// light or dark, judged from a hex colour; anything else counts as dark
+function toneOf(c){
+  if (!/^#[0-9a-fA-F]{6}$/.test(c || '')) return 'dark';
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(c.substr(i, 2), 16));
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.55 ? 'light' : 'dark';
 }
 
 /* ---------- textures, generated exactly as the browser generates them ---------- */
@@ -438,15 +604,79 @@ const TEXTURES = {
 
 /* ---------- the boards you can start from ---------- */
 const SANS = 'ui-sans-serif,-apple-system,system-ui,sans-serif';
+const AURORA_FONT = '"Manrope", ui-sans-serif, -apple-system, system-ui, sans-serif';
+const AURORA_DISPLAY = '"Unbounded", "Manrope", ui-sans-serif, system-ui, sans-serif';
+
+/* A 1.0 board says nothing about the new look, so it gets the 1.0 values,
+   the same rule the app uses: no background, no glass, no grain, the
+   outline tab, and its own font for titles too. */
+function mixHex(x, y, t){
+  const ch = (h, i) => parseInt(h.substr(i, 2), 16);
+  return '#' + [1, 3, 5].map((i) =>
+    ('0' + Math.round(ch(x, i) * t + ch(y, i) * (1 - t)).toString(16)).slice(-2)).join('').toUpperCase();
+}
+function plainExtras(t){
+  const out = { '--mesh':'none', '--frost-blur':'0px', '--tabstyle':'outline', '--grain':'0',
+    '--frost':t['--bg'], '--accent-ink':t['--bg'],
+    '--tab-edge-a':t['--stroke'], '--tab-edge-b':t['--stroke'],
+    '--wash-a':mixHex(t['--stroke'], t['--bg'], 0.5), '--wash-b':mixHex(t['--stroke'], t['--bg'], 0.22),
+    '--display':t['--font'] };
+  return out;
+}
 function pack(t){
-  return Object.assign({
+  const b = Object.assign({
     '--stroke-w':'2px','--glow':'14px','--radius':'18px','--tab-radius':'999px',
     '--toolbar-h':'46px','--tabstrip-h':'42px','--gap':'6px','--fsize':'13px',
     '--speed':'150ms','--font':SANS,'--texture':'none','--strip':'transparent',
   }, t);
+  return Object.assign(b, plainExtras(b));
 }
+
+/* 1.1 boards, copied from the app's own list. Aurora is the default; the
+   six washes are our own names. In the browser each has a light and a
+   dark half; here each half is its own starting point. */
+const NOVA_SHAPE = {
+  '--stroke-w':'1px','--glow':'14px','--radius':'14px','--tab-radius':'12px',
+  '--toolbar-h':'48px','--tabstrip-h':'42px','--gap':'6px','--fsize':'13px',
+  '--speed':'150ms','--font':AURORA_FONT,'--display':AURORA_DISPLAY,'--tabstyle':'pill',
+  '--strip':'transparent','--texture':'none',
+};
+function rgba(hex, a){
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.substr(i, 2), 16));
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+}
+function wash(t){
+  return Object.assign({}, NOVA_SHAPE, {
+    '--bg':t.bg, '--ink':t.ink, '--stroke':t.accent, '--accent-ink':t.on,
+    '--wash-a':t.a, '--wash-b':t.b, '--panel':t.panel,
+    '--tab-edge-a':t.ea, '--tab-edge-b':t.eb,
+    '--ink-dim':rgba(t.ink, 0.64), '--fill':'rgba(255,255,255,.075)',
+    '--frost':rgba(t.bg, 0.45), '--frost-blur':'24px', '--mesh':'wash', '--grain':'0.06',
+  });
+}
+const AURORA = Object.assign({}, NOVA_SHAPE, {
+  '--stroke':'#FDE68A','--accent-ink':'#2E1065','--bg':'#140833','--panel':'#170B36',
+  '--fill':'rgba(255,255,255,.075)','--ink':'#FFFFFF','--ink-dim':'rgba(255,255,255,.64)',
+  '--mesh':'aurora','--frost':'rgba(22,10,52,.42)','--frost-blur':'26px','--grain':'0.14',
+  '--wash-a':'#7C3AED','--wash-b':'#DB2777','--tab-edge-a':'#A78BFA','--tab-edge-b':'#F472B6' });
+const AURORA_LIGHT = Object.assign({}, NOVA_SHAPE, {
+  '--stroke':'#7C3AED','--accent-ink':'#FFFFFF','--bg':'#EFE9FA','--panel':'#FFFFFF',
+  '--fill':'rgba(255,255,255,.5)','--ink':'#241B3C','--ink-dim':'rgba(36,27,60,.66)',
+  '--mesh':'aurora-light','--frost':'rgba(255,255,255,.55)','--frost-blur':'26px','--grain':'0.14',
+  '--wash-a':'#7C3AED','--wash-b':'#DB2777','--tab-edge-a':'#7C3AED','--tab-edge-b':'#DB2777' });
+
 const BOARDS = {
-  Ember:  pack({'--stroke':'#FF7F5C','--bg':'#0A0A0B','--fill':'#1A1210','--panel':'#111112','--ink':'#F2EFE9','--ink-dim':'#8B8177','--glow':'10px'}),
+  Aurora: AURORA,
+  'Aurora light': AURORA_LIGHT,
+  Sunrise: wash({ bg:'#130D09', ink:'#FBF3EC', accent:'#FFB870', on:'#2A1404', a:'#5A3A0C', b:'#5C2318', panel:'#1F1611', ea:'#FBBF24', eb:'#FB7185' }),
+  Bloom:   wash({ bg:'#110A14', ink:'#F9EEF6', accent:'#F9A8D4', on:'#3B0A24', a:'#561642', b:'#371C62', panel:'#1D1222', ea:'#F472B6', eb:'#A78BFA' }),
+  Lagoon:  wash({ bg:'#071015', ink:'#EAF6F8', accent:'#67E8F9', on:'#0B2A33', a:'#0C4746', b:'#122F68', panel:'#0F1C24', ea:'#2DD4BF', eb:'#60A5FA' }),
+  Meadow:  wash({ bg:'#09110B', ink:'#ECF7EE', accent:'#86EFAC', on:'#0A2E1A', a:'#1D4721', b:'#0D4741', panel:'#121D15', ea:'#4ADE80', eb:'#2DD4BF' }),
+  Dusk:    wash({ bg:'#0D0B17', ink:'#F1EFFB', accent:'#A5B4FC', on:'#1E1B4B', a:'#28226C', b:'#461D52', panel:'#181528', ea:'#818CF8', eb:'#C084FC' }),
+  Smoke:   wash({ bg:'#0D0F12', ink:'#EEF1F5', accent:'#CBD5E1', on:'#1E293B', a:'#272D35', b:'#1D2228', panel:'#181B20', ea:'#CBD5E1', eb:'#94A3B8' }),
+
+  // the old default, called Classic since 1.1: exactly the 1.0 look
+  Classic: pack({'--stroke':'#FF7F5C','--bg':'#0A0A0B','--fill':'#1A1210','--panel':'#111112','--ink':'#F2EFE9','--ink-dim':'#8B8177','--glow':'10px'}),
   Ice:    pack({'--stroke':'#63D7E8','--bg':'#070B0D','--fill':'#0D1A1E','--panel':'#0B1214','--ink':'#EAF6F8','--ink-dim':'#6E858B','--glow':'16px'}),
   Chalk:  pack({'--stroke':'#F2EFE6','--bg':'#12161A','--fill':'#1A1F24','--panel':'#0E1113','--ink':'#F2EFE6','--ink-dim':'#767C83','--glow':'0px','--tab-radius':'10px','--texture':TEXTURES.Chalk['--texture'],'--texture-size':'180px','--texture-op':'0.55','--texture-blend':'soft-light'}),
   Acid:   pack({'--stroke':'#00FF00','--bg':'#000000','--fill':'#001400','--panel':'#000000','--ink':'#CFFFCF','--ink-dim':'#4E874E','--glow':'22px','--radius':'4px','--tab-radius':'3px','--speed':'60ms','--font':'ui-monospace,Menlo,Consolas,monospace','--texture':TEXTURES.Film['--texture'],'--texture-size':'90px','--texture-op':'0.22','--texture-blend':'overlay'}),
@@ -613,6 +843,92 @@ function markTextures(){
            document.querySelector('#texrow output').textContent = r.value; }
 }
 
+/* ---------- the 1.1 look ---------- */
+(function(){
+  const box = document.getElementById('look');
+  function chips(label, name, values){
+    const d = row(label);
+    const c = document.createElement('div'); c.className = 'chips';
+    values.forEach(([v, text]) => {
+      const b = document.createElement('button');
+      b.className = 'chip'; b.type = 'button'; b.textContent = text; b.dataset.v = v;
+      b.addEventListener('click', () => { setTok(name, v); syncLook(); });
+      c.append(b);
+    });
+    d.append(c); d.dataset.chips = name;
+    box.append(d);
+  }
+  function colour(label, name){
+    const d = row(label);
+    const c = document.createElement('input'); c.type = 'color';
+    const t = document.createElement('input'); t.type = 'text'; t.spellcheck = false;
+    const push = (v) => { setTok(name, v); if (/^#[0-9a-fA-F]{6}$/.test(v)) c.value = v; t.value = v; };
+    c.addEventListener('input', () => push(c.value));
+    // see-through colours are fine here, the glass is meant to be
+    t.addEventListener('change', () => {
+      const v = t.value.trim();
+      if (/^#[0-9a-fA-F]{6}$/.test(v) || /^rgba?\(\s*[\d.]+\s*,\s*[\d.]+\s*,\s*[\d.]+\s*(,\s*[\d.]+\s*)?\)$/.test(v)) push(v);
+      else t.value = T[name] || '';
+    });
+    d.append(c, t); d.dataset.tok = name;
+    box.append(d);
+  }
+  chips('Background', '--mesh', [['aurora','Aurora'],['aurora-light','Aurora light'],['wash','Wash'],['none','None']]);
+  colour('Wash from', '--wash-a');
+  colour('Wash to', '--wash-b');
+  colour('Glass', '--frost');
+  const d = row('Glass blur');
+  const r = document.createElement('input'); r.type = 'range'; r.min = 0; r.max = 50; r.step = 1;
+  const o = document.createElement('output');
+  r.addEventListener('input', () => { setTok('--frost-blur', r.value + 'px'); o.textContent = r.value === '0' ? 'off' : r.value + 'px'; });
+  d.append(r, o); d.dataset.blur = '1';
+  box.append(d);
+  const g = row('Grain');
+  const gr = document.createElement('input'); gr.type = 'range'; gr.min = 0; gr.max = 100; gr.step = 1;
+  const go = document.createElement('output');
+  gr.addEventListener('input', () => { setTok('--grain', String(gr.value / 100)); go.textContent = gr.value === '0' ? 'off' : (gr.value / 100).toFixed(2); });
+  g.append(gr, go); g.dataset.grain = '1';
+  box.append(g);
+  chips('Tab style', '--tabstyle', [['pill','Pill'],['glow','Glow'],['outline','Outline']]);
+  colour('Pill edge from', '--tab-edge-a');
+  colour('Pill edge to', '--tab-edge-b');
+  colour('Text on accent', '--accent-ink');
+})();
+
+function syncLook(){
+  document.querySelectorAll('#look [data-chips]').forEach((d) => {
+    let v = T[d.dataset.chips];
+    if (d.dataset.chips === '--tabstyle' && !v && T['--tabglow']) v = T['--tabglow'] === 'on' ? 'glow' : 'outline';
+    d.querySelectorAll('.chip').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
+  });
+  const bl = document.querySelector('#look [data-blur]');
+  if (bl) {
+    const n = parseInt(T['--frost-blur'], 10) || 0;
+    bl.querySelector('input').value = n;
+    bl.querySelector('output').textContent = n ? n + 'px' : 'off';
+  }
+  const gr = document.querySelector('#look [data-grain]');
+  if (gr) {
+    const n = parseFloat(T['--grain']) || 0;
+    gr.querySelector('input').value = Math.round(n * 100);
+    gr.querySelector('output').textContent = n ? n.toFixed(2) : 'off';
+  }
+}
+
+// the title font: Aurora's, or any of the text fonts
+(function(){
+  const sel = document.getElementById('display');
+  const a = document.createElement('option');
+  a.value = AURORA_DISPLAY; a.textContent = 'Aurora (Unbounded)';
+  sel.append(a);
+  [...document.getElementById('font').options].forEach((o) => {
+    if (o.value === AURORA_FONT) return;
+    const c = document.createElement('option'); c.value = o.value; c.textContent = o.textContent;
+    sel.append(c);
+  });
+  sel.addEventListener('change', () => setTok('--display', sel.value));
+})();
+
 /* ---------- pictures ---------- */
 // Same two images the browser offers: one on the new tab page, one behind
 // the toolbars, each with fade and blur so text stays readable on top.
@@ -660,7 +976,7 @@ Object.keys(BOARDS).forEach((name) => {
   const i = document.createElement('i');
   i.style.background = BOARDS[name]['--stroke'];
   b.append(i, document.createTextNode(name));
-  b.addEventListener('click', () => { apply(BOARDS[name]); document.getElementById('bname').value = name; });
+  b.addEventListener('click', () => { apply(BOARDS[name]); document.getElementById('bname').value = name; b.classList.add('on'); });
   document.getElementById('packs').append(b);
 });
 
@@ -700,6 +1016,19 @@ function syncControls(){
     const hit = [...f.options].find((o) => o.value === T['--font']);
     if (hit) f.value = hit.value;
   }
+  const ds = document.getElementById('display');
+  if (T['--display']) {
+    const hit = [...ds.options].find((o) => o.value === T['--display']);
+    if (hit) ds.value = hit.value;
+  }
+  document.querySelectorAll('#look .row[data-tok]').forEach((d) => {
+    const v = T[d.dataset.tok];
+    if (!v) return;
+    const c = d.querySelector('input[type=color]'), t = d.querySelector('input[type=text]');
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) c.value = v;
+    t.value = v;
+  });
+  syncLook();
   markTextures();
 }
 
@@ -1160,6 +1489,10 @@ document.getElementById('paste').addEventListener('click', () => {
       if (/^--[a-z-]+$/.test(k) && typeof v === 'string') clean[k] = v;
     });
     if (!Object.keys(clean).length) throw new Error('empty');
+    if ('--tabglow' in clean) {
+      if (!clean['--tabstyle']) clean['--tabstyle'] = clean['--tabglow'] === 'on' ? 'glow' : 'outline';
+      delete clean['--tabglow'];
+    }
     apply(clean);
     if (obj.name) document.getElementById('bname').value = obj.name;
     said.textContent = 'Loaded. Change anything you like.';
@@ -1168,7 +1501,24 @@ document.getElementById('paste').addEventListener('click', () => {
   }
 });
 
-apply(BOARDS.Ember);
+/* ---------- the Aurora example ---------- */
+(function(){
+  const text = JSON.stringify({ chalkboard: 1, name: 'Aurora', tokens: BOARDS.Aurora }, null, 2);
+  document.getElementById('auroraex').textContent = text;
+  document.getElementById('auroraUse').addEventListener('click', () => {
+    apply(BOARDS.Aurora);
+    document.getElementById('bname').value = 'Aurora';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  const copy = document.getElementById('auroraCopy');
+  copy.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(text); copy.textContent = 'Copied'; }
+    catch { copy.textContent = 'Select the text above'; }
+    setTimeout(() => { copy.textContent = 'Copy the example'; }, 1500);
+  });
+})();
+
+apply(BOARDS.Classic);
 document.getElementById('bname').value = 'My board';
 </script>
 

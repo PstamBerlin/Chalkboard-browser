@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Chalkboard, a browser that is empty by default</title>
-<meta name="description" content="A browser you build yourself. No AI, no telemetry, no account. Every colour, shape and size is yours to set.">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="s" x1="0.1" y1="0.95" x2="0.9" y2="0.05"><stop offset="0" stop-color="%235FC2D4"/><stop offset="0.34" stop-color="%23E8697D"/><stop offset="0.66" stop-color="%23F0C85E"/><stop offset="1" stop-color="%23F2EFE6"/></linearGradient></defs><rect width="512" height="512" rx="114" fill="%230C0F11"/><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="url(%23s)" stroke-width="52"/></svg>'><rect width="512" height="512" rx="114" fill="%230A0A0B"/><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="%23FF7F5C" stroke-width="52"/></svg>'>
+<title>Chalkboard, a browser that tells nobody anything</title>
+<meta name="description" content="A browser that tells nobody anything. No AI, no telemetry, no account. Every colour, shape and size is yours to set.">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="s" x1="0.1" y1="0.95" x2="0.9" y2="0.05"><stop offset="0" stop-color="%235FC2D4"/><stop offset="0.34" stop-color="%23E8697D"/><stop offset="0.66" stop-color="%23F0C85E"/><stop offset="1" stop-color="%23F2EFE6"/></linearGradient></defs><rect width="512" height="512" rx="114" fill="%230C0F11"/><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="url(%23s)" stroke-width="52"/></svg>'>
 <meta property="og:title" content="Chalkboard">
-<meta property="og:description" content="A browser that is empty by default. No AI, no telemetry, no account. Every colour, shape and size is yours to set.">
+<meta property="og:description" content="A browser that tells nobody anything. No AI, no telemetry, no account. Every colour, shape and size is yours to set.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0A0A0B">
 <style>
@@ -217,11 +217,10 @@ p{margin:0}
 
 /* ================= the chalk page ================= */
 .demo .page{
-  border-top:var(--stroke-w) solid var(--faint);
   min-height:190px;display:grid;place-items:center;padding:26px 18px;
   background:var(--panel,var(--bg));
 }
-.demo .main{width:min(520px,86%);margin-inline:auto}
+.demo .main{width:min(680px,92%);margin-inline:auto}
 .demo .cmarkbig{width:104px;height:auto;margin:0 auto 18px;display:block;opacity:.92}
 .demo .ln{
   display:flex;align-items:center;height:50px;padding:0 20px;
@@ -385,6 +384,216 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
 .said{color:var(--stroke);font-size:13px;min-height:1.3em;margin:12px 0 0}
 .said.bad{color:#FF6B6B}
 
+/* ---------------- 1.1: Aurora in the demo ----------------
+   The app's own 1.1 rules out of ui.css, scoped to .demo the same way as
+   the 1.0 ones above. The script sets data-mesh, data-nova, data-glass,
+   data-grain, data-tone and data-tabstyle on the demo from the board's
+   tokens, exactly as the app sets them on its window. A 1.0 board sets
+   none of them, so it looks exactly as it did. */
+.demo{
+  position:relative;isolation:isolate;
+  --line:color-mix(in srgb, var(--ink) 12%, transparent);
+  --lift:rgba(255,255,255,.10);--lift-2:rgba(255,255,255,.14);--shade:rgba(0,0,0,.25);
+  --ctl-r:max(3px, calc(var(--radius,16px) - 5px));
+}
+.demo[data-tone="light"]{--lift:rgba(255,255,255,.8);--lift-2:rgba(255,255,255,.9);--shade:rgba(36,27,60,.12)}
+.demo[data-nova]{
+  border:1px solid var(--line);border-radius:18px;font-family:var(--font);
+  box-shadow:inset 0 1px 0 var(--lift),0 10px 40px rgba(0,0,0,.25);
+}
+/* the window's own background: dark at the top, bright at the bottom */
+.demo[data-mesh="aurora"]{background:
+  radial-gradient(60% 55% at 14% 92%, rgba(167,139,250,.75) 0%, rgba(167,139,250,0) 60%),
+  radial-gradient(55% 50% at 86% 88%, rgba(236,72,153,.55) 0%, rgba(236,72,153,0) 60%),
+  radial-gradient(40% 40% at 60% 70%, rgba(124,58,237,.55) 0%, rgba(124,58,237,0) 60%),
+  linear-gradient(180deg, #140833 0%, #2A0F5E 42%, #5B2DB8 100%)}
+.demo[data-mesh="aurora-light"]{background:linear-gradient(180deg,#EFE9FA 0%,#F6F2FB 50%,#FFFFFF 100%)}
+/* a wash: the board's two colours across the top, fading into its window */
+.demo[data-mesh="wash"]{background:
+  linear-gradient(180deg, transparent 0, var(--bg) 300px),
+  linear-gradient(100deg, var(--wash-a), var(--wash-b))}
+/* the grain, drawn here like everything else, under the bars and the page */
+.demo[data-grain]::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:var(--grain,0);mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+/* frosted glass over the background */
+.demo[data-glass] .chrome,
+.demo[data-glass] .side{
+  background:var(--frost);
+  -webkit-backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+  backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+}
+.demo[data-nova] .chrome{border-bottom:1px solid var(--line);box-shadow:inset 0 1px 0 var(--lift)}
+.demo[data-nova] .dbody{border-top:0}
+.demo[data-nova] .side{border-right:1px solid var(--line)}
+.demo[data-nova] .page{background:transparent}
+/* small glass controls; the selected thing is solid accent, no glass */
+.demo[data-nova] .round,
+.demo[data-nova] .omni,
+.demo[data-nova] .mark{
+  background:var(--fill);border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 var(--lift-2);color:var(--ink);
+}
+.demo[data-nova] .round{border-radius:var(--ctl-r)}
+.demo[data-nova] .round.dim{opacity:.35;box-shadow:none}
+.demo[data-nova] .round.cb{color:var(--stroke)}
+.demo[data-nova] .round.on{background:var(--stroke);color:var(--accent-ink);border-color:transparent;box-shadow:none}
+.demo[data-nova] .omni{border-radius:var(--ctl-r);padding:0 12px}
+.demo[data-nova] .omni .site{font-weight:700}
+.demo[data-nova] .mark{border-radius:var(--ctl-r);color:var(--ink-dim);font-weight:600}
+.demo[data-nova] .sidenew{border:1px dashed var(--line);border-radius:var(--ctl-r);font-weight:600}
+
+/* tabs: three styles. outline is exactly the 1.0 tab, so the softer tab
+   only applies to pill and glow */
+.demo[data-nova]:not([data-tabstyle="outline"]) .tab{border:var(--tab-bw, 1px) solid transparent;color:var(--ink-dim);font-weight:600}
+.demo[data-tabstyle="glow"] .tab.on{
+  color:var(--ink);border-color:transparent;
+  background:
+    radial-gradient(110% 150% at 50% 145%, color-mix(in srgb, var(--stroke) 42%, transparent) 0%, transparent 68%),
+    var(--fill);
+  box-shadow:0 5px var(--glow) -7px color-mix(in srgb, var(--stroke) 75%, transparent),
+             inset 0 1px 0 var(--lift-2);
+}
+/* pill: a capsule with a dark fill and a thin edge running left to right
+   through the two edge colours, the close button on the right */
+.demo[data-tabstyle="pill"]{
+  --pill-fill:color-mix(in srgb, var(--bg) 62%, #000);
+  --pill-ink:#FFFFFF;
+  --tab-bw:1.5px;
+}
+.demo[data-tabstyle="pill"][data-tone="light"]{--pill-fill:#FFFFFF;--pill-ink:var(--ink)}
+.demo[data-tabstyle="pill"] .tab{border:1.5px solid transparent;border-radius:999px}
+.demo[data-tabstyle="pill"] .tab.on{
+  color:var(--pill-ink);box-shadow:0 2px 10px -4px var(--shade);
+  background:
+    linear-gradient(var(--pill-fill), var(--pill-fill)) padding-box,
+    linear-gradient(90deg, var(--tab-edge-a), var(--tab-edge-b)) border-box;
+}
+.demo[data-tabstyle="pill"] .tab.on .x{opacity:.75}
+
+/* Window density: an override on top of the board, so switching boards
+   keeps it. Same sizes as the app. */
+.demo[data-density="compact"]{--toolbar-h:36px!important;--tabstrip-h:32px!important;--gap:4px!important;--fsize:12px!important;--btn:26px}
+.demo[data-density="touch"]{--toolbar-h:54px!important;--tabstrip-h:48px!important;--gap:8px!important;--fsize:14px!important;--btn:40px}
+.demo .round{width:var(--btn,32px);height:var(--btn,32px)}
+.demo .round.sm{width:calc(var(--btn,32px) - 6px);height:calc(var(--btn,32px) - 6px)}
+.demo .omni{height:calc(var(--btn,32px) + 2px)}
+
+/* list all tabs, at the end of the tab strip */
+.demo .alltabs{padding:0 0 7px;display:flex;flex-direction:column;gap:5px}
+.demo .alltabs[hidden]{display:none}
+.demo .atq{
+  height:30px;padding:0 12px;font:inherit;font-size:.92em;color:var(--ink);
+  background:var(--fill);border:var(--stroke-w) solid var(--faint);border-radius:var(--tab-radius);
+}
+.demo[data-nova] .atq{border:1px solid var(--line);border-radius:var(--ctl-r)}
+.demo .atq:focus{outline:none;border-color:var(--stroke)}
+.demo .atrow{display:flex;align-items:center;gap:8px;height:28px;padding:0 10px;
+  border-radius:var(--tab-radius);color:var(--ink);font-size:.9em}
+.demo[data-nova] .atrow{border-radius:var(--ctl-r);font-weight:600}
+.demo .atrow.now{background:var(--fill)}
+.demo .atrow .u{color:var(--ink-dim);margin-left:auto;font-size:.9em}
+
+/* tabs on the side: the tab list moves into a column on the left */
+.demo .dbody{display:flex;border-top:var(--stroke-w) solid var(--faint)}
+.demo .side{
+  display:none;flex:0 0 min(200px,40%);min-width:0;padding:8px;
+  background:var(--bg);border-right:var(--stroke-w) solid var(--faint);
+}
+.demo[data-side] .side{display:block}
+.demo[data-side] .tabstrip{display:none}
+.demo[data-side] .chrome{padding-top:4px}
+.demo .side .tabs{flex-direction:column;align-items:stretch;overflow:visible;padding:0;gap:4px}
+.demo .side .tab{max-width:none;flex:0 0 auto;height:30px}
+.demo .sidenew{
+  display:flex;align-items:center;gap:8px;height:30px;margin-bottom:6px;padding:0 10px;
+  border:var(--stroke-w) dashed var(--faint);border-radius:var(--tab-radius);
+  color:var(--ink-dim);font-size:.86em;
+}
+.demo .sidenew svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+/* the 1.1 new tab page: shortcuts, widgets, Customize */
+.demo .page{position:relative;flex:1;min-width:0}
+.demo .ln{max-width:520px;margin-inline:auto}
+.demo[data-nova] .ln{
+  border:1px solid var(--line);border-radius:999px;color:var(--ink-dim);
+  background:var(--frost);
+  -webkit-backdrop-filter:blur(var(--frost-blur)) saturate(1.5);backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+  box-shadow:inset 0 1px 0 var(--lift-2),0 10px 40px rgba(0,0,0,.25);
+}
+.demo .nt-tiles{display:flex;align-items:center;justify-content:center;gap:12px;margin:18px 0 4px}
+.demo .nt-plus{
+  width:42px;height:42px;flex:none;display:grid;place-items:center;
+  border:var(--stroke-w) dashed var(--faint);border-radius:calc(var(--radius,16px) - 2px);
+  color:var(--ink-dim);font-size:20px;line-height:1;
+}
+.demo[data-nova] .nt-plus{border:1px dashed var(--line);background:var(--fill)}
+.demo .nt-empty{color:var(--ink-dim);font-size:.92em}
+.demo .nt-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;text-align:left}
+.demo .nt-card{
+  min-width:0;padding:11px 12px;display:flex;flex-direction:column;gap:6px;
+  border:var(--stroke-w) solid var(--faint);border-radius:var(--radius,16px);background:var(--fill);
+}
+.demo[data-nova] .nt-card{
+  border:1px solid var(--line);background:var(--frost);
+  -webkit-backdrop-filter:blur(var(--frost-blur)) saturate(1.5);backdrop-filter:blur(var(--frost-blur)) saturate(1.5);
+  box-shadow:inset 0 1px 0 var(--lift),0 10px 40px rgba(0,0,0,.18);
+}
+.demo .nt-h{font-size:.74em;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);font-weight:700}
+.demo[data-nova] .nt-h{font-family:var(--title-font,var(--font));font-weight:800;font-size:.7em;letter-spacing:.16em}
+.demo .nt-row{display:flex;align-items:baseline;gap:8px;min-width:0}
+.demo .nt-row i{font-style:normal;color:var(--ink-dim);font-size:.9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.demo .nt-num{font-variant-numeric:tabular-nums;font-size:1.25em;font-weight:600;color:var(--ink)}
+.demo[data-nova] .nt-num{font-family:var(--title-font,var(--font));font-weight:500}
+.demo .nt-ring{display:flex;align-items:center;gap:10px}
+.demo .nt-ring svg{width:40px;height:40px;flex:none;transform:rotate(-90deg)}
+.demo .nt-ring .rt{fill:none;stroke:var(--faint);stroke-width:3.5}
+.demo .nt-ring .rf{fill:none;stroke:var(--stroke);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:100.5;stroke-dashoffset:22}
+.demo[data-nova] .nt-ring .rt{stroke:var(--line)}
+.demo .nt-item{display:flex;align-items:center;gap:7px;font-size:.92em;color:var(--ink);min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.demo .nt-item::before{content:"";width:10px;height:10px;flex:none;border-radius:50%;border:1.5px solid var(--ink-dim)}
+.demo .nt-item.done{color:var(--ink-dim);text-decoration:line-through}
+.demo .nt-item.done::before{background:var(--stroke);border-color:var(--stroke)}
+.demo .nt-fab{
+  position:absolute;right:12px;bottom:12px;width:32px;height:32px;display:grid;place-items:center;
+  border:var(--stroke-w) solid var(--faint);border-radius:50%;color:var(--ink-dim);background:var(--fill);
+}
+.demo[data-nova] .nt-fab{border:1px solid var(--line);border-radius:var(--ctl-r);background:var(--frost);color:var(--ink)}
+.demo .nt-fab svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* the strip under the demo, one line per kind of choice */
+.strip.look{flex-direction:column;align-items:stretch;gap:12px}
+.sline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.sline .striplab{min-width:58px}
+.sline > .boards:not(.seg){flex:1 1 280px;min-width:0}
+.boards.seg{gap:4px}
+.boards button.dimmed{opacity:.45}
+
+/* the board cards for 1.1 boards wear the same background and pill */
+.bcard[data-nova] .bmock{border:1px solid color-mix(in srgb, var(--bink) 14%, transparent)}
+.bcard[data-mesh="aurora"] .bmock{background:
+  radial-gradient(60% 55% at 14% 92%, rgba(167,139,250,.75) 0%, rgba(167,139,250,0) 60%),
+  radial-gradient(55% 50% at 86% 88%, rgba(236,72,153,.55) 0%, rgba(236,72,153,0) 60%),
+  radial-gradient(40% 40% at 60% 70%, rgba(124,58,237,.55) 0%, rgba(124,58,237,0) 60%),
+  linear-gradient(180deg, #140833 0%, #2A0F5E 42%, #5B2DB8 100%)}
+.bcard[data-mesh="aurora-light"] .bmock{background:linear-gradient(180deg,#EFE9FA 0%,#F6F2FB 50%,#FFFFFF 100%)}
+.bcard[data-mesh="wash"] .bmock{background:linear-gradient(180deg, transparent 0, var(--bb) 85%),
+  linear-gradient(100deg, var(--bwa), var(--bwb))}
+.bcard[data-nova] .bmock .bpage{background:transparent}
+.bcard[data-nova] .bmock .bpill,
+.bcard[data-nova] .bmock .bdot,
+.bcard[data-nova] .bmock .bsearch{border:1px solid color-mix(in srgb, var(--bink) 14%, transparent);background:var(--bf)}
+.bcard[data-nova] .bmock .bdot{border-radius:3px}
+.bcard[data-tabstyle="pill"] .bmock .brow.strip .bpill{border-radius:999px}
+.bcard[data-tabstyle="pill"] .bmock .bpill.on{
+  border:1px solid transparent;box-shadow:none;
+  background:linear-gradient(var(--bpf), var(--bpf)) padding-box,
+             linear-gradient(90deg, var(--bea), var(--beb)) border-box;
+}
+
 @media (max-width:760px){
   .pillars{grid-template-columns:1fr}
   .tokens{grid-template-columns:1fr}
@@ -392,6 +601,14 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
   .row b{flex:none}
   section{padding:56px 0}
   .demo .marks{display:none}
+}
+@media (max-width:560px){
+  .demo .nt-cards{grid-template-columns:1fr 1fr}
+  .demo .nt-list{display:none}
+  .demo[data-side] .nt-cards{grid-template-columns:1fr}
+  .demo[data-side] .nt-timer{display:none}
+  .demo .nt-empty{font-size:.85em}
+  .demo .page{padding-bottom:56px}
 }
 @media (prefers-reduced-motion:reduce){*{transition-duration:0ms!important}}
 :focus-visible{outline:2px solid var(--stroke);outline-offset:3px}
@@ -439,7 +656,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       </svg>
       Chalkboard
     </span>
-    <span class="ver">1.0</span>
+    <span class="ver">1.0 · 1.1 soon</span>
     <span class="sp"></span>
     <button class="cap" id="navget">Download</button>
   </div>
@@ -448,9 +665,9 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
 <header class="hero">
   <div class="wrap">
     <svg class="heromark" viewBox="0 0 512 512" role="img" aria-label="Chalkboard"><use href="#cmark"/></svg>
-    <p class="eyebrow">--stroke: #FF7F5C</p>
-    <h1>Empty by<br>default.</h1>
-    <p class="lede">A browser you build yourself. Every colour, shape, size and font is a setting you can reach. No AI anywhere in it. No telemetry, no account, no server.</p>
+    <p class="eyebrow">--mesh: aurora</p>
+    <h1>Tells nobody<br>anything.</h1>
+    <p class="lede">A browser you build yourself. Every colour, shape, size and font is a setting you can reach. No AI anywhere in it. No telemetry, no account, no server. Coming soon in 1.1: a look called Aurora, with the old one still one click away. Until then the download is 1.0.</p>
 
     <div class="herobtns">
       <a class="cap big" id="heromac" href="#get">Get it for Mac</a>
@@ -460,11 +677,14 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
     </div>
 
     <!-- The hero is the product. Change the colour and the whole page
-         changes with it, because that is the entire pitch. -->
+         changes with it, because that is the entire pitch. In 1.1 the
+         window opens in Aurora, the new default, and the page keeps its
+         own coral until you pick a board. -->
+    <!-- SCREENSHOT: hero-aurora-dark (the real 1.1 window in Aurora dark, new tab page showing, same shape as this demo) -->
     <div class="demo" id="demo">
       <div class="chrome">
         <div class="tabstrip">
-          <div class="tabs">
+          <div class="tabs" id="demotabs">
             <button class="tab on">
               <span class="fav chalkfav">C</span>
               <span class="lbl">New tab</span>
@@ -482,6 +702,11 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
             </button>
           </div>
           <span class="round sm"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></span>
+          <button class="round sm" id="demoall" type="button" title="List all tabs" aria-label="List all tabs" aria-expanded="false"><svg viewBox="0 0 24 24"><rect x="4" y="8.5" width="12.5" height="11" rx="2.6"/><path d="M8 5.2h9.2a2.8 2.8 0 0 1 2.8 2.8v8.2"/></svg></button>
+        </div>
+        <div class="alltabs" id="demoalltabs" hidden>
+          <input class="atq" id="demoatq" type="text" placeholder="Search your tabs" spellcheck="false" autocomplete="off" aria-label="Search your tabs">
+          <div id="demoatrows"></div>
         </div>
 
         <div class="toolbar">
@@ -493,7 +718,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
           </div>
           <span class="round"><svg viewBox="0 0 24 24"><path d="M12 4.5l2.3 4.7 5.2.8-3.8 3.6.9 5.1-4.6-2.4-4.6 2.4.9-5.1L4.5 10l5.2-.8z"/></svg></span>
           <span class="round"><svg viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6.5 11 7.6 7.2A1.6 1.6 0 0 1 9.1 6h5.8a1.6 1.6 0 0 1 1.5 1.2L17.5 11"/><circle cx="7.3" cy="14.4" r="2.6"/><circle cx="16.7" cy="14.4" r="2.6"/><path d="M9.9 14.4h4.2"/></svg></span>
-          <span class="round"><svg viewBox="0 0 512 512" class="cmark"><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="currentColor" stroke-width="52" stroke-linecap="butt"/></svg></span>
+          <span class="round cb"><svg viewBox="0 0 512 512" class="cmark"><path d="M341.6 160.9 A128 128 0 1 0 341.6 351.1" fill="none" stroke="currentColor" stroke-width="52" stroke-linecap="butt"/></svg></span>
           <span class="round"><svg viewBox="0 0 24 24"><path d="M5 8h14M5 12h14M5 16h14"/></svg></span>
         </div>
 
@@ -504,33 +729,143 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
         </div>
       </div>
 
-      <div class="page">
-        <div class="main">
-          <svg class="cmarkbig" viewBox="0 0 512 320" aria-hidden="true">
-            <g fill="none" stroke="var(--stroke)" stroke-width="24" stroke-linejoin="round" opacity=".9">
-              <rect x="94" y="36" width="324" height="248" rx="42"/>
-              <path d="M 94 120 H 418"/>
-            </g>
-            <circle cx="146" cy="78" r="15" fill="var(--stroke)"/>
-            <circle cx="196" cy="78" r="15" fill="var(--ink)" opacity=".55"/>
-            <circle cx="246" cy="78" r="15" fill="var(--dim)" opacity=".8"/>
-          </svg>
-          <div class="ln">Write something</div>
+      <div class="dbody">
+        <!-- tabs on the side: the tab list moves in here -->
+        <div class="side" id="demoside">
+          <span class="sidenew"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg>New tab</span>
+        </div>
+        <!-- the 1.1 new tab page: the mark, the line, shortcuts (empty
+             apart from the + tile), three widgets and Customize -->
+        <div class="page">
+          <div class="main">
+            <svg class="cmarkbig" viewBox="0 0 512 320" aria-hidden="true">
+              <g fill="none" stroke="var(--stroke)" stroke-width="24" stroke-linejoin="round" opacity=".9">
+                <rect x="94" y="36" width="324" height="248" rx="42"/>
+                <path d="M 94 120 H 418"/>
+              </g>
+              <circle cx="146" cy="78" r="15" fill="var(--stroke)"/>
+              <circle cx="196" cy="78" r="15" fill="var(--ink)" opacity=".55"/>
+              <circle cx="246" cy="78" r="15" fill="var(--ink-dim)" opacity=".8"/>
+            </svg>
+            <div class="ln">Write something</div>
+            <div class="nt-tiles">
+              <span class="nt-plus" aria-hidden="true">+</span>
+              <span class="nt-empty">Add the sites you use most.</span>
+            </div>
+            <div class="nt-cards">
+              <div class="nt-card">
+                <span class="nt-h">World clock</span>
+                <span class="nt-row"><b class="nt-num" data-zone="Europe/Berlin">21:14</b><i>Berlin</i></span>
+                <span class="nt-row"><b class="nt-num" data-zone="Asia/Tokyo">04:14</b><i>Tokyo</i></span>
+              </div>
+              <div class="nt-card nt-timer">
+                <span class="nt-h">Focus timer</span>
+                <span class="nt-ring">
+                  <svg viewBox="0 0 40 40" aria-hidden="true"><circle class="rt" cx="20" cy="20" r="16"/><circle class="rf" cx="20" cy="20" r="16"/></svg>
+                  <span class="nt-row" style="flex-direction:column;gap:0"><b class="nt-num">25:00</b><i>Focus</i></span>
+                </span>
+              </div>
+              <div class="nt-card nt-list">
+                <span class="nt-h">Lists</span>
+                <span class="nt-item done">Print three dragons</span>
+                <span class="nt-item">Market on Saturday</span>
+              </div>
+            </div>
+          </div>
+          <span class="nt-fab" title="Customize" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span>
         </div>
       </div>
     </div>
 
-    <div class="strip">
-      <span class="striplab">outline</span>
-      <div class="sw" id="swatches"></div>
-      <input class="hexin" id="hexin" value="#FF7F5C" spellcheck="false" aria-label="Exact outline colour">
-      <span class="striplab">glow</span>
-      <input class="rng" id="glow" type="range" min="0" max="30" value="14" aria-label="Glow">
-      <div class="boards" id="heroboards"></div>
+    <div class="strip look" id="lookstrip">
+      <div class="sline"><span class="striplab">new</span><div class="boards" id="heroboardsnew"></div></div>
+      <div class="sline"><span class="striplab">from 1.0</span><div class="boards" id="heroboards"></div></div>
+      <div class="sline">
+        <span class="striplab">mode</span><div class="boards seg" id="modeseg"></div>
+        <span class="striplab">density</span><div class="boards seg" id="densityseg"></div>
+        <span class="striplab">tabs</span><div class="boards seg" id="sideseg"></div>
+      </div>
+      <div class="sline">
+        <span class="striplab">background</span><div class="boards seg" id="meshseg"></div>
+        <span class="striplab">glass</span><div class="boards seg" id="glassseg"></div>
+        <span class="striplab">tab style</span><div class="boards seg" id="tabseg"></div>
+      </div>
+      <div class="sline">
+        <span class="striplab">accent</span>
+        <div class="sw" id="swatches"></div>
+        <input class="hexin" id="hexin" value="#FDE68A" spellcheck="false" aria-label="Exact accent colour">
+        <span class="striplab">glow</span>
+        <input class="rng" id="glow" type="range" min="0" max="30" value="14" aria-label="Glow">
+      </div>
     </div>
-    <p class="note">This page is running the real thing. Whatever you pick here, the browser can do.</p>
+    <p class="note">This page is running the real thing: everything you can pick here is in Chalkboard 1.1, coming soon (1.0 has the fifteen 1.0 boards). Aurora's two fonts ship inside the app; this page fetches nothing, so here it uses yours.</p>
   </div>
 </header>
+
+<section id="new">
+  <div class="wrap">
+    <p class="eyebrow">1.1 · coming soon &nbsp;--mesh --tabstyle --frost-blur</p>
+    <h2>A new look.<br>The old one kept.</h2>
+    <p class="lede" style="margin-top:16px">Coming soon in 1.1. Aurora becomes the new default: a violet mesh, dark at the top and bright at the bottom, frosted glass bars, one butter yellow accent, and a pill for the tab you are on. If you liked 1.0 better, it is called Classic now, it is exactly the 1.0 look, and it is one click away. All fifteen 1.0 boards are still there, unchanged.</p>
+
+    <!-- SCREENSHOT: aurora-light (the 1.1 window in Aurora light) -->
+    <!-- SCREENSHOT: classic-next-to-1.0 (Classic in 1.1 beside the real 1.0 window, to show they match) -->
+    <!-- SCREENSHOT: newtab-aurora (the new tab page with shortcuts, the three widgets and the Customize panel open) -->
+    <!-- SCREENSHOT: tray-look-style (the tray's Look section with the Style group) -->
+    <!-- SCREENSHOT: tabs-on-the-side (vertical tabs with the list of all tabs open) -->
+
+    <div class="pillars">
+      <div class="card">
+        <h3>Aurora</h3>
+        <p>The new default. A violet mesh, frosted glass, one butter yellow accent, and two fonts, Unbounded and Manrope, that ship inside the app so nothing is fetched. Light, Dark, or Device to follow your Mac.</p>
+      </div>
+      <div class="card">
+        <h3>The pill tab</h3>
+        <p>The tab you are on is a capsule with a dark fill and a thin edge that runs from violet to pink, the close button on the right. Glow and the 1.0 Outline are the other two tab styles.</p>
+      </div>
+      <div class="card">
+        <h3>Classic, one click away</h3>
+        <p>The old default is called Classic now, and it is the exact 1.0 look: no glass, no mesh, outline tabs, the 1.0 fonts. Pick it in the tray or on the new tab page.</p>
+      </div>
+      <div class="card">
+        <h3>All fifteen 1.0 boards</h3>
+        <p>Every board from 1.0 is still in Boards, unchanged: Classic, Ice, Chalk, Acid, Grape, Paper and the nine borrowed browser looks.</p>
+      </div>
+      <div class="card">
+        <h3>Six gradient boards</h3>
+        <p>Sunrise, Bloom, Lagoon, Meadow, Dusk and Smoke. Two colours washed across the top of the window, each with a light and a dark half, and a pill edge in the same two colours.</p>
+      </div>
+      <div class="card">
+        <h3>Style, mix and match</h3>
+        <p>Every part of the new look is its own setting: background, frosted glass and how strong it is, grain, tab style, the pill's two edge colours, and fonts. Rebuild the old look by hand, or mix old and new. The mix travels in .board files.</p>
+      </div>
+      <div class="card">
+        <h3>A new tab page with things on it</h3>
+        <p>Shortcuts with a + tile that is always there. It starts empty, because Chalkboard never guesses your sites. A world clock, a focus timer and lists. Customize picks the theme, the wallpaper and what to show. All of it stays on your machine.</p>
+      </div>
+      <div class="card">
+        <h3>Window density</h3>
+        <p>Automatic, Standard, Compact or Touch. Automatic goes compact when the window is small, and switching boards keeps it.</p>
+      </div>
+      <div class="card">
+        <h3>Tabs on the side</h3>
+        <p>One switch in Layout moves the tabs into a column on the left. Dragging to reorder works there too.</p>
+      </div>
+      <div class="card">
+        <h3>List all tabs</h3>
+        <p>A button at the end of the tab strip opens a list of every open tab, and you can search it.</p>
+      </div>
+      <div class="card">
+        <h3>Settings stay saved</h3>
+        <p>What you pick stays picked: after a quit, after a crash right after the change, after an update. Clearing your browsing data wipes cookies, site data and the cache, never your settings. In 1.0 the look quietly reset on every restart.</p>
+      </div>
+      <div class="card">
+        <h3>A Look section first</h3>
+        <p>The tray opens with the look: theme swatches with the Style group right under them, then Light, Dark or Device, and window density. On Aurora and the gradient boards the sliders wear a tick ruler.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="what">
   <div class="wrap">
@@ -551,12 +886,18 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       <div class="tok"><code>--tab-max</code><span>How wide tabs are allowed to get</span></div>
       <div class="tok"><code>--texture</code><span>The grain over the browser's own surfaces</span></div>
       <div class="tok"><code>--strip</code><span>The tab row, when it differs from the toolbar</span></div>
+      <div class="tok"><code>--mesh</code><span>The window's background: Aurora, Aurora light, a wash, or none</span></div>
+      <div class="tok"><code>--frost-blur</code><span>Frosted glass, up to 50px, zero turns it off</span></div>
+      <div class="tok"><code>--tabstyle</code><span>Pill, glow, or the 1.0 outline</span></div>
+      <div class="tok"><code>--tab-edge-a/b</code><span>The two colours of the pill's edge</span></div>
+      <div class="tok"><code>--grain</code><span>Grain over the background, 0 to 1</span></div>
+      <div class="tok"><code>--display</code><span>The font for titles and numbers</span></div>
     </div>
 
     <div class="pillars">
       <div class="card">
         <h3>Boards</h3>
-        <p>A Board is every setting as one line of text. Copy it, send it to a friend, and they get your exact browser. Fifteen presets to start from, including a proper light one and nine borrowed browser looks. The tray has Easy, Medium and Expert modes, from three settings to every knob there is.</p>
+        <p>A Board is every setting as one line of text. Copy it, send it to a friend, and they get your exact browser. Twenty two to start from: Aurora, six gradient boards, and all fifteen from 1.0, including Classic, a proper light one and nine borrowed browser looks. The tray has Easy, Medium and Expert modes, from a few settings to every knob there is.</p>
       </div>
       <div class="card">
         <h3>Texture</h3>
@@ -568,7 +909,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       </div>
       <div class="card">
       <h3>Three modes</h3>
-        <p>Easy is the first minute: Boards, the accent colour, a wallpaper. Medium adds the fun knobs. Expert shows every knob there is. Nothing is ever removed, deeper controls wait for the tier that asks.</p>
+        <p>Easy is the first minute: Boards, the accent colour, a wallpaper, and the look: light or dark, the background, frosted glass and the tab style. Medium adds the fun knobs, like the pill's edge colours, grain and fonts. Expert shows every knob there is. Nothing is ever removed, deeper controls wait for the tier that asks.</p>
       </div>
       <div class="card">
       <h3>Update from a file</h3>
@@ -584,7 +925,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       </div>
       <div class="card">
         <h3>Yours, all the way down</h3>
-        <p>Your own search engine, any URL with %s in it. Any font on the machine. Toolbar at the top or the bottom. Your pictures on the new tab page and the toolbars. Extensions by dropping a folder in.</p>
+        <p>Your own search engine, any URL with %s in it. Any font on the machine. Toolbar at the top or the bottom, tabs on top or on the side. Your pictures on the new tab page and the toolbars. Extensions by dropping a folder in.</p>
       </div>
     </div>
   </div>
@@ -602,7 +943,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       <a class="cap big" href="chalkboard-make-a-board.html">Make your own</a>
     </div>
 
-    <p class="note" style="margin-top:22px">Twelve of these only exist here. Fifteen ship inside the browser, including the nine that borrow the colours of browsers you already know, so switching does not have to look like switching.</p>
+    <p class="note" style="margin-top:22px">Twelve of these only exist here. Twenty two ship inside the browser: Aurora, the six gradient boards, and the fifteen from 1.0, including the nine that borrow the colours of browsers you already know, so switching does not have to look like switching. Aurora and the gradient boards have a light and a dark half; the card shows the dark one.</p>
   </div>
 </section>
 
@@ -650,7 +991,8 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       <div class="row"><b>Encrypted DNS</b><span>So your internet provider cannot read the name of every site you visit. On by default on desktop. Not available as a switch on Android, it has to be set by hand in about:config.<i class="only warn">desktop only</i></span></div>
       <div class="row"><b>Nothing gets in silently</b><span>Camera, microphone, location and notifications are refused unless you say yes, and sites cannot check whether they already have permission.</span></div>
       <div class="row"><b>It lies about itself</b><span>A browser nobody else uses is a perfect fingerprint. Chalkboard tells websites it is a plain, common browser. Same reason Tor makes everyone look identical.</span></div>
-      <div class="row"><b>Your data stays yours</b><span>History, bookmarks and settings are plain files on your own device. Forget everything deletes the lot in one tap.</span></div>
+      <div class="row"><b>The new tab page fetches nothing</b><span>No weather, no news, no stocks, no web fonts. Its fonts ship inside the app, and the shortcuts, clocks, timer and lists keep their data on your own machine.</span></div>
+      <div class="row"><b>Your data stays yours</b><span>History, bookmarks and settings are plain files on your own device. Forget everything deletes the lot in one tap. Clearing only your browsing data takes the cookies, site data and cache, and leaves your settings alone.</span></div>
     </div>
   </div>
 </section>
@@ -682,23 +1024,27 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
 
     <div class="getbox soonbox">
       <h3>Chalkboard for Android <span class="pill">coming soon</span></h3>
-      <p>It is written, not finished. Built on the Firefox engine so add-ons genuinely work, with the engine's own ad and popup blocking, twelve remappable gestures and the same Chalk Tray. What is left is getting it through a clean build.</p>
+      <p>It is written, not finished. Built on the Firefox engine so add-ons genuinely work, with the engine's own ad and popup blocking, twelve remappable gestures and the same Chalk Tray. It builds now (0.6 beta, newest look) and is being tested; it comes out once it has run on a real phone.</p>
       <a class="cap big" id="mainapk" href="https://github.com/PstamBerlin/Chalkboard-browser">Watch it on GitHub</a>
 
       <p class="dlnote">One download, both versions inside — open the folder and pick Apple Silicon (Macs from 2020 on: M1/M2/M3…) or Intel (older Macs). First open: right-click the app → Open — macOS warns once about an unsigned app, then never again.</p>
     </div>
 
     <div class="getbox">
-      <h3>Chalkboard for Mac <span class="pill">1.0</span></h3>
-      <p class="dlnote" style="margin-top:0">New in 1.0: sixteen textures, an icon and a new tab mark that wear your board, and updating from inside the browser. From 0.6: a loading bar, Website CSS for restyling pages, Easy and Medium and Expert modes, fifteen boards with fonts, split view, pinned tabs, board files.</p>
+      <h3>Chalkboard for Mac <span class="pill">1.0 now · 1.1 soon</span></h3>
+      <p class="dlnote" style="margin-top:0"><b>The download is Chalkboard 1.0 for now.</b> 1.1 goes here as soon as it is finished.</p>
+      <p class="dlnote">Coming soon in 1.1: Aurora with a light and a dark half, the pill tab, six gradient boards, Classic (exactly the 1.0 look), Style for mixing old and new, a new tab page with shortcuts, a world clock, a focus timer and lists, window density, tabs on the side, list all tabs, smooth animations, and settings that stay saved. From 1.0: sixteen textures, an icon and a new tab mark that wear your board, and updating from inside the browser. From 0.6: a loading bar, Website CSS for restyling pages, Easy and Medium and Expert modes, fifteen boards with fonts, split view, pinned tabs, board files.</p>
+      <p class="dlnote">Coming from 1.0? When 1.1 is out, it switches you to Aurora once, because 1.0 never really saved your look. Classic is one click away, and from then on what you pick stays picked.</p>
       <p>A real Mac app, nothing to install first. Pick the build for your chip — each is a one-click download.</p>
       <a class="cap big" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">Download for Mac</a>
       <p class="dlnote">Apple Silicon is any Mac from 2020 on (M1, M2, M3…); Intel is older Macs. First open: right click the app and choose Open — macOS warns once about an unsigned app, then never again.</p>
     </div>
 
     <div class="getbox">
+      <!-- 1.1: CHALKBOARD_ZIP in the script below is still the 1.0 source. When the
+           1.1 source zip goes in, change this pill to 1.1 and drop the line about 1.0. -->
       <h3>Windows and Linux, from source <span class="pill">1.0</span></h3>
-      <p>The whole browser, about 40 KB of code. The same source also runs on macOS.</p>
+      <p>The whole browser, about 40 KB of code. The same source also runs on macOS. This download is the 1.0 source, like the Mac app, until 1.1 is finished.</p>
       <button class="cap big" id="mainget">Download chalkboard.zip</button>
       <button class="cap big quiet" id="guideget">The guide, PDF</button>
 
@@ -725,6 +1071,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
       <div class="row"><b>No Netflix or Spotify</b><span>Anything using DRM will not play. Electron does not ship Widevine.</span></div>
       <div class="row"><b>Partial extensions on desktop</b><span>Electron supports a useful part of the Chrome extension API, not all of it. Heavy ad blockers may not work properly. Android does better, since Firefox add-ons are properly supported.</span></div>
       <div class="row"><b>Some Android privacy settings are manual</b><span>Encrypted DNS, referrer hiding and fingerprint resistance are not switches yet, because GeckoView gives no public way to set those preferences from code. They still work, but you have to set them by hand in about:config. The tray tells you which names to look for.</span></div>
+      <div class="row"><b>No weather, news or stocks</b><span>Left out of the new tab page on purpose. They would mean the page talking to someone.</span></div>
       <div class="row"><b>No auto update</b><span>Security depends on the Electron version it ships with, so it has to be bumped by hand.</span></div>
       <div class="row"><b>No sync, no passwords</b><span>Nothing is stored anywhere but your own machine, which also means nothing follows you to another one.</span></div>
       <div class="row"><b>Search sees your IP</b><span>Whoever provides your results knows where the request came from. That is a fact of not owning a search index, not something code can fix.</span></div>
@@ -735,7 +1082,7 @@ footer .mono{font-family:var(--mono);font-size:11.5px}
 
 <footer>
   <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;width:min(1000px,92vw)">
-    <span>Chalkboard, made by Peter. <span class="mono" style="opacity:.5">site build G46</span></span>
+    <span>Chalkboard, made by Peter. <span class="mono" style="opacity:.5">site build G47</span></span>
     <span class="mono">no ai &nbsp;·&nbsp; no telemetry &nbsp;·&nbsp; no account</span>
   </div>
   <div style="text-align:center;margin:16px 0 4px"><a href="https://hansolo42.gumroad.com/l/chocolateisyummy" target="_blank" rel="noopener" style="display:inline-block;background:#6B4A2B;color:#F7ECD9;border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:9px 16px;font-family:inherit;font-size:14px;font-weight:700;letter-spacing:.3px;text-decoration:none">🍫 Buy me a hot chocolate</a></div>
@@ -798,27 +1145,19 @@ function saveBlob(b64, type, name){
    alike. Colours, glow, shape, speed and font, exactly as a .board would
    apply them in the browser. */
 function tryOn(t, card){
-  var r = document.documentElement.style;
-  r.setProperty('--stroke', t['--stroke']);
-  r.setProperty('--bg', t['--bg']);
-  r.setProperty('--fill', t['--fill'] || t['--bg']);
-  r.setProperty('--ink', t['--ink'] || '#F2EFE9');
-  r.setProperty('--dim', t['--ink-dim'] || '#8B8177');
-  r.setProperty('--glow', t['--glow'] || '14px');
-  var tr2 = parseInt(t['--tab-radius'], 10);
-  r.setProperty('--rp', (isNaN(tr2) || tr2 >= 99) ? '999px' : t['--tab-radius']);
-  var rr2 = parseInt(t['--radius'], 10); if (isNaN(rr2)) rr2 = 18;
-  var rc2 = Math.min(rr2, 16);
-  r.setProperty('--rc', rc2 + 'px');
-  r.setProperty('--rd', (rc2 ? rc2 + 4 : 0) + 'px');
-  r.setProperty('--bw', t['--stroke-w'] || '2px');
-  r.setProperty('--speed', t['--speed'] || '150ms');
-  r.setProperty('--display', t['--font'] || 'ui-sans-serif,-apple-system,system-ui,sans-serif');
-  var g = document.getElementById('glow');
-  if (g) g.value = parseInt(t['--glow'] || '14', 10);
-  var hx = document.getElementById('hexin');
-  if (hx) hx.value = t['--stroke'];
-  if (typeof markBoard === 'function') markBoard(null);
+  // A board from a card or a file may leave things out; fill them the way
+  // the browser does, so the page and the demo always get a whole look.
+  var full = Object.assign({
+    '--fill': t['--bg'], '--ink': '#F2EFE9', '--ink-dim': '#8B8177', '--glow': '14px',
+    '--stroke-w': '2px', '--radius': '18px', '--tab-radius': '999px', '--speed': '150ms',
+    '--font': 'ui-sans-serif,-apple-system,system-ui,sans-serif'
+  }, plainExtras(t), t);
+  current = null;
+  wear(full);
+  markBoard(null);
+  markCard(card);
+}
+function markCard(card){
   [].forEach.call(document.querySelectorAll('.bcard'), function(c){ c.classList.remove('on'); });
   if (card) card.classList.add('on');
 }
@@ -840,9 +1179,110 @@ function pack(name, blurb, inside, t){
   }, t) };
 }
 
+/* ================================================================== *
+ * 1.1 boards, copied from the app's own list so the cards and the demo
+ * show exactly what ships. Aurora is the default. The six washes have
+ * our own names. Each has a light and a dark half.
+ * ================================================================== */
+var AURORA_FONT = '"Manrope", ui-sans-serif, -apple-system, system-ui, sans-serif';
+var AURORA_DISPLAY = '"Unbounded", "Manrope", ui-sans-serif, system-ui, sans-serif';
+var NOVA_SHAPE = {
+  '--stroke-w': '1px', '--glow': '14px', '--radius': '14px', '--tab-radius': '12px',
+  '--toolbar-h': '48px', '--tabstrip-h': '42px', '--gap': '6px', '--fsize': '13px',
+  '--speed': '150ms', '--font': AURORA_FONT, '--display': AURORA_DISPLAY, '--tabstyle': 'pill',
+  '--strip': 'transparent', '--texture': 'none', '--wall': 'none', '--chromewall': 'none',
+};
+function rgba(hex, a){
+  var c = [1, 3, 5].map(function(i){ return parseInt(hex.substr(i, 2), 16); });
+  return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+}
+function mixHex(x, y, t){
+  var ch = function(h, i){ return parseInt(h.substr(i, 2), 16); };
+  return '#' + [1, 3, 5].map(function(i){
+    return ('0' + Math.round(ch(x, i) * t + ch(y, i) * (1 - t)).toString(16)).slice(-2);
+  }).join('').toUpperCase();
+}
+function washBoard(light, dark){
+  function half(t, isLight){
+    return Object.assign({}, NOVA_SHAPE, {
+      '--bg': t.bg, '--ink': t.ink, '--stroke': t.accent, '--accent-ink': t.on,
+      '--wash-a': t.a, '--wash-b': t.b, '--panel': t.panel,
+      '--tab-edge-a': t.ea, '--tab-edge-b': t.eb,
+      '--ink-dim': rgba(t.ink, isLight ? 0.70 : 0.64),
+      '--fill': isLight ? 'rgba(255,255,255,.6)' : 'rgba(255,255,255,.075)',
+      '--frost': isLight ? 'rgba(255,255,255,.55)' : rgba(t.bg, 0.45),
+      '--frost-blur': '24px', '--mesh': 'wash', '--grain': '0.06',
+    });
+  }
+  return { light: half(light, true), dark: half(dark, false) };
+}
+var NOVA_BOARDS = {
+  Aurora: {
+    dark: Object.assign({}, NOVA_SHAPE, {
+      '--stroke': '#FDE68A', '--accent-ink': '#2E1065', '--bg': '#140833', '--panel': '#170B36',
+      '--fill': 'rgba(255,255,255,.075)', '--ink': '#FFFFFF', '--ink-dim': 'rgba(255,255,255,.64)',
+      '--mesh': 'aurora', '--frost': 'rgba(22,10,52,.42)', '--frost-blur': '26px', '--grain': '0.14',
+      '--wash-a': '#7C3AED', '--wash-b': '#DB2777', '--tab-edge-a': '#A78BFA', '--tab-edge-b': '#F472B6' }),
+    light: Object.assign({}, NOVA_SHAPE, {
+      '--stroke': '#7C3AED', '--accent-ink': '#FFFFFF', '--bg': '#EFE9FA', '--panel': '#FFFFFF',
+      '--fill': 'rgba(255,255,255,.5)', '--ink': '#241B3C', '--ink-dim': 'rgba(36,27,60,.66)',
+      '--mesh': 'aurora-light', '--frost': 'rgba(255,255,255,.55)', '--frost-blur': '26px', '--grain': '0.14',
+      '--wash-a': '#7C3AED', '--wash-b': '#DB2777', '--tab-edge-a': '#7C3AED', '--tab-edge-b': '#DB2777' }),
+  },
+  Sunrise: washBoard(
+    { bg: '#FFFBF6', ink: '#2B1B10', accent: '#A8420B', on: '#FFFFFF', a: '#FFE7B3', b: '#FFD3C4', panel: '#FFFFFF', ea: '#D97706', eb: '#E11D48' },
+    { bg: '#130D09', ink: '#FBF3EC', accent: '#FFB870', on: '#2A1404', a: '#5A3A0C', b: '#5C2318', panel: '#1F1611', ea: '#FBBF24', eb: '#FB7185' }),
+  Bloom: washBoard(
+    { bg: '#FFF9FC', ink: '#2A1430', accent: '#A3195F', on: '#FFFFFF', a: '#FFD5EA', b: '#E5D8FF', panel: '#FFFFFF', ea: '#DB2777', eb: '#7C3AED' },
+    { bg: '#110A14', ink: '#F9EEF6', accent: '#F9A8D4', on: '#3B0A24', a: '#561642', b: '#371C62', panel: '#1D1222', ea: '#F472B6', eb: '#A78BFA' }),
+  Lagoon: washBoard(
+    { bg: '#F6FBFC', ink: '#0E2231', accent: '#0B6378', on: '#FFFFFF', a: '#C6F0EC', b: '#CFDFFF', panel: '#FFFFFF', ea: '#0D9488', eb: '#2563EB' },
+    { bg: '#071015', ink: '#EAF6F8', accent: '#67E8F9', on: '#0B2A33', a: '#0C4746', b: '#122F68', panel: '#0F1C24', ea: '#2DD4BF', eb: '#60A5FA' }),
+  Meadow: washBoard(
+    { bg: '#F7FBF6', ink: '#13281A', accent: '#1D6B3C', on: '#FFFFFF', a: '#D5F2CC', b: '#C8EEE4', panel: '#FFFFFF', ea: '#16A34A', eb: '#0D9488' },
+    { bg: '#09110B', ink: '#ECF7EE', accent: '#86EFAC', on: '#0A2E1A', a: '#1D4721', b: '#0D4741', panel: '#121D15', ea: '#4ADE80', eb: '#2DD4BF' }),
+  Dusk: washBoard(
+    { bg: '#FAF9FE', ink: '#1D1938', accent: '#4F46E5', on: '#FFFFFF', a: '#D8DAFF', b: '#EAD4F2', panel: '#FFFFFF', ea: '#4F46E5', eb: '#A21CAF' },
+    { bg: '#0D0B17', ink: '#F1EFFB', accent: '#A5B4FC', on: '#1E1B4B', a: '#28226C', b: '#461D52', panel: '#181528', ea: '#818CF8', eb: '#C084FC' }),
+  Smoke: washBoard(
+    { bg: '#F7F8FA', ink: '#1B2028', accent: '#434E5D', on: '#FFFFFF', a: '#E1E5EB', b: '#D3D9E2', panel: '#FFFFFF', ea: '#64748B', eb: '#334155' },
+    { bg: '#0D0F12', ink: '#EEF1F5', accent: '#CBD5E1', on: '#1E293B', a: '#272D35', b: '#1D2228', panel: '#181B20', ea: '#CBD5E1', eb: '#94A3B8' }),
+};
+
+/* A 1.0 board says nothing about the new look, so it gets the 1.0
+   values: no mesh, no glass, no grain, the outline tab, its own font for
+   titles too. The same rule the app uses, which is why Classic is the
+   exact 1.0 look. */
+function plainExtras(t){
+  var out = { '--mesh': 'none', '--frost-blur': '0px', '--tabstyle': 'outline', '--grain': '0' };
+  if (t['--bg']) {
+    Object.assign(out, { '--frost': t['--bg'], '--wash-a': t['--bg'], '--wash-b': t['--bg'],
+      '--accent-ink': t['--bg'] });
+  }
+  if (t['--stroke']) {
+    Object.assign(out, { '--tab-edge-a': t['--stroke'], '--tab-edge-b': t['--stroke'] });
+    var s = clean(t['--stroke']), b = clean(t['--bg'] || '');
+    if (s && b) Object.assign(out, { '--wash-a': mixHex(s, b, 0.5), '--wash-b': mixHex(s, b, 0.22) });
+  }
+  if (t['--font']) out['--display'] = t['--font'];
+  return out;
+}
+
+var NOVA_PACKS = [
+  ['Aurora',  'The new default. Violet mesh, frosted glass, butter yellow.'],
+  ['Sunrise', 'Gold to coral, washed across the top.'],
+  ['Bloom',   'Pink to violet. The soft one.'],
+  ['Lagoon',  'Teal to blue, like shallow water.'],
+  ['Meadow',  'Green to teal. Calm.'],
+  ['Dusk',    'Indigo to plum, after sunset.'],
+  ['Smoke',   'Cool grey. No colour fuss.'],
+].map(function(r){
+  return { name: r[0], blurb: r[1], inside: 'built in', board: r[0], tokens: NOVA_BOARDS[r[0]].dark };
+});
+
 var BOARD_PACKS = [
   /* the six that ship inside the browser */
-  pack('Ember', 'The default. Warm coral on near black.', 'built in', {
+  pack('Classic', 'Exactly the 1.0 look. Warm coral on near black.', 'built in', {
     '--stroke': '#FF7F5C', '--bg': '#0A0A0B', '--fill': '#1A1210',
     '--panel': '#111112', '--ink': '#F2EFE9', '--ink-dim': '#8B8177' }),
   pack('Ice', 'Cold cyan. Reads like a heads up display.', 'built in', {
@@ -985,6 +1425,10 @@ var BOARD_PACKS = [
     '--font': 'Tahoma,Verdana,"MS Sans Serif",sans-serif' }),
 ];
 
+// Aurora first, then Classic, so the first row says what 1.1 is: the new
+// look, the old one kept, and the gradient boards.
+BOARD_PACKS = [NOVA_PACKS[0], BOARD_PACKS[0]].concat(NOVA_PACKS.slice(1), BOARD_PACKS.slice(1));
+
 function boardFileText(p){
   return JSON.stringify({ chalkboard: 1, name: p.name, tokens: p.tokens }, null, 2);
 }
@@ -1025,6 +1469,19 @@ function boardFileText(p){
     if (t['--strip'] && t['--strip'] !== t['--bg']) {
       card.style.setProperty('--bstrip', t['--strip']);
     }
+    if (t['--mesh'] && t['--mesh'] !== 'none') {
+      card.dataset.mesh = t['--mesh'];
+      card.setAttribute('data-nova', '');
+      card.style.setProperty('--bink', t['--ink']);
+      card.style.setProperty('--bwa', t['--wash-a']);
+      card.style.setProperty('--bwb', t['--wash-b']);
+    }
+    if (t['--tabstyle'] === 'pill') {
+      card.dataset.tabstyle = 'pill';
+      card.style.setProperty('--bea', t['--tab-edge-a']);
+      card.style.setProperty('--beb', t['--tab-edge-b']);
+      card.style.setProperty('--bpf', 'color-mix(in srgb, ' + t['--bg'] + ' 62%, #000)');
+    }
     card.innerHTML =
       '<div class="bmock">' +
         '<div class="brow strip">' +
@@ -1044,7 +1501,10 @@ function boardFileText(p){
 
     // Tap the card, the whole page tries the theme on. One shared path,
     // so community boards behave exactly like the built in ones.
-    card.addEventListener('click', function(){ tryOn(t, card); });
+    card.addEventListener('click', function(){
+      if (p.board) { setBoard(p.board); markCard(card); }
+      else tryOn(t, card);
+    });
     card.querySelector('.bget').addEventListener('click', function(e){
       e.stopPropagation();
       saveBlob(toBase64(boardFileText(p)), 'application/json',
@@ -1054,7 +1514,7 @@ function boardFileText(p){
     grid.appendChild(card);
   });
 
-  // Twenty seven cards is a wall, so it opens as one row of the six
+  // Thirty four cards is a wall, so it opens as one row of the six
   // flagship built ins, and the rest are one press away.
   var more = document.getElementById('morepacks');
   var hidden = BOARD_PACKS.length - 6;
@@ -1091,6 +1551,8 @@ const ALLOWED = new Set([
   '--stroke-w','--glow','--radius','--tab-radius','--toolbar-h','--tabstrip-h',
   '--gap','--fsize','--tab-max','--ui-zoom','--speed','--font',
   '--texture','--texture-size','--texture-op','--texture-blend',
+  '--mesh','--wash-a','--wash-b','--frost','--frost-blur','--accent-ink','--display',
+  '--tabglow','--grain','--tabstyle','--tab-edge-a','--tab-edge-b',
 ]);
 
 function checkTokens(tokens){
@@ -1416,22 +1878,58 @@ function clean(h){
   return /^[0-9a-f]{6}$/i.test(h) ? '#' + h.toUpperCase() : null;
 }
 
-function setStroke(hex, fromBoard){
-  const c = clean(hex);
-  if (!c) return;
-  root.style.setProperty('--stroke', c);
-  hexin.value = c;
-  document.querySelectorAll('#swatches button').forEach(function(b){
-    b.classList.toggle('on', b.dataset.c === c);
-  });
-  if (!fromBoard) markBoard(null);
+/* ---------------- 1.1 in the demo ---------------- */
+const demo = document.getElementById('demo');
+const LABELS = { 'Ember': 'Classic' };
+const NEW_NAMES = Object.keys(NOVA_BOARDS);
+const OLD_NAMES = Object.keys(BOARDS);
+const darkScheme = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+let modeSetting = 'dark';   // light, dark or device, for boards with two halves
+let current = 'Aurora';     // the board that is on
+let tweaked = false;        // you changed something since picking it
+let pageWorn = false;       // the page keeps its own coral until you pick something
+let density = 'auto';
+
+function resolvedMode(){
+  if (modeSetting !== 'device') return modeSetting;
+  return darkScheme && !darkScheme.matches ? 'light' : 'dark';
+}
+function boardTokens(name){
+  if (NOVA_BOARDS[name]) return NOVA_BOARDS[name][resolvedMode()];
+  if (BOARDS[name]) return Object.assign(plainExtras(BOARDS[name]), BOARDS[name]);
+  return null;
+}
+// light or dark, judged from a hex colour; anything else counts as dark
+function toneOf(colour){
+  const h = clean(colour || '');
+  if (!h) return 'dark';
+  const c = [1, 3, 5].map(function(i){ return parseInt(h.substr(i, 2), 16); });
+  return (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) / 255 > 0.55 ? 'light' : 'dark';
 }
 
-function setBoard(name){
-  const b = BOARDS[name];
-  // The board's own tokens, exactly as the browser would apply them.
+/* CSS cannot branch on a token's value, so the keyword tokens become
+   attributes on the demo, the way the app puts them on its window. */
+function paintDemo(){
+  const cs = getComputedStyle(demo);
+  const v = function(k){ return cs.getPropertyValue(k).trim(); };
+  const m = v('--mesh');
+  const mesh = ['aurora', 'aurora-light', 'wash'].indexOf(m) >= 0 ? m : 'none';
+  demo.dataset.mesh = mesh;
+  demo.toggleAttribute('data-nova', mesh !== 'none');
+  demo.toggleAttribute('data-glass', parseFloat(v('--frost-blur')) > 0);
+  demo.toggleAttribute('data-grain', parseFloat(v('--grain')) > 0);
+  const ts = v('--tabstyle');
+  demo.dataset.tabstyle = ['pill', 'glow', 'outline'].indexOf(ts) >= 0 ? ts : 'outline';
+  demo.dataset.tone = toneOf(v('--bg'));
+  markSeg('meshseg', mesh);
+  markSeg('glassseg', demo.hasAttribute('data-glass') ? 'on' : 'off');
+  markSeg('tabseg', demo.dataset.tabstyle);
+}
+
+/* The page's own styling reads a few short names, so a board is mirrored
+   onto them, the same as before 1.1. */
+function pageWear(b){
   Object.keys(b).forEach(function(k){ root.style.setProperty(k, b[k]); });
-  // The page's own styling reads a few short names, so mirror them over.
   root.style.setProperty('--dim', b['--ink-dim'] || '#8B8177');
   const tr = parseInt(b['--tab-radius'], 10);
   root.style.setProperty('--rp', (isNaN(tr) || tr >= 99) ? '999px' : b['--tab-radius']);
@@ -1440,16 +1938,208 @@ function setBoard(name){
   root.style.setProperty('--rc', rc + 'px');
   root.style.setProperty('--rd', (rc ? rc + 4 : 0) + 'px');
   root.style.setProperty('--bw', b['--stroke-w'] || '2px');
+  // --display is this page's text font; a board's own --display is for
+  // the browser's titles, so the demo gets it as --title-font instead
   root.style.setProperty('--display', b['--font'] || 'ui-sans-serif,-apple-system,system-ui,sans-serif');
-  hexin.value = b['--stroke'];
-  glow.value = parseInt(b['--glow'], 10);
-  setStroke(b['--stroke'], true);
+}
+
+/* Paint the demo with a whole look. The page wears it too, unless onPage
+   is false, which only happens on load: the window opens in Aurora, as
+   the browser does, and the page keeps its own colours. */
+function wear(t, onPage){
+  demo.removeAttribute('style');
+  Object.keys(t).forEach(function(k){ if (k !== '--display') demo.style.setProperty(k, t[k]); });
+  demo.style.setProperty('--title-font', t['--display'] || t['--font'] || '');
+  if (onPage !== false) { pageWear(t); pageWorn = true; }
+  hexin.value = t['--stroke'];
+  glow.value = parseInt(t['--glow'], 10) || 0;
+  markSwatch(clean(t['--stroke']));
+  paintDemo();
+}
+
+function setStroke(hex, fromBoard){
+  const c = clean(hex);
+  if (!c) return;
+  root.style.setProperty('--stroke', c);
+  demo.style.setProperty('--stroke', c);
+  hexin.value = c;
+  markSwatch(c);
+  if (!fromBoard) markBoard(null);
+}
+function markSwatch(c){
+  document.querySelectorAll('#swatches button').forEach(function(b){
+    b.classList.toggle('on', b.dataset.c === c);
+  });
+}
+
+function setBoard(name){
+  const t = boardTokens(name);
+  if (!t) return;
+  current = name;
+  wear(t);
   markBoard(name);
 }
+// markBoard(name) says which board is on; markBoard(null) says you
+// changed something since. Only buttons that carry a board id are
+// marked, so the label can say Classic or Ninety Five.
 function markBoard(name){
-  document.querySelectorAll('#heroboards button').forEach(function(b){
-    b.classList.toggle('on', b.textContent === name);
+  if (name === null) tweaked = true;
+  else { current = name; tweaked = false; }
+  const on = tweaked ? '' : current;
+  document.querySelectorAll('#lookstrip [data-board]').forEach(function(b){
+    b.classList.toggle('on', !!on && b.dataset.board === on);
   });
+  paintModeSeg();
+}
+
+/* A new mode swaps a two-mode board to its other half. A setting you
+   changed stays where you put it, as in the app. */
+let shownMode = 'dark';     // the half on screen right now
+function setMode(m){
+  const before = shownMode;
+  modeSetting = m;
+  const now = resolvedMode();
+  shownMode = now;
+  const n = current && NOVA_BOARDS[current];
+  if (n && now !== before) {
+    const t = Object.assign({}, n[now]);
+    Object.keys(t).forEach(function(k){
+      if (k === '--display') return;
+      const have = demo.style.getPropertyValue(k).trim();
+      if (have && have !== n[before][k]) t[k] = have;
+    });
+    wear(t, pageWorn);
+    markBoard(tweaked ? null : current);
+  }
+  paintModeSeg();
+}
+function paintModeSeg(){
+  markSeg('modeseg', modeSetting);
+  const two = !!(current && NOVA_BOARDS[current]);
+  document.querySelectorAll('#modeseg button').forEach(function(b){
+    b.classList.toggle('dimmed', !two);
+    b.title = two ? '' : 'Only boards with a light and a dark half change with this';
+  });
+}
+if (darkScheme && darkScheme.addEventListener) {
+  darkScheme.addEventListener('change', function(){ if (modeSetting === 'device') setMode('device'); });
+}
+
+/* Style: each part of the new look is its own setting, so old and new
+   can be mixed. Picking a board sets them all again. */
+function setStyle(k, v){
+  demo.style.setProperty(k, v);
+  if (pageWorn) root.style.setProperty(k, v);
+  paintDemo();
+  markBoard(null);
+}
+function glassOn(){
+  const t = current ? boardTokens(current) : null;
+  const b = t ? parseFloat(t['--frost-blur']) : 0;
+  return b > 0 ? t['--frost-blur'] : '24px';
+}
+
+/* Window density, on top of the board. Automatic goes compact when the
+   window is small; here the window is the demo. */
+function densityNow(){
+  if (density !== 'auto') return density;
+  return demo.clientWidth < 900 ? 'compact' : 'standard';
+}
+function applyDensity(){
+  const d = densityNow();
+  if (d === 'standard') demo.removeAttribute('data-density');
+  else demo.dataset.density = d;
+  markSeg('densityseg', density);
+}
+window.addEventListener('resize', function(){ if (density === 'auto') applyDensity(); });
+
+/* Tabs on the side: the same tab list moves into the column on the left. */
+const tabsEl = document.getElementById('demotabs');
+const tabstrip = demo.querySelector('.tabstrip');
+const sideEl = document.getElementById('demoside');
+function setSide(on){
+  demo.toggleAttribute('data-side', on);
+  if (on) sideEl.appendChild(tabsEl);
+  else tabstrip.insertBefore(tabsEl, tabstrip.firstChild);
+  markSeg('sideseg', on ? 'side' : 'top');
+}
+tabsEl.addEventListener('click', function(e){
+  const t = e.target.closest('.tab');
+  if (!t) return;
+  tabsEl.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === t); });
+  drawAllTabs();
+});
+
+/* List all tabs, with a search box. */
+const allBtn = document.getElementById('demoall');
+const allBox = document.getElementById('demoalltabs');
+const atq = document.getElementById('demoatq');
+const atrows = document.getElementById('demoatrows');
+function drawAllTabs(){
+  if (allBox.hidden) return;
+  const q = atq.value.trim().toLowerCase();
+  const rows = [].map.call(tabsEl.querySelectorAll('.tab'), function(t){
+    return { label: t.querySelector('.lbl').textContent, on: t.classList.contains('on') };
+  }).filter(function(r){ return !q || r.label.toLowerCase().indexOf(q) >= 0; });
+  const els = rows.map(function(r){
+    const d = document.createElement('div');
+    d.className = 'atrow' + (r.on ? ' now' : '');
+    d.textContent = r.label;
+    return d;
+  });
+  if (!els.length) {
+    const d = document.createElement('div');
+    d.className = 'atrow'; d.style.color = 'var(--ink-dim)'; d.textContent = 'No tab matches.';
+    els.push(d);
+  }
+  atrows.replaceChildren.apply(atrows, els);
+}
+allBtn.addEventListener('click', function(){
+  const open = allBox.hidden;
+  allBox.hidden = !open;
+  allBtn.classList.toggle('on', open);
+  allBtn.setAttribute('aria-expanded', String(open));
+  drawAllTabs();
+});
+atq.addEventListener('input', drawAllTabs);
+
+/* The world clock tells the real time; it is worked out here, nothing is asked for. */
+(function(){
+  const els = demo.querySelectorAll('[data-zone]');
+  function tick(){
+    els.forEach(function(el){
+      try {
+        el.textContent = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit',
+          hour12: false, timeZone: el.dataset.zone }).format(new Date());
+      } catch (e) { /* keep the written time */ }
+    });
+  }
+  tick();
+  setInterval(tick, 20000);
+})();
+
+/* ---------------- the controls ---------------- */
+function seg(id, items, pick){
+  const box = document.getElementById(id);
+  box.replaceChildren.apply(box, items.map(function(it){
+    const b = document.createElement('button');
+    b.type = 'button'; b.dataset.v = it[0]; b.textContent = it[1];
+    b.addEventListener('click', function(){ pick(it[0]); });
+    return b;
+  }));
+}
+function markSeg(id, v){
+  document.querySelectorAll('#' + id + ' button').forEach(function(b){
+    b.classList.toggle('on', b.dataset.v === v);
+  });
+}
+function boardButton(name){
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.dataset.board = name;
+  b.textContent = LABELS[name] || name;
+  b.addEventListener('click', function(){ setBoard(name); markCard(null); });
+  return b;
 }
 
 document.getElementById('swatches').replaceChildren.apply(
@@ -1459,30 +2149,40 @@ document.getElementById('swatches').replaceChildren.apply(
     b.type = 'button';
     b.style.background = c;
     b.dataset.c = c;
-    b.setAttribute('aria-label', 'Outline ' + c);
+    b.setAttribute('aria-label', 'Accent ' + c);
     b.addEventListener('click', function(){ setStroke(c); });
     return b;
   })
 );
-
+document.getElementById('heroboardsnew').replaceChildren.apply(
+  document.getElementById('heroboardsnew'), NEW_NAMES.map(boardButton));
 document.getElementById('heroboards').replaceChildren.apply(
-  document.getElementById('heroboards'),
-  Object.keys(BOARDS).map(function(name){
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.textContent = name;
-    b.addEventListener('click', function(){ setBoard(name); });
-    return b;
-  })
-);
+  document.getElementById('heroboards'), OLD_NAMES.map(boardButton));
+
+seg('modeseg', [['dark', 'Dark'], ['light', 'Light'], ['device', 'Device']], setMode);
+seg('densityseg', [['auto', 'Automatic'], ['standard', 'Standard'], ['compact', 'Compact'], ['touch', 'Touch']],
+  function(d){ density = d; applyDensity(); });
+seg('sideseg', [['top', 'On top'], ['side', 'On the side']], function(v){ setSide(v === 'side'); });
+seg('meshseg', [['aurora', 'Aurora'], ['aurora-light', 'Aurora light'], ['wash', 'Wash'], ['none', 'None']],
+  function(v){ setStyle('--mesh', v); });
+seg('glassseg', [['on', 'On'], ['off', 'Off']],
+  function(v){ setStyle('--frost-blur', v === 'on' ? glassOn() : '0px'); });
+seg('tabseg', [['pill', 'Pill'], ['glow', 'Glow'], ['outline', 'Outline']],
+  function(v){ setStyle('--tabstyle', v); });
 
 hexin.addEventListener('change', function(){ setStroke(hexin.value); });
 glow.addEventListener('input', function(){
   root.style.setProperty('--glow', glow.value + 'px');
+  demo.style.setProperty('--glow', glow.value + 'px');
   markBoard(null);
 });
 
-setBoard('Ember');
+// The page starts in its own coral; the window starts as the browser does.
+pageWear(boardTokens('Ember'));
+wear(boardTokens('Aurora'), false);
+markBoard('Aurora');
+setSide(false);
+applyDensity();
 </script>
 </body>
 </html>
