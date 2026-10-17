@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-look-default="Classic">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- chalk-look:head (shared by the three pages; build.py writes it) -->
+<!-- chalk-look:head (shared by the pages; build.py writes it) -->
 <script>
 /* The look you picked on this site, put on before anything is drawn, so a
    page never flashes the wrong one. Everything else about it is in the
    script at the end of the page. Nothing here is required: no storage,
-   no problem, the page just starts in Aurora. */
+   no problem, the page just starts in its own first look. */
 (function(r){var s=null,h,m,k;
 try{s=JSON.parse(localStorage.getItem('chalkboard.site.look'))}catch(e){}
-if(!s||!s.h||!s.h.dark)s={"mode":"device","h":{"dark":{"v":{"--lk-bg":"#140833","--lk-top":"#140833","--lk-ink":"#FFFFFF","--lk-muted":"#B5B1BE","--lk-accent":"#FDE68A","--lk-accent-text":"#FDE68A","--lk-accent-ink":"#2E1065","--lk-fill":"rgba(255,255,255,0.075)","--lk-frost":"rgba(22,10,52,0.42)","--lk-blur":"26px","--lk-panel":"#170B36","--lk-field":"#22173F","--lk-line":"rgba(255,255,255,0.14)","--lk-line-2":"rgba(255,255,255,0.26)","--lk-wash":"rgba(255,255,255,0.05)","--lk-pill-fill":"#0C0520","--lk-pill-ink":"#FFFFFF","--lk-edge-a":"#A78BFA","--lk-edge-b":"#F472B6","--lk-wash-a":"#7C3AED","--lk-wash-b":"#DB2777","--lk-glow":"14px","--lk-font":"\"Manrope\", ui-sans-serif, -apple-system, system-ui, sans-serif","--lk-head":"\"Unbounded\", \"Manrope\", ui-sans-serif, system-ui, sans-serif","--lk-rp":"12px","--lk-tab-r":"12px","--lk-rc":"14px","--lk-rd":"18px","--lk-bw":"1px","--lk-ring":"#F0EFF2","--lk-grain-img":"url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22220%22%20height%3D%22220%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.9%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23g)%22%20opacity%3D%220.14%22%2F%3E%3C%2Fsvg%3E\")","--lk-lift":"rgba(255,255,255,.10)","--lk-lift-2":"rgba(255,255,255,.14)","--lk-shade":"rgba(0,0,0,.25)","--lk-scheme":"dark"},"a":{"look":"aurora","mesh":"aurora","tabstyle":"pill","tone":"dark","nova":"","glass":"","grain":"","font":"aurora"},"theme":"#140833"},"light":{"v":{"--lk-bg":"#F4EFFF","--lk-top":"#F4EFFF","--lk-ink":"#141120","--lk-muted":"#685E8B","--lk-accent":"#7C3AED","--lk-accent-text":"#7838E5","--lk-accent-ink":"#FFFFFF","--lk-fill":"#FCF9FC","--lk-frost":"rgba(255,255,255,0.7)","--lk-blur":"26px","--lk-panel":"#FFFFFF","--lk-field":"#E7E2F2","--lk-line":"rgba(20,17,32,0.14)","--lk-line-2":"rgba(20,17,32,0.26)","--lk-wash":"rgba(20,17,32,0.05)","--lk-pill-fill":"#FFFFFF","--lk-pill-ink":"#141120","--lk-edge-a":"#B9A6D3","--lk-edge-b":"#D9A38F","--lk-wash-a":"#7C3AED","--lk-wash-b":"#DB2777","--lk-glow":"14px","--lk-font":"\"Manrope\", ui-sans-serif, -apple-system, system-ui, sans-serif","--lk-head":"\"Unbounded\", \"Manrope\", ui-sans-serif, system-ui, sans-serif","--lk-rp":"12px","--lk-tab-r":"12px","--lk-rc":"14px","--lk-rd":"18px","--lk-bw":"1px","--lk-ring":"#211D31","--lk-grain-img":"url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22220%22%20height%3D%22220%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.9%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23g)%22%20opacity%3D%220.14%22%2F%3E%3C%2Fsvg%3E\")","--lk-lift":"rgba(255,255,255,.8)","--lk-lift-2":"rgba(255,255,255,.9)","--lk-shade":"rgba(36,27,60,.12)","--lk-scheme":"light"},"a":{"look":"aurora","mesh":"aurora-light","tabstyle":"pill","tone":"light","nova":"","glass":"","grain":"","font":"aurora"},"theme":"#F4EFFF"}}};
+if(!s||!s.h||!s.h.dark)s={"mode":"device","h":{"dark":{"v":{"--lk-bg":"#0A0A0B","--lk-top":"#0A0A0B","--lk-ink":"#F2EFE9","--lk-muted":"#8B8177","--lk-accent":"#FF7F5C","--lk-accent-text":"#FF7F5C","--lk-accent-ink":"#0A0A0B","--lk-fill":"#1A1210","--lk-frost":"#0A0A0B","--lk-blur":"0px","--lk-panel":"#111112","--lk-field":"#181818","--lk-line":"rgba(242,239,233,0.14)","--lk-line-2":"rgba(242,239,233,0.26)","--lk-wash":"rgba(242,239,233,0.05)","--lk-pill-fill":"#060607","--lk-pill-ink":"#FFFFFF","--lk-edge-a":"#FF7F5C","--lk-edge-b":"#FF7F5C","--lk-wash-a":"#854534","--lk-wash-b":"#40241D","--lk-glow":"10px","--lk-font":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-head":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-rp":"999px","--lk-tab-r":"999px","--lk-rc":"16px","--lk-rd":"20px","--lk-bw":"2px","--lk-ring":"#C1BAB2","--lk-grain-img":"none","--lk-lift":"rgba(255,255,255,.10)","--lk-lift-2":"rgba(255,255,255,.14)","--lk-shade":"rgba(0,0,0,.25)","--lk-scheme":"dark"},"a":{"look":"ember","mesh":"none","tabstyle":"outline","tone":"dark","classic":""},"theme":"#0A0A0B"},"light":{"v":{"--lk-bg":"#0A0A0B","--lk-top":"#0A0A0B","--lk-ink":"#F2EFE9","--lk-muted":"#8B8177","--lk-accent":"#FF7F5C","--lk-accent-text":"#FF7F5C","--lk-accent-ink":"#0A0A0B","--lk-fill":"#1A1210","--lk-frost":"#0A0A0B","--lk-blur":"0px","--lk-panel":"#111112","--lk-field":"#181818","--lk-line":"rgba(242,239,233,0.14)","--lk-line-2":"rgba(242,239,233,0.26)","--lk-wash":"rgba(242,239,233,0.05)","--lk-pill-fill":"#060607","--lk-pill-ink":"#FFFFFF","--lk-edge-a":"#FF7F5C","--lk-edge-b":"#FF7F5C","--lk-wash-a":"#854534","--lk-wash-b":"#40241D","--lk-glow":"10px","--lk-font":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-head":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-rp":"999px","--lk-tab-r":"999px","--lk-rc":"16px","--lk-rd":"20px","--lk-bw":"2px","--lk-ring":"#C1BAB2","--lk-grain-img":"none","--lk-lift":"rgba(255,255,255,.10)","--lk-lift-2":"rgba(255,255,255,.14)","--lk-shade":"rgba(0,0,0,.25)","--lk-scheme":"dark"},"a":{"look":"ember","mesh":"none","tabstyle":"outline","tone":"dark","classic":""},"theme":"#0A0A0B"}}};
 m=s.mode;if(m!=='light'&&m!=='dark')m=window.matchMedia&&!matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark';
 h=s.h[m]||s.h.dark;
 try{for(k in h.v)if(/^--lk-[a-z0-9-]+$/.test(k))r.style.setProperty(k,h.v[k]);
@@ -402,7 +402,7 @@ for(k in h.a)if(/^[a-z]+$/.test(k))r.setAttribute('data-'+k,h.a[k])}catch(e){}
   html[data-font="aurora"] h1{font-weight:800;font-size:24px;letter-spacing:-.035em}
   html[data-font="aurora"] body{font-weight:500}
 </style>
-<!-- chalk-look:style (shared by the three pages; build.py writes it) -->
+<!-- chalk-look:style (shared by the pages; build.py writes it) -->
 <style>
 /* The two fonts of the Aurora look, Manrope and Unbounded, inside this page
    as data, so nothing is ever fetched. Each is the variable font, Latin
@@ -799,7 +799,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
   <footer>Chalkboard · every value is a token, and this page writes them all</footer>
 </div>
 
-<!-- chalk-look:script (shared by the three pages; build.py writes it) -->
+<!-- chalk-look:script (shared by the pages; build.py writes it) -->
 <script>
 /* ==================================================================
  * The site's look, shared word for word by index.html,
@@ -1290,10 +1290,16 @@ var ChalkLook = (function(core){
   var darkMQ = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   var calmMQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
 
+  /* The look a page starts in when nothing was picked yet: the page says
+     so on <html data-look-default>, else the layer's own default. */
+  function pageDefault(){
+    var b = root.getAttribute('data-look-default');
+    return core.normalize(b ? { board: b } : core.DEFAULT);
+  }
   function read(){
     var s = null;
     try { s = JSON.parse(window.localStorage.getItem(KEY) || 'null'); } catch (e) { s = null; }
-    return core.normalize(s || core.DEFAULT);
+    return s ? core.normalize(s) : pageDefault();
   }
   var state = read();
   var halves = null;
@@ -1387,7 +1393,7 @@ var ChalkLook = (function(core){
   }
   function reset(opts){
     opts = Object.assign({}, opts || {}, { forget: true });
-    set(core.DEFAULT, opts);
+    set(pageDefault(), opts);
   }
 
   /* ---------------- the Look control in the nav ---------------- */
