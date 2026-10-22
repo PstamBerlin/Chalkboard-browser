@@ -301,6 +301,17 @@ p{margin:0}
 }
 .boards button.on{border-color:var(--stroke);color:var(--stroke-t,var(--stroke));box-shadow:var(--halo)}
 
+
+/* a screenshot beside text, for the tray */
+.feature{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:36px;align-items:center;margin-top:34px}
+.feature .shot{margin:0;border:1px solid var(--faint);border-radius:var(--rc,16px);overflow:hidden;background:var(--panel,transparent)}
+.feature .shot img{display:block;width:100%;height:auto;max-height:560px;object-fit:cover;object-position:top}
+.featuretext h3{font-size:26px;margin:6px 0 12px}
+.featuretext > p{color:var(--dim);font-size:15.5px}
+.points{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px}
+.points li{padding:12px 14px;border:1px solid var(--faint);border-radius:12px;color:var(--dim);font-size:14.5px}
+.points li b{color:inherit;font-weight:600}
+
 /* ---------------- sections ---------------- */
 section{padding:76px 0}
 .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
@@ -641,6 +652,7 @@ footer > .wrap{color:var(--dim)}
 
 @media (max-width:760px){
   .pillars{grid-template-columns:1fr}
+  .feature{grid-template-columns:1fr}
   .tokens{grid-template-columns:1fr}
   .row{flex-direction:column;gap:5px}
   .row b{flex:none}
@@ -1194,6 +1206,26 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
     <!-- SCREENSHOT: newtab-aurora (the new tab page with shortcuts, the three widgets and the Customize panel open) -->
     <!-- SCREENSHOT: tray-look-style (the tray's Look section with the Style group) -->
     <!-- SCREENSHOT: tabs-on-the-side (vertical tabs with the list of all tabs open) -->
+
+    <!-- the Chalk Tray, reimagined: a screenshot of the new tray beside three short points -->
+    <div class="feature" id="tray">
+      <figure class="shot">
+        <picture>
+          <source srcset="images/tray-reimagined-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="images/tray-reimagined.png" alt="The Chalk Tray in 1.1: a search box, then sections as cards with an icon, a title and a one-line hint, sorted into groups" width="572" height="1438" loading="lazy">
+        </picture>
+      </figure>
+      <div class="featuretext">
+        <p class="eyebrow">Chalk Tray, reimagined</p>
+        <h3>Every setting, findable.</h3>
+        <p>The tray used to be twenty grey headings in one long list. Now every section is a card with an icon, a name and one line that says what is inside, sorted into four groups: Look and feel, Browser, Privacy and data, and More.</p>
+        <ul class="points">
+          <li><b>Find a setting.</b> Type a word, and only the sections that have it stay, already open. It searches the expert knobs too, even in Easy mode.</li>
+          <li><b>Easy, Medium, Expert say what they show.</b> Just the basics, more knobs, or everything.</li>
+          <li><b>Buttons you can tell apart.</b> New window, Save as PDF and the rest carry icons. Reset the look and Forget everything are red outlines, so nothing gets wiped by mistake.</li>
+        </ul>
+      </div>
+    </div>
 
     <div class="pillars">
       <div class="card">
