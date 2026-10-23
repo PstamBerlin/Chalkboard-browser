@@ -1517,8 +1517,16 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
     <div class="getbox">
       <!-- CHALKBOARD_ZIP in the script below is the 1.1 source (chalkboard/ with package.json, main.js, lib, ui, pages, assets). -->
-      <h3>Windows and Linux, from source <span class="pill pre">1.1 on Sunday</span><span class="pill post">1.1</span></h3>
-      <p>The whole browser as source, fonts included. The same source also runs on macOS.<span class="pre"> The 1.1 source comes out on Sunday, 25 October, together with the Mac app.</span></p>
+      <h3>Chalkboard for Windows <span class="pill pre">first build, Sunday</span><span class="pill post">1.1 · first build</span></h3>
+      <p class="dlnote pre" style="margin-top:0"><b>The first Windows build comes out on Sunday, 25 October,</b> together with the Mac app. 64-bit, nothing to install: unzip, keep the folder together, double-click Chalkboard.exe.</p>
+      <p class="dlnote post" style="margin-top:0">The first Windows build. 64-bit, nothing to install: unzip, keep the folder together, double-click Chalkboard.exe. It is the same browser as the Mac one and has not been tested on many machines yet; say what breaks on GitHub.</p>
+      <a class="cap big post" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-win.zip">Download for Windows</a>
+      <p class="dlnote">First open: Windows shows a blue "Windows protected your PC" box once, because the app is not signed with a paid certificate. Click More info, then Run anyway.</p>
+    </div>
+
+    <div class="getbox">
+      <h3>Linux, from source <span class="pill pre">1.1 on Sunday</span><span class="pill post">1.1</span></h3>
+      <p>The whole browser as source, fonts included. The same source also runs on macOS and Windows.<span class="pre"> The 1.1 source comes out on Sunday, 25 October, together with the apps.</span></p>
       <button class="cap big post" id="mainget">Download chalkboard.zip</button>
       <button class="cap big quiet" id="guideget">The guide, PDF</button>
 
@@ -1530,7 +1538,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       </div>
       <button class="cap big quiet" id="mainguide" style="margin-top:10px">The visual guide, PDF</button>
       <p class="dlnote">Eight pages showing the window, the six Boards, the Chalk Tray, the shortcut editor and the privacy stance. Drawn from the same design tokens the browser uses, so it shows the real thing.</p>
-      <p class="dlnote">Needs Node.js. The npm install step downloads Electron and takes a few minutes. After that it starts in about a second. Prefer a ready-made Mac app? It's the one-click download in the Mac section above, no Node needed. macOS will warn about an unsigned app: right click it and choose Open, or allow it under Privacy and Security in System Settings.</p>
+      <p class="dlnote">Needs Node.js. The npm install step downloads Electron and takes a few minutes. After that it starts in about a second. Prefer a ready-made app? Mac and Windows are the one-click downloads above, no Node needed. macOS will warn about an unsigned app: right click it and choose Open, or allow it under Privacy and Security in System Settings.</p>
     </div>
   </div>
 </section>
