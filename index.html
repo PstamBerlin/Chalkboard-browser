@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" data-look-default="Classic">
+<html lang="en" data-look-default="Aurora">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- release day: until Sunday 25 October 2026 the page says 1.1 comes out
+     on Sunday (.pre), from that day on it says out now (.post). Without
+     JavaScript the page shows the out-now state. -->
+<script>(function(d){var r=new Date(2026,9,25);d.setAttribute("data-release",new Date()<r?"soon":"out")})(document.documentElement)</script>
 <!-- chalk-look:head (shared by the pages; build.py writes it) -->
 <script>
 /* The look you picked on this site, put on before anything is drawn, so a
@@ -11,7 +15,7 @@
    no problem, the page just starts in its own first look. */
 (function(r){var s=null,h,m,k;
 try{s=JSON.parse(localStorage.getItem('chalkboard.site.look'))}catch(e){}
-if(!s||!s.h||!s.h.dark)s={"mode":"device","h":{"dark":{"v":{"--lk-bg":"#0A0A0B","--lk-top":"#0A0A0B","--lk-ink":"#F2EFE9","--lk-muted":"#8B8177","--lk-accent":"#FF7F5C","--lk-accent-text":"#FF7F5C","--lk-accent-ink":"#0A0A0B","--lk-fill":"#1A1210","--lk-frost":"#0A0A0B","--lk-blur":"0px","--lk-panel":"#111112","--lk-field":"#181818","--lk-line":"rgba(242,239,233,0.14)","--lk-line-2":"rgba(242,239,233,0.26)","--lk-wash":"rgba(242,239,233,0.05)","--lk-pill-fill":"#060607","--lk-pill-ink":"#FFFFFF","--lk-edge-a":"#FF7F5C","--lk-edge-b":"#FF7F5C","--lk-wash-a":"#854534","--lk-wash-b":"#40241D","--lk-glow":"10px","--lk-font":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-head":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-rp":"999px","--lk-tab-r":"999px","--lk-rc":"16px","--lk-rd":"20px","--lk-bw":"2px","--lk-ring":"#C1BAB2","--lk-grain-img":"none","--lk-lift":"rgba(255,255,255,.10)","--lk-lift-2":"rgba(255,255,255,.14)","--lk-shade":"rgba(0,0,0,.25)","--lk-scheme":"dark"},"a":{"look":"ember","mesh":"none","tabstyle":"outline","tone":"dark","classic":""},"theme":"#0A0A0B"},"light":{"v":{"--lk-bg":"#0A0A0B","--lk-top":"#0A0A0B","--lk-ink":"#F2EFE9","--lk-muted":"#8B8177","--lk-accent":"#FF7F5C","--lk-accent-text":"#FF7F5C","--lk-accent-ink":"#0A0A0B","--lk-fill":"#1A1210","--lk-frost":"#0A0A0B","--lk-blur":"0px","--lk-panel":"#111112","--lk-field":"#181818","--lk-line":"rgba(242,239,233,0.14)","--lk-line-2":"rgba(242,239,233,0.26)","--lk-wash":"rgba(242,239,233,0.05)","--lk-pill-fill":"#060607","--lk-pill-ink":"#FFFFFF","--lk-edge-a":"#FF7F5C","--lk-edge-b":"#FF7F5C","--lk-wash-a":"#854534","--lk-wash-b":"#40241D","--lk-glow":"10px","--lk-font":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-head":"ui-sans-serif,-apple-system,system-ui,sans-serif","--lk-rp":"999px","--lk-tab-r":"999px","--lk-rc":"16px","--lk-rd":"20px","--lk-bw":"2px","--lk-ring":"#C1BAB2","--lk-grain-img":"none","--lk-lift":"rgba(255,255,255,.10)","--lk-lift-2":"rgba(255,255,255,.14)","--lk-shade":"rgba(0,0,0,.25)","--lk-scheme":"dark"},"a":{"look":"ember","mesh":"none","tabstyle":"outline","tone":"dark","classic":""},"theme":"#0A0A0B"}}};
+if(!s||!s.h||!s.h.dark)s={"mode":"device","h":{"dark":{"v":{"--lk-bg":"#140833","--lk-top":"#140833","--lk-ink":"#FFFFFF","--lk-muted":"#B5B1BE","--lk-accent":"#FDE68A","--lk-accent-text":"#FDE68A","--lk-accent-ink":"#2E1065","--lk-fill":"rgba(255,255,255,0.075)","--lk-frost":"rgba(22,10,52,0.42)","--lk-blur":"26px","--lk-panel":"#170B36","--lk-field":"#22173F","--lk-line":"rgba(255,255,255,0.14)","--lk-line-2":"rgba(255,255,255,0.26)","--lk-wash":"rgba(255,255,255,0.05)","--lk-pill-fill":"#0C0520","--lk-pill-ink":"#FFFFFF","--lk-edge-a":"#A78BFA","--lk-edge-b":"#F472B6","--lk-wash-a":"#7C3AED","--lk-wash-b":"#DB2777","--lk-glow":"14px","--lk-font":"\"Manrope\", ui-sans-serif, -apple-system, system-ui, sans-serif","--lk-head":"\"Unbounded\", \"Manrope\", ui-sans-serif, system-ui, sans-serif","--lk-rp":"12px","--lk-tab-r":"12px","--lk-rc":"14px","--lk-rd":"18px","--lk-bw":"1px","--lk-ring":"#F0EFF2","--lk-grain-img":"url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22220%22%20height%3D%22220%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.9%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23g)%22%20opacity%3D%220.14%22%2F%3E%3C%2Fsvg%3E\")","--lk-lift":"rgba(255,255,255,.10)","--lk-lift-2":"rgba(255,255,255,.14)","--lk-shade":"rgba(0,0,0,.25)","--lk-scheme":"dark"},"a":{"look":"aurora","mesh":"aurora","tabstyle":"pill","tone":"dark","nova":"","glass":"","grain":"","font":"aurora"},"theme":"#140833"},"light":{"v":{"--lk-bg":"#F4EFFF","--lk-top":"#F4EFFF","--lk-ink":"#141120","--lk-muted":"#685E8B","--lk-accent":"#7C3AED","--lk-accent-text":"#7838E5","--lk-accent-ink":"#FFFFFF","--lk-fill":"#FCF9FC","--lk-frost":"rgba(255,255,255,0.7)","--lk-blur":"26px","--lk-panel":"#FFFFFF","--lk-field":"#E7E2F2","--lk-line":"rgba(20,17,32,0.14)","--lk-line-2":"rgba(20,17,32,0.26)","--lk-wash":"rgba(20,17,32,0.05)","--lk-pill-fill":"#FFFFFF","--lk-pill-ink":"#141120","--lk-edge-a":"#B9A6D3","--lk-edge-b":"#D9A38F","--lk-wash-a":"#7C3AED","--lk-wash-b":"#DB2777","--lk-glow":"14px","--lk-font":"\"Manrope\", ui-sans-serif, -apple-system, system-ui, sans-serif","--lk-head":"\"Unbounded\", \"Manrope\", ui-sans-serif, system-ui, sans-serif","--lk-rp":"12px","--lk-tab-r":"12px","--lk-rc":"14px","--lk-rd":"18px","--lk-bw":"1px","--lk-ring":"#211D31","--lk-grain-img":"url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22220%22%20height%3D%22220%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.9%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23g)%22%20opacity%3D%220.14%22%2F%3E%3C%2Fsvg%3E\")","--lk-lift":"rgba(255,255,255,.8)","--lk-lift-2":"rgba(255,255,255,.9)","--lk-shade":"rgba(36,27,60,.12)","--lk-scheme":"light"},"a":{"look":"aurora","mesh":"aurora-light","tabstyle":"pill","tone":"light","nova":"","glass":"","grain":"","font":"aurora"},"theme":"#F4EFFF"}}};
 m=s.mode;if(m!=='light'&&m!=='dark')m=window.matchMedia&&!matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark';
 h=s.h[m]||s.h.dark;
 try{for(k in h.v)if(/^--lk-[a-z0-9-]+$/.test(k))r.style.setProperty(k,h.v[k]);
@@ -270,6 +274,19 @@ p{margin:0}
   background:var(--fill);color:var(--ink-dim);
   box-shadow:0 0 14px color-mix(in srgb, var(--stroke) 45%, transparent);
 }
+
+/* a screenshot beside text, for the tray */
+.feature{scroll-margin-top:84px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:36px;align-items:center;margin-top:34px}
+.feature .shot{margin:0;border:1px solid var(--faint);border-radius:var(--rc,16px);overflow:hidden;background:var(--panel,transparent)}
+.feature .shot img{display:block;width:100%;height:auto;max-height:560px;object-fit:cover;object-position:top}
+.featuretext h3{font-size:26px;margin:6px 0 12px}
+.featuretext > p{color:var(--dim);font-size:15.5px}
+.points{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px}
+.points li{padding:12px 14px;border:1px solid var(--faint);border-radius:12px;color:var(--dim);font-size:14.5px}
+.points li b{color:inherit;font-weight:600}
+
+/* release day: see the script in <head> */
+html[data-release="soon"] .post,html:not([data-release="soon"]) .pre{display:none!important}
 
 /* ---------------- the live theming strip ---------------- */
 .strip{
@@ -616,6 +633,7 @@ footer > .wrap{color:var(--dim)}
 .sline > .boards:not(.seg){flex:1 1 280px;min-width:0}
 .boards.seg{gap:4px}
 .boards button.dimmed{opacity:.45}
+@media (max-width:760px){.feature{grid-template-columns:1fr}}
 
 /* the board cards for 1.1 boards wear the same background and pill */
 .bcard[data-nova] .bmock{border:1px solid color-mix(in srgb, var(--bink) 14%, transparent)}
@@ -997,9 +1015,9 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 <!-- /chalk-look:style -->
 </head>
 <body>
-<a class="upbar" href="chalkboard-1-1.html" id="upbar">
+<a class="upbar" href="#new" id="upbar">
   <span class="up-tag">1.1</span>
-  <span class="up-text"><b>Chalkboard 1.1 is here.</b> A new look called Aurora, a new tab page with things on it, split view, tabs on the side, sleeping tabs, a tray you can search. The old look stays one click away.</span>
+  <span class="up-text"><b class="pre">Chalkboard 1.1 comes out on Sunday, 25 October.</b><b class="post">Chalkboard 1.1 is here.</b> A new look called Aurora, a new tab page with things on it, split view, tabs on the side, sleeping tabs, a tray you can search. The old look stays one click away.</span>
   <span class="up-go">See what is new &rarr;</span>
 </a>
 
@@ -1043,8 +1061,9 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       </svg>
       Chalkboard
     </span>
-    <span class="ver" style="white-space:nowrap">1.0</span>
-    <a class="newpill" href="chalkboard-1-1.html">1.1 is out &rarr;</a>
+    <span class="ver pre" style="white-space:nowrap">1.0 &middot; 1.1 on Sunday</span>
+    <span class="ver post" style="white-space:nowrap">1.1 &middot; out now</span>
+    <a class="newpill" href="#new">What is new in 1.1 &rarr;</a>
     <span class="sp"></span>
     <span class="navlook" data-lookctl></span>
     <button class="cap" id="navget">Download</button>
@@ -1054,7 +1073,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 <header class="hero">
   <div class="wrap">
     <svg class="heromark" viewBox="0 0 512 512" role="img" aria-label="Chalkboard"><use href="#cmark"/></svg>
-    <p class="eyebrow">--stroke: #FF7F5C</p>
+    <p class="eyebrow"><span class="pre">1.1 · Sunday, 25 October</span><span class="post">1.1 · out now</span> &nbsp;--mesh --tabstyle --frost-blur</p>
     <h1>Tells nobody<br>anything.</h1>
     <p class="lede">A browser you build yourself. Every colour, shape, size and font is a setting you can reach. No AI anywhere in it. No telemetry, no account, no server.</p>
 
@@ -1168,14 +1187,14 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
     </div>
 
     <div class="strip look" id="lookstrip">
-      <div class="sline" hidden><span class="striplab">new</span><div class="boards" id="heroboardsnew"></div></div>
-      <div class="sline"><span class="striplab">boards</span><div class="boards" id="heroboards"></div></div>
-      <div class="sline" hidden>
+      <div class="sline"><span class="striplab">new</span><div class="boards" id="heroboardsnew"></div></div>
+      <div class="sline"><span class="striplab">from 1.0</span><div class="boards" id="heroboards"></div></div>
+      <div class="sline">
         <span class="striplab">mode</span><div class="boards seg" id="modeseg"></div>
         <span class="striplab">density</span><div class="boards seg" id="densityseg"></div>
         <span class="striplab">tabs</span><div class="boards seg" id="sideseg"></div>
       </div>
-      <div class="sline" hidden>
+      <div class="sline">
         <span class="striplab">background</span><div class="boards seg" id="meshseg"></div>
         <span class="striplab">glass</span><div class="boards seg" id="glassseg"></div>
         <span class="striplab">tab style</span><div class="boards seg" id="tabseg"></div>
@@ -1188,9 +1207,146 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
         <input class="rng" id="glow" type="range" min="0" max="30" value="14" aria-label="Glow">
       </div>
     </div>
-    <p class="note">This page is running the real thing. Whatever you pick here, the browser can do. <a href="chalkboard-1-1.html">1.1 adds Aurora, six more boards and a lot more knobs &rarr;</a></p>
+    <p class="note">This page is running the real thing: everything you can pick here is in Chalkboard 1.1<span class="pre">, which comes out on Sunday, 25 October</span>. Aurora's two fonts ship inside the app, and this page carries its own copy of them, so it still fetches nothing. Whatever you pick, the whole site wears it, on every page, and reset in the bar at the top goes back to Aurora. <a href="#new">Everything that is new in 1.1 &rarr;</a></p>
   </div>
 </header>
+
+<section id="new" style="scroll-margin-top:84px">
+  <div class="wrap">
+    <p class="eyebrow"><span class="pre">1.1 · comes out Sunday, 25 October</span><span class="post">1.1 · out now</span> &nbsp;--mesh --tabstyle --frost-blur</p>
+    <h2>New in 1.1: a new look.<br>The old one kept.</h2>
+    <p class="lede" style="margin-top:16px">Aurora becomes the new default: a violet mesh, dark at the top and bright at the bottom, frosted glass bars, one butter yellow accent, and a pill for the tab you are on. If you liked 1.0 better, it is called Classic now, it is exactly the 1.0 look, and it is one click away. All fifteen 1.0 boards are still there, unchanged.</p>
+
+    <!-- SCREENSHOT: aurora-light (the 1.1 window in Aurora light) -->
+    <!-- SCREENSHOT: classic-next-to-1.0 (Classic in 1.1 beside the real 1.0 window, to show they match) -->
+    <!-- SCREENSHOT: newtab-aurora (the new tab page with shortcuts, the three widgets and the Customize panel open) -->
+    <!-- SCREENSHOT: tray-look-style (the tray's Look section with the Style group) -->
+    <!-- SCREENSHOT: tabs-on-the-side (vertical tabs with the list of all tabs open) -->
+
+    <!-- the Chalk Tray, reimagined: a screenshot of the new tray beside three short points -->
+    <div class="feature" id="tray">
+      <figure class="shot">
+        <picture>
+          <source srcset="images/tray-reimagined-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="images/tray-reimagined.png" alt="The Chalk Tray in 1.1: a search box, then sections as cards with an icon, a title and a one-line hint, sorted into groups" width="572" height="1438" loading="lazy">
+        </picture>
+      </figure>
+      <div class="featuretext">
+        <p class="eyebrow">Chalk Tray, reimagined</p>
+        <h3>Every setting, findable.</h3>
+        <p>The tray used to be twenty grey headings in one long list. Now every section is a card with an icon, a name and one line that says what is inside, sorted into four groups: Look and feel, Browser, Privacy and data, and More.</p>
+        <ul class="points">
+          <li><b>Find a setting.</b> Type a word, and only the sections that have it stay, already open. It searches the expert knobs too, even in Easy mode.</li>
+          <li><b>Easy, Medium, Expert say what they show.</b> Just the basics, more knobs, or everything.</li>
+          <li><b>Buttons you can tell apart.</b> New window, Save as PDF and the rest carry icons. Reset the look and Forget everything are red outlines, so nothing gets wiped by mistake.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="card">
+        <h3>Aurora</h3>
+        <p>The new default. A violet mesh, frosted glass, one butter yellow accent, and two fonts, Unbounded and Manrope, that ship inside the app so nothing is fetched. Light, Dark, or Device to follow your Mac.</p>
+      </div>
+      <div class="card">
+        <h3>The pill tab</h3>
+        <p>The tab you are on is a capsule with a dark fill and a thin edge that runs from violet to pink, the close button on the right. Glow and the 1.0 Outline are the other two tab styles.</p>
+      </div>
+      <div class="card">
+        <h3>Classic, one click away</h3>
+        <p>The old default is called Classic now, and it is the exact 1.0 look: no glass, no mesh, outline tabs, the 1.0 fonts. Pick it in the tray or on the new tab page.</p>
+      </div>
+      <div class="card">
+        <h3>All fifteen 1.0 boards</h3>
+        <p>Every board from 1.0 is still in Boards, unchanged: Classic, Ice, Chalk, Acid, Grape, Paper and the nine borrowed browser looks.</p>
+      </div>
+      <div class="card">
+        <h3>Six gradient boards</h3>
+        <p>Sunrise, Bloom, Lagoon, Meadow, Dusk and Smoke. Two colours washed across the top of the window, each with a light and a dark half, and a pill edge in the same two colours.</p>
+      </div>
+      <div class="card">
+        <h3>Style, mix and match</h3>
+        <p>Every part of the new look is its own setting: background, frosted glass and how strong it is, grain, tab style, the pill's two edge colours, and fonts. Rebuild the old look by hand, or mix old and new. The mix travels in .board files.</p>
+      </div>
+      <div class="card">
+        <h3>A new tab page with things on it</h3>
+        <p>Shortcuts with a + tile that is always there. It starts empty, because Chalkboard never guesses your sites. A world clock, a focus timer and lists. Customize picks the theme, the wallpaper and what to show. All of it stays on your machine.</p>
+      </div>
+      <div class="card">
+        <h3>Window density</h3>
+        <p>Automatic, Standard, Compact or Touch. Automatic goes compact when the window is small, and switching boards keeps it.</p>
+      </div>
+      <div class="card">
+        <h3>Tabs on the side</h3>
+        <p>One switch in Layout moves the tabs into a column on the left. Dragging to reorder works there too.</p>
+      </div>
+      <div class="card">
+        <h3>List all tabs</h3>
+        <p>A button at the end of the tab strip opens a list of every open tab, and you can search it.</p>
+      </div>
+      <div class="card">
+        <h3>Settings stay saved</h3>
+        <p>What you pick stays picked: after a quit, after a crash right after the change, after an update. Clearing your browsing data wipes cookies, site data and the cache, never your settings. In 1.0 the look quietly reset on every restart.</p>
+      </div>
+      <div class="card">
+        <h3>The + next to the last tab</h3>
+        <p>The new tab button sits right after your last tab, the way Firefox does it, and follows the tabs as they fill the strip. The list of all tabs keeps the far right.</p>
+      </div>
+      <div class="card">
+        <h3>Signing in to Google works</h3>
+        <p>Google's sign-in page turned 1.0 away. In 1.1 it goes through, and the browser still tells websites as little as before. Nothing else about privacy changed.</p>
+      </div>
+      <div class="card">
+        <h3>Split view</h3>
+        <p>Two pages side by side. Drag the divider, double-click it for half and half, Ctrl+Tab hops between the sides, and the side you work in drives the address bar. The split comes back after a restart.</p>
+      </div>
+      <div class="card">
+        <h3>Side tabs that fold</h3>
+        <p>The column on the left shows each site's real icon. Drag its edge to resize, fold it to a narrow rail of icons with the button at its foot or a double-click, and open it the same way.</p>
+      </div>
+      <div class="card">
+        <h3>Real site icons</h3>
+        <p>A page's own icon on its tab, in the address bar and on its new-tab shortcut. Fetched once, straight from the site, kept on your machine, gone with your browsing data.</p>
+      </div>
+      <div class="card">
+        <h3>Sleeping tabs</h3>
+        <p>A tab you have not looked at for 10 minutes gives its page back to the Mac and keeps its name, address and icon. Click it and it loads again. Pinned, playing and loading tabs stay awake. Switch under Privacy.</p>
+      </div>
+      <div class="card">
+        <h3>&#8984;K finds anything</h3>
+        <p>One box for commands, open tabs, bookmarks, boards and settings. Type a few letters, press Enter.</p>
+      </div>
+      <div class="card">
+        <h3>Your toolbar, your buttons</h3>
+        <p>Add, remove and reorder every toolbar button under Toolbar, or pick Minimal, Chalkboard or Everything. Shortcuts keep working for buttons you took off.</p>
+      </div>
+      <div class="card">
+        <h3>An introduction</h3>
+        <p>chalk://intro shows what Chalkboard can do and how it works, once per version and any time from the tray.</p>
+      </div>
+      <div class="card">
+        <h3>Default browser, copy and paste</h3>
+        <p>One button under More makes Chalkboard your default browser. Copy, paste and the Edit menu work in every page, and right-click menus have cut, copy, paste and search.</p>
+      </div>
+      <div class="card">
+        <h3>A Look section first</h3>
+        <p>The tray opens with the look: theme swatches with the Style group right under them, then Light, Dark or Device, and window density. On Aurora and the gradient boards the sliders wear a tick ruler.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="after">
+  <div class="wrap">
+    <p class="eyebrow">1.1.1 and 1.1.2 &nbsp;small updates, one thing each</p>
+    <h2>Right after 1.1.</h2>
+    <p class="lede" style="margin-top:16px">Side tabs and split view made it into 1.1 after all. These two come right behind it, each as its own small update.</p>
+    <div class="tokens">
+      <div class="tok"><code>1.1.1</code><span>Site looks: DuckDuckGo, Google, Wikipedia, GitHub, YouTube, Maps and MakerWorld wear your board. Colours only, logos untouched, and no website is ever told your look.</span></div>
+      <div class="tok"><code>1.1.2</code><span>Two more boards: Coder, a terminal look with scanlines, and Pure, flat white or dark with no glow at all.</span></div>
+    </div>
+  </div>
+</section>
 
 <section id="what">
   <div class="wrap">
@@ -1350,9 +1506,10 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
     </div>
 
     <div class="getbox">
-      <h3>Chalkboard for Mac <span class="pill">1.1</span></h3>
-      <p class="dlnote" style="margin-top:0"><b>This is Chalkboard 1.1.</b> Already on 1.0? Your settings, bookmarks and boards stay; it switches you to Aurora once, and Classic is one click away.</p>
-      <p class="dlnote">New in 1.1: <a href="chalkboard-1-1.html">everything that changed, on its own page</a>. Updating from 1.0 without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.0.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
+      <h3>Chalkboard for Mac <span class="pill pre">1.0</span><span class="pill post">1.1</span></h3>
+      <p class="dlnote pre" style="margin-top:0"><b>This is Chalkboard 1.0. Chalkboard 1.1 comes out on Sunday, 25 October.</b> From Sunday the same button gives you 1.1, and if you already have 1.0, a small update file goes in at Chalk Tray &rarr; Update: your settings, bookmarks and boards stay. <a href="#new">What is in 1.1</a>.</p>
+      <p class="dlnote post" style="margin-top:0"><b>This is Chalkboard 1.1.</b> Already on 1.0? Your settings, bookmarks and boards stay; it switches you to Aurora once, and Classic is one click away.</p>
+      <p class="dlnote post">New in 1.1: <a href="#new">everything that changed</a>. Updating from 1.0 without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.0.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
       <p>A real Mac app, nothing to install first. Pick the build for your chip — each is a one-click download.</p>
       <a class="cap big" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">Download for Mac</a>
       <p class="dlnote">Apple Silicon is any Mac from 2020 on (M1, M2, M3…); Intel is older Macs. First open: right click the app and choose Open — macOS warns once about an unsigned app, then never again.</p>
@@ -1360,9 +1517,9 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
     <div class="getbox">
       <!-- CHALKBOARD_ZIP in the script below is the 1.1 source (chalkboard/ with package.json, main.js, lib, ui, pages, assets). -->
-      <h3>Windows and Linux, from source <span class="pill">1.1</span></h3>
-      <p>The whole browser as source, fonts included. The same source also runs on macOS.</p>
-      <button class="cap big" id="mainget">Download chalkboard.zip</button>
+      <h3>Windows and Linux, from source <span class="pill pre">1.1 on Sunday</span><span class="pill post">1.1</span></h3>
+      <p>The whole browser as source, fonts included. The same source also runs on macOS.<span class="pre"> The 1.1 source comes out on Sunday, 25 October, together with the Mac app.</span></p>
+      <button class="cap big post" id="mainget">Download chalkboard.zip</button>
       <button class="cap big quiet" id="guideget">The guide, PDF</button>
 
       <div class="steps">
@@ -1399,7 +1556,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
 <footer>
   <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;width:min(1000px,92vw)">
-    <span>Chalkboard, made by Peter. <span class="mono">site build G48</span></span>
+    <span>Chalkboard, made by Peter. <span class="mono">site build G49</span></span>
     <span class="mono">no ai &nbsp;·&nbsp; no telemetry &nbsp;·&nbsp; no account</span>
   </div>
   <div style="text-align:center;margin:16px 0 4px"><a href="https://hansolo42.gumroad.com/l/chocolateisyummy" target="_blank" rel="noopener" style="display:inline-block;background:#6B4A2B;color:#F7ECD9;border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:9px 16px;font-family:inherit;font-size:14px;font-weight:700;letter-spacing:.3px;text-decoration:none">🍫 Buy me a hot chocolate</a></div>
