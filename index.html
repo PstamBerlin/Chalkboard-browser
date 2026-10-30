@@ -1079,7 +1079,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
     <div class="herobtns">
       <a class="cap big" id="heromac" href="#get">Get it for Mac</a>
-      <a class="cap big quiet" id="herowin" href="#get">Windows and Linux</a>
+      <a class="cap big soon" id="herowin" href="#get">Windows and Linux, in testing</a>
       <a class="cap big soon" id="heroapk" href="https://github.com/PstamBerlin/Chalkboard-browser">Android, coming soon</a>
       <button class="cap big quiet" id="heroguide">The guide, PDF</button>
     </div>
@@ -1498,8 +1498,6 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       <h3>Chalkboard for Android <span class="pill">coming soon</span></h3>
       <p>It is written, not finished. Built on the Firefox engine so add-ons genuinely work, with the engine's own ad and popup blocking, twelve remappable gestures and the same Chalk Tray. It builds now (0.6 beta, newest look) and is being tested; it comes out once it has run on a real phone.</p>
       <a class="cap big" id="mainapk" href="https://github.com/PstamBerlin/Chalkboard-browser">Watch it on GitHub</a>
-
-      <p class="dlnote">One download, both versions inside — open the folder and pick Apple Silicon (Macs from 2020 on: M1/M2/M3…) or Intel (older Macs). First open: right-click the app → Open — macOS warns once about an unsigned app, then never again.</p>
     </div>
 
     <div class="getbox">
@@ -1514,16 +1512,14 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
     <div class="getbox">
       <!-- CHALKBOARD_ZIP in the script below is the 1.1 source (chalkboard/ with package.json, main.js, lib, ui, pages, assets). -->
-      <h3>Chalkboard for Windows <span class="pill pre">first build, Sunday</span><span class="pill post">1.1 · first build</span></h3>
-      <p class="dlnote pre" style="margin-top:0"><b>The first Windows build comes out on Sunday, 25 October,</b> together with the Mac app. 64-bit, nothing to install: unzip, keep the folder together, double-click Chalkboard.exe.</p>
-      <p class="dlnote post" style="margin-top:0">The first Windows build. 64-bit, nothing to install: unzip, keep the folder together, double-click Chalkboard.exe. It is the same browser as the Mac one and has not been tested on many machines yet; say what breaks on GitHub.</p>
-      <a class="cap big post" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-win.zip">Download for Windows</a>
-      <p class="dlnote">First open: Windows shows a blue "Windows protected your PC" box once, because the app is not signed with a paid certificate. Click More info, then Run anyway.</p>
+      <h3>Chalkboard for Windows <span class="pill">in testing</span></h3>
+      <p class="dlnote" style="margin-top:0"><b>Windows is in testing and does not work yet.</b> A first build exists, but it has not run properly on a real Windows computer, so there is no download until it does. It will come out once it runs.</p>
+      <a class="cap big quiet" href="https://github.com/PstamBerlin/Chalkboard-browser">Watch it on GitHub</a>
     </div>
 
     <div class="getbox">
-      <h3>Linux, from source <span class="pill pre">1.1 on Sunday</span><span class="pill post">1.1</span></h3>
-      <p>The whole browser as source, fonts included. The same source also runs on macOS and Windows.<span class="pre"> The 1.1 source comes out on Sunday, 25 October, together with the apps.</span></p>
+      <h3>Linux, from source <span class="pill">in testing</span></h3>
+      <p><b>Linux is in testing and does not work properly yet.</b> It starts, but on the one Linux laptop it was tried on the window is drawn garbled, with stripes and broken text. A fix is being worked on. The source below is the same code the Mac app runs, fonts included, so you can try it, but expect problems.</p>
       <button class="cap big post" id="mainget">Download chalkboard.zip</button>
       <button class="cap big quiet" id="guideget">The guide, PDF</button>
 
@@ -1535,7 +1531,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       </div>
       <button class="cap big quiet" id="mainguide" style="margin-top:10px">The visual guide, PDF</button>
       <p class="dlnote">Eight pages showing the window, the six Boards, the Chalk Tray, the shortcut editor and the privacy stance. Drawn from the same design tokens the browser uses, so it shows the real thing.</p>
-      <p class="dlnote">Needs Node.js. The npm install step downloads Electron and takes a few minutes. After that it starts in about a second. Prefer a ready-made app? Mac and Windows are the one-click downloads above, no Node needed. macOS will warn about an unsigned app: right click it and choose Open, or allow it under Privacy and Security in System Settings.</p>
+      <p class="dlnote">Needs Node.js. The npm install step downloads Electron and takes a few minutes. After that it starts in about a second. Prefer a ready-made app? Mac is the one-click download above, no Node needed. macOS will warn about an unsigned app: right click it and choose Open, or allow it under Privacy and Security in System Settings.</p>
     </div>
   </div>
 </section>
@@ -1554,6 +1550,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       <div class="row"><b>No auto update</b><span>Security depends on the Electron version it ships with, so it has to be bumped by hand.</span></div>
       <div class="row"><b>No sync, no passwords</b><span>Nothing is stored anywhere but your own machine, which also means nothing follows you to another one.</span></div>
       <div class="row"><b>Search sees your IP</b><span>Whoever provides your results knows where the request came from. That is a fact of not owning a search index, not something code can fix.</span></div>
+      <div class="row"><b>Windows and Linux are in testing</b><span>They are being tested and do not work yet. On Linux the window opens but is drawn garbled on the laptop it was tried on, and Windows has not run properly on a real computer. There is no Windows download and Linux is source only. Mac is the only finished version.</span></div>
       <div class="row"><b>Android is not out yet</b><span>The Android version is written but not shipping. It is a real project, not vapour, and the code is public, but there is no download until it builds and runs properly.</span></div>
     </div>
   </div>
