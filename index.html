@@ -285,6 +285,16 @@ p{margin:0}
 .points li{padding:12px 14px;border:1px solid var(--faint);border-radius:12px;color:var(--dim);font-size:14.5px}
 .points li b{color:inherit;font-weight:600}
 
+/* 1.1.1: the site looks, as real screenshots */
+.lookpair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.lookpair:first-of-type{margin-top:30px}
+.look{margin:0;border:1px solid var(--faint);border-radius:var(--rc,16px);overflow:hidden;background:var(--panel,transparent)}
+.look img{display:block;width:100%;height:auto}
+.look figcaption{padding:9px 14px;font-size:13px;color:var(--dim);border-top:1px solid var(--faint)}
+.lookwide{margin-top:14px}
+.lookpoints{grid-template-columns:1fr 1fr;margin-top:22px}
+.lookhead{font-size:26px;margin:44px 0 0}
+
 /* release day: see the script in <head> */
 html[data-release="soon"] .post,html:not([data-release="soon"]) .pre{display:none!important}
 
@@ -660,6 +670,7 @@ footer > .wrap{color:var(--dim)}
 @media (max-width:760px){
   .pillars{grid-template-columns:1fr}
   .tokens{grid-template-columns:1fr}
+  .lookpair,.lookpoints{grid-template-columns:1fr}
   .row{flex-direction:column;gap:5px}
   .row b{flex:none}
   section{padding:56px 0}
@@ -1015,9 +1026,9 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 <!-- /chalk-look:style -->
 </head>
 <body>
-<a class="upbar" href="#new" id="upbar">
-  <span class="up-tag">1.1</span>
-  <span class="up-text"><b class="pre">Chalkboard 1.1 comes out on Sunday, 25 October.</b><b class="post">Chalkboard 1.1 is here.</b> A new look called Aurora, a new tab page with things on it, tabs on the side, sleeping tabs, a tray you can search. The old look stays one click away.</span>
+<a class="upbar" href="#looks" id="upbar">
+  <span class="up-tag">1.1.1</span>
+  <span class="up-text"><b>Chalkboard 1.1.1 is here.</b> Your board on DuckDuckGo, Google, Wikipedia, GitHub, YouTube and MakerWorld, and zoom the way Firefox does it.</span>
   <span class="up-go">See what is new &rarr;</span>
 </a>
 
@@ -1062,8 +1073,8 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       Chalkboard
     </span>
     <span class="ver pre" style="white-space:nowrap">1.0 &middot; 1.1 on Sunday</span>
-    <span class="ver post" style="white-space:nowrap">1.1 &middot; out now</span>
-    <a class="newpill" href="#new">What is new in 1.1 &rarr;</a>
+    <span class="ver post" style="white-space:nowrap">1.1.1 &middot; out now</span>
+    <a class="newpill" href="#looks">What is new in 1.1.1 &rarr;</a>
     <span class="sp"></span>
     <span class="navlook" data-lookctl></span>
     <button class="cap" id="navget">Download</button>
@@ -1211,6 +1222,38 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
   </div>
 </header>
 
+<!-- 1.1.1 (15 November 2026): site looks and zoom. The screenshots are the real 1.1.1, in Aurora. -->
+<section id="looks" style="scroll-margin-top:84px">
+  <div class="wrap">
+    <p class="eyebrow">1.1.1 &middot; out now</p>
+    <h2>New in 1.1.1: your board,<br>on the web.</h2>
+    <p class="lede" style="margin-top:16px">Eight websites you use all the time now wear the board you picked: DuckDuckGo, Google search, Wikipedia in English and German, GitHub, YouTube and MakerWorld, with Google Maps and Translate in a look of their own. Colours only. Logos, layouts and the sites' own buttons stay exactly as they are.</p>
+    <div class="lookpair">
+      <figure class="look"><img src="images/looks-github-light.jpg" alt="GitHub's home page in Chalkboard 1.1.1 with the Aurora light board: pale violet background, violet buttons" width="1600" height="928" loading="lazy"><figcaption>GitHub, in Aurora light</figcaption></figure>
+      <figure class="look"><img src="images/looks-github-dark.jpg" alt="The same GitHub page with the Aurora dark board: a deep violet background and butter yellow buttons" width="1600" height="928" loading="lazy"><figcaption>The same page, in Aurora dark</figcaption></figure>
+    </div>
+    <div class="lookpair">
+      <figure class="look"><img src="images/looks-duckduckgo.jpg" alt="DuckDuckGo search results in Chalkboard with the Aurora dark board" width="1600" height="928" loading="lazy"><figcaption>DuckDuckGo</figcaption></figure>
+      <figure class="look"><img src="images/looks-makerworld.jpg" alt="MakerWorld's home page in Chalkboard with the Aurora dark board" width="1600" height="928" loading="lazy"><figcaption>MakerWorld</figcaption></figure>
+    </div>
+    <figure class="look lookwide"><img src="images/looks-wikipedia.jpg" alt="The German Wikipedia article on Berlin in Chalkboard with the Aurora dark board" width="1600" height="447" loading="lazy"><figcaption>Wikipedia</figcaption></figure>
+    <ul class="points lookpoints">
+      <li><b>Nothing leaves your Mac.</b> A look is a stylesheet put on the page on your computer, the way your own CSS is. No colour goes into any address, and no website is told which look you wear.</li>
+      <li><b>Only the boards as they come.</b> A site's scripts can read a page's colours, so the sites only ever see a built-in board, never your own mix, and never anything in a private window.</li>
+      <li><b>Changed a board?</b> The sites keep wearing the board your changes started from, and a small bubble says so. One switch in the Look card turns that off.</li>
+      <li><b>Board colours on other sites.</b> An experiment you switch on in Look: sites without a look of their own get your colours where it is safe. Right-click a page to turn it off there.</li>
+    </ul>
+    <h3 class="lookhead">Zoom, the way Firefox does it.</h3>
+    <div class="tokens">
+      <div class="tok"><code>pinch</code><span>Ctrl and scroll, or pinch on a trackpad or touch screen, up to three times the size.</span></div>
+      <div class="tok"><code>per site</code><span>A site you zoomed comes back at that zoom, in every tab and after a restart. The list stays on your Mac.</span></div>
+      <div class="tok"><code>67 &ndash; 200 %</code><span>Pick the size every page starts at. A badge beside the address shows when a page is not at 100 %.</span></div>
+      <div class="tok"><code>&#8984; +</code><span>Zooms in with or without Shift, on any keyboard layout. All of it starts off, in the tray's new Zoom section.</span></div>
+    </div>
+    <p class="note" style="margin-top:22px">Also fixed: on Linux the window could draw as garbled lines (issue #1), and the View menu's zoom zoomed Chalkboard itself instead of the page (issue #2).</p>
+  </div>
+</section>
+
 <section id="new" style="scroll-margin-top:84px">
   <div class="wrap">
     <p class="eyebrow"><span class="pre">1.1 · comes out Sunday, 25 October</span><span class="post">1.1 · out now</span> &nbsp;--mesh --tabstyle --frost-blur</p>
@@ -1334,11 +1377,10 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
 <section id="after">
   <div class="wrap">
-    <p class="eyebrow">1.1.1, 1.1.2 and 1.1.4 &nbsp;small updates</p>
-    <h2>Right after 1.1.</h2>
-    <p class="lede" style="margin-top:16px">Side tabs made it into 1.1 after all. These come right behind it, each as its own small update.</p>
+    <p class="eyebrow">1.1.2 and 1.1.4 &nbsp;small updates</p>
+    <h2>Coming next.</h2>
+    <p class="lede" style="margin-top:16px">1.1.1 is out. These come right behind it, each as its own small update.</p>
     <div class="tokens">
-      <div class="tok"><code>1.1.1</code><span>Site looks: DuckDuckGo, Google, Wikipedia, GitHub, YouTube, Maps and MakerWorld wear your board. Colours only, logos untouched, and no website is ever told your look.</span></div>
       <div class="tok"><code>1.1.2</code><span>Two more boards and a translator. Coder, a terminal look with scanlines, and Pure, flat white or dark with no glow at all. And Translate this page, the way Firefox does it: a page in another language is translated on your own computer by Mozilla's open-source engine and the same language files Firefox uses. Nothing you read is sent anywhere; the only download is the language files, once, from Mozilla.</span></div>
       <div class="tok"><code>1.1.4</code><span>Split view 2.0: a split button, a divider you drag or move with the keyboard, double-click for half and half, Ctrl+Tab between the sides, the side you work in drives the address bar, and the split comes back after a restart. 1.1 keeps the simple split of 1.0.</span></div>
     </div>
@@ -1501,10 +1543,10 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
     </div>
 
     <div class="getbox">
-      <h3>Chalkboard for Mac <span class="pill pre">1.0</span><span class="pill post">1.1</span></h3>
+      <h3>Chalkboard for Mac <span class="pill pre">1.0</span><span class="pill post">1.1.1</span></h3>
       <p class="dlnote pre" style="margin-top:0"><b>This is Chalkboard 1.0. Chalkboard 1.1 comes out on Sunday, 25 October.</b> From Sunday the same button gives you 1.1, and if you already have 1.0, a small update file goes in at Chalk Tray &rarr; Update: your settings, bookmarks and boards stay. <a href="#new">What is in 1.1</a>.</p>
-      <p class="dlnote post" style="margin-top:0"><b>This is Chalkboard 1.1.</b> Already on 1.0? Your settings, bookmarks and boards stay; it switches you to Aurora once, and Classic is one click away.</p>
-      <p class="dlnote post">New in 1.1: <a href="#new">everything that changed</a>. Updating from 1.0 without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.0.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
+      <p class="dlnote post" style="margin-top:0"><b>This is Chalkboard 1.1.1.</b> Already on 1.0 or 1.1? Your settings, bookmarks and boards stay. Coming from 1.0 it switches you to Aurora once, and Classic is one click away.</p>
+      <p class="dlnote post">New in 1.1.1: <a href="#looks">your board on the web, and zoom</a>. New in 1.1: <a href="#new">everything that changed</a>. Updating without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.1.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
       <p>A real Mac app, nothing to install first. Pick the build for your chip — each is a one-click download.</p>
       <a class="cap big" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">Download for Mac</a>
       <p class="dlnote">Apple Silicon is any Mac from 2020 on (M1, M2, M3…); Intel is older Macs. First open: right click the app and choose Open — macOS warns once about an unsigned app, then never again.</p>
