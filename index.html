@@ -376,6 +376,26 @@ section{padding:76px 0}
 .steps i{color:var(--dim);font-style:normal}
 .dlnote{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:14px}
 
+/* the warning before the Mac download: macOS will say it cannot check the app, so say it first */
+.macwarn{width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:26px 26px 22px;
+  border:var(--bw,2px) solid var(--stroke);border-radius:var(--rd,20px);background:var(--fill);color:var(--ink);box-shadow:var(--halo),0 30px 80px rgba(0,0,0,.55)}
+.macwarn::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.macwarn h3{margin:0 0 8px;font-size:21px;line-height:1.25}
+.macwarn .why{color:var(--dim);font-size:14.5px;margin:0 0 16px}
+.macwarn ol{margin:0 0 16px;padding-left:22px;font-size:15px;line-height:1.55}
+.macwarn ol li{margin-bottom:7px}
+.macwarn ol b{color:var(--stroke-t,var(--stroke))}
+.mockalert{display:flex;gap:14px;align-items:flex-start;margin:0 0 18px;padding:14px 16px;border-radius:14px;background:color-mix(in srgb, var(--bg) 75%, transparent);border:1px solid var(--faint);font-size:13px;line-height:1.45}
+.mockalert .ic{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb, var(--stroke) 22%, transparent)}
+.mockalert p{margin:0 0 10px;color:var(--ink)}
+.mockalert .btns{display:flex;gap:8px;flex-wrap:wrap}
+.mockalert .btns span{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:7px;font-weight:600;font-size:12.5px}
+.mockalert .no{border:1px solid var(--faint);color:var(--dim);text-decoration:line-through}
+.mockalert .yes{background:var(--stroke);color:var(--bg);box-shadow:0 0 0 3px color-mix(in srgb, var(--stroke) 35%, transparent)}
+.mockalert small{display:block;margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.macwarn .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.macwarn .acts .cap{height:44px}
+
 /* ---------------- limits ---------------- */
 .limits .row b{color:var(--ink)}
 .limits{border-top:1px solid var(--faint);padding-top:0}
@@ -1548,7 +1568,7 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       <p class="dlnote post" style="margin-top:0"><b>This is Chalkboard 1.1.1.</b> Already on 1.0 or 1.1? Your settings, bookmarks and boards stay. Coming from 1.0 it switches you to Aurora once, and Classic is one click away.</p>
       <p class="dlnote post">New in 1.1.1: <a href="#looks">your board on the web, and zoom</a>. New in 1.1: <a href="#new">everything that changed</a>. Updating without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.1.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
       <p>A real Mac app, nothing to install first. Pick the build for your chip — each is a one-click download.</p>
-      <a class="cap big" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">Download for Mac</a>
+      <a class="cap big" id="macget" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">Download for Mac</a>
       <p class="dlnote">The zip holds both versions: Apple Silicon for any Mac from 2020 on (M1, M2, M3…), and Intel for older Macs.</p>
       <p class="dlnote"><b>The first time you open it, macOS warns you.</b> Chalkboard is not signed with a paid Apple developer account yet, so macOS says it cannot check it for malware. Click <b>Done</b>, not Move to Trash. Then open System Settings &rarr; Privacy &amp; Security, scroll down, and click <b>Open Anyway</b> next to Chalkboard. macOS asks one last time; after that Chalkboard opens like any other app. (On macOS 14 and older, right click the app and choose Open instead.)</p>
     </div>
@@ -1578,6 +1598,29 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
     </div>
   </div>
 </section>
+
+<dialog class="macwarn" id="macwarn" aria-labelledby="macwarnTitle">
+  <h3 id="macwarnTitle">Before you download: macOS will warn you</h3>
+  <p class="why">Chalkboard is not signed with a paid Apple developer account yet. So the first time you open it, macOS says it cannot check it for malware and offers to move it to the Trash. That warning is expected. The whole source code is public on GitHub, so anyone can check what it does.</p>
+  <div class="mockalert" aria-hidden="true">
+    <div class="ic">!</div>
+    <div>
+      <p><b>&ldquo;Chalkboard&rdquo; Not Opened</b><br>Apple could not verify &ldquo;Chalkboard&rdquo; is free of malware that may harm your Mac or compromise your privacy.</p>
+      <div class="btns"><span class="no">Move to Trash</span><span class="yes">Done</span></div>
+      <small>click Done, not Move to Trash</small>
+    </div>
+  </div>
+  <ol>
+    <li>Open the zip and drag <b>Chalkboard</b> into Applications (Apple Silicon for Macs from 2020 on, Intel for older ones).</li>
+    <li>Open it. When macOS warns you, click <b>Done</b>. Never Move to Trash.</li>
+    <li>Open <b>System Settings &rarr; Privacy &amp; Security</b>, scroll down, and click <b>Open Anyway</b> next to Chalkboard.</li>
+    <li>Click <b>Open</b> once more. From then on Chalkboard opens like any other app.</li>
+  </ol>
+  <div class="acts">
+    <button class="cap quiet" id="macwarnNo" type="button">Cancel</button>
+    <a class="cap" id="macwarnYes" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">I understand, download for Mac</a>
+  </div>
+</dialog>
 
 <section class="limits">
   <div class="wrap" style="padding-top:60px">
@@ -3045,6 +3088,15 @@ function download(){
    Linux box's own button downloads the source zip */
 var mainget = document.getElementById('mainget');
 if (mainget) mainget.addEventListener('click', download);
+/* Download for Mac shows the warning first (macOS will say it cannot check the app); the download starts from
+   the warning's own button. Without dialog support the button just downloads, and the note under it says the same. */
+var macget = document.getElementById('macget'), macwarn = document.getElementById('macwarn');
+if (macget && macwarn && typeof macwarn.showModal === 'function') {
+  macget.addEventListener('click', function(e){ e.preventDefault(); macwarn.showModal(); document.getElementById('macwarnYes').focus(); });
+  document.getElementById('macwarnNo').addEventListener('click', function(){ macwarn.close(); });
+  document.getElementById('macwarnYes').addEventListener('click', function(){ setTimeout(function(){ macwarn.close(); }, 150); });
+  macwarn.addEventListener('click', function(e){ if (e.target === macwarn) macwarn.close(); });   // a click outside the box closes it
+}
 var navget = document.getElementById('navget');
 if (navget) navget.addEventListener('click', function(){ document.getElementById('get').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); });
 
