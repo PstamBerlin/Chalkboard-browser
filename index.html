@@ -1046,9 +1046,9 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 <!-- /chalk-look:style -->
 </head>
 <body>
-<a class="upbar" href="#looks" id="upbar">
-  <span class="up-tag">1.1.1</span>
-  <span class="up-text"><b>Chalkboard 1.1.1 is here.</b> Your board on DuckDuckGo, Google, Wikipedia, GitHub, YouTube and MakerWorld, and zoom the way Firefox does it.</span>
+<a class="upbar" href="#v112" id="upbar">
+  <span class="up-tag">1.1.2</span>
+  <span class="up-text"><b>Chalkboard 1.1.2 is here.</b> Two new boards, Coder and Pure, and a translator that works on your own Mac.</span>
   <span class="up-go">See what is new &rarr;</span>
 </a>
 
@@ -1093,8 +1093,8 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
       Chalkboard
     </span>
     <span class="ver pre" style="white-space:nowrap">1.0 &middot; 1.1 on Sunday</span>
-    <span class="ver post" style="white-space:nowrap">1.1.1 &middot; out now</span>
-    <a class="newpill" href="#looks">What is new in 1.1.1 &rarr;</a>
+    <span class="ver post" style="white-space:nowrap">1.1.2 &middot; out now</span>
+    <a class="newpill" href="#v112">What is new in 1.1.2 &rarr;</a>
     <span class="sp"></span>
     <span class="navlook" data-lookctl></span>
     <button class="cap" id="navget">Download</button>
@@ -1242,10 +1242,48 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
   </div>
 </header>
 
+<!-- 1.1.2 (22 November 2026): Coder, Pure and the translator. The screenshots are the real 1.1.2 (shots112.py). -->
+<section id="v112" style="scroll-margin-top:84px">
+  <div class="wrap">
+    <p class="eyebrow">1.1.2 &middot; out now</p>
+    <h2>New in 1.1.2: two boards<br>and a translator.</h2>
+    <p class="lede" style="margin-top:16px">Coder is a terminal: a monospace font, square-ish corners, quick moves and faint scan lines. Pure is clean and modern with no glow at all, flat white or flat near-black. Both have a light and a dark half, like every new board, and both are in the tray's Look card and on the new tab page.</p>
+    <div class="lookpair">
+      <figure class="look"><img src="images/v112-coder-dark.jpg" alt="Chalkboard 1.1.2 with the Coder board, dark half: black and green, a monospace font, the new tab page with its clock, focus timer and lists" width="1600" height="1084" loading="lazy"><figcaption>Coder, dark</figcaption></figure>
+      <figure class="look"><img src="images/v112-coder-light.jpg" alt="The same window with the Coder board's light half: pale mint and green" width="1600" height="1084" loading="lazy"><figcaption>Coder, light</figcaption></figure>
+    </div>
+    <div class="lookpair">
+      <figure class="look"><img src="images/v112-pure-light.jpg" alt="Chalkboard 1.1.2 with the Pure board, light half: flat white with black lines and no glow" width="1600" height="1084" loading="lazy"><figcaption>Pure, light</figcaption></figure>
+      <figure class="look"><img src="images/v112-pure-dark.jpg" alt="The same window with the Pure board's dark half: flat near-black with white lines" width="1600" height="1084" loading="lazy"><figcaption>Pure, dark</figcaption></figure>
+    </div>
+
+    <h3 class="lookhead">Translate this page, on your Mac.</h3>
+    <p class="lede" style="margin-top:12px">A page in another language gets a small bar: translate it, not now, or never for that language. It works the way Firefox does it, with Mozilla's open-source translation engine and the same language files Firefox uses, running inside Chalkboard.</p>
+    <div class="lookpair">
+      <figure class="look"><img src="images/v112-translate-offer.jpg" alt="A German Wikipedia article about the Brandenburg Gate in Chalkboard, with a bar that says This page is in German, Translate to English, Not now, Never for German" width="1600" height="1084" loading="lazy"><figcaption>A German page, and the offer</figcaption></figure>
+      <figure class="look"><img src="images/v112-translate-on.jpg" alt="The same article translated into English, with a bar that says Translated from German and a Show original button" width="1600" height="1084" loading="lazy"><figcaption>The same page, a few seconds later</figcaption></figure>
+    </div>
+    <ul class="points lookpoints">
+      <li><b>No text leaves your Mac.</b> The page is translated on your own computer. Nothing you read is sent to a translation service.</li>
+      <li><b>One download per language.</b> The first time you use a language, Chalkboard downloads its files from Mozilla: about 37 MB for each direction, plus the 5 MB engine once. After that it works offline. Each file is checked against Mozilla's own fingerprint.</li>
+      <li><b>The page keeps working.</b> Text is swapped in place, so links and buttons still work, and new text is translated as it appears. Show original puts every word back.</li>
+      <li><b>It is yours to set.</b> The tray's Translate card picks the language you read, turns the offer on or off, keeps your never list, and removes the downloaded files when you want the space back.</li>
+    </ul>
+
+    <h3 class="lookhead">Also in 1.1.2.</h3>
+    <div class="tokens">
+      <div class="tok"><code>side tabs</code><span>Folded to icons, a tab is the right size again, a long list scrolls by itself so the + never scrolls away, and a tab playing sound keeps its speaker.</span></div>
+      <div class="tok"><code>no gap</code><span>Folding the side column fast, or dragging its edge, no longer shows a strip of empty window beside the page.</span></div>
+      <div class="tok"><code>&#8984; K</code><span>Two new commands: Tabs on the side, and Side tabs as icons. Give them a key of your own in the tray under Keys.</span></div>
+      <div class="tok"><code>experimental</code><span>A new section at the end of the tray with two looks to try: springy animations and liquid glass. Both start off, and both may still change.</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- 1.1.1 (15 November 2026): site looks and zoom. The screenshots are the real 1.1.1, in Aurora. -->
 <section id="looks" style="scroll-margin-top:84px">
   <div class="wrap">
-    <p class="eyebrow">1.1.1 &middot; out now</p>
+    <p class="eyebrow">1.1.1 &middot; 15 November</p>
     <h2>New in 1.1.1: your board,<br>on the web.</h2>
     <p class="lede" style="margin-top:16px">Eight websites you use all the time now wear the board you picked: DuckDuckGo, Google search, Wikipedia in English and German, GitHub, YouTube and MakerWorld, with Google Maps and Translate in a look of their own. Colours only. Logos, layouts and the sites' own buttons stay exactly as they are.</p>
     <div class="lookpair">
@@ -1397,11 +1435,10 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
 
 <section id="after">
   <div class="wrap">
-    <p class="eyebrow">1.1.2 and 1.1.4 &nbsp;small updates</p>
+    <p class="eyebrow">1.1.4 &nbsp;a small update</p>
     <h2>Coming next.</h2>
-    <p class="lede" style="margin-top:16px">1.1.1 is out. These come right behind it, each as its own small update.</p>
+    <p class="lede" style="margin-top:16px">1.1.2 is out. This comes right behind it, as its own small update.</p>
     <div class="tokens">
-      <div class="tok"><code>1.1.2</code><span>Two more boards and a translator. Coder, a terminal look with scanlines, and Pure, flat white or dark with no glow at all. And Translate this page, the way Firefox does it: a page in another language is translated on your own computer by Mozilla's open-source engine and the same language files Firefox uses. Nothing you read is sent anywhere; the only download is the language files, once, from Mozilla.</span></div>
       <div class="tok"><code>1.1.4</code><span>Split view 2.0: a split button, a divider you drag or move with the keyboard, double-click for half and half, Ctrl+Tab between the sides, the side you work in drives the address bar, and the split comes back after a restart. 1.1 keeps the simple split of 1.0.</span></div>
     </div>
   </div>
@@ -1563,10 +1600,10 @@ html[data-tabstyle="outline"]:not([data-classic]) .lookctl .lk-reset{border-radi
     </div>
 
     <div class="getbox">
-      <h3>Chalkboard for Mac <span class="pill pre">1.0</span><span class="pill post">1.1.1</span></h3>
+      <h3>Chalkboard for Mac <span class="pill pre">1.0</span><span class="pill post">1.1.2</span></h3>
       <p class="dlnote pre" style="margin-top:0"><b>This is Chalkboard 1.0. Chalkboard 1.1 comes out on Sunday, 25 October.</b> From Sunday the same button gives you 1.1, and if you already have 1.0, a small update file goes in at Chalk Tray &rarr; Update: your settings, bookmarks and boards stay. <a href="#new">What is in 1.1</a>.</p>
-      <p class="dlnote post" style="margin-top:0"><b>This is Chalkboard 1.1.1.</b> Already on 1.0 or 1.1? Your settings, bookmarks and boards stay. Coming from 1.0 it switches you to Aurora once, and Classic is one click away.</p>
-      <p class="dlnote post">New in 1.1.1: <a href="#looks">your board on the web, and zoom</a>. New in 1.1: <a href="#new">everything that changed</a>. Updating without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.1.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
+      <p class="dlnote post" style="margin-top:0"><b>This is Chalkboard 1.1.2.</b> Already on 1.0 or 1.1? Your settings, bookmarks and boards stay. Coming from 1.0 it switches you to Aurora once, and Classic is one click away.</p>
+      <p class="dlnote post">New in 1.1.2: <a href="#v112">two boards and a translator</a>. New in 1.1.1: <a href="#looks">your board on the web, and zoom</a>. New in 1.1: <a href="#new">everything that changed</a>. Updating without a new download? <a href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-update-1.1.2.zip">The update file</a> goes in at Chalk Tray &rarr; Update.</p>
       <p>A real Mac app, nothing to install first. Pick the build for your chip — each is a one-click download.</p>
       <a class="cap big" id="macget" href="https://github.com/PstamBerlin/Chalkboard-browser/releases/latest/download/Chalkboard-mac.zip">Download for Mac</a>
       <p class="dlnote">The zip holds both versions: Apple Silicon for any Mac from 2020 on (M1, M2, M3…), and Intel for older Macs.</p>
